@@ -1,0 +1,25 @@
+//JWT
+
+antisocial.app.jwtSecret = YOUR-JWT-SECRET
+antisocial.app.jwtExpirationMs = JWT-EXPIRATION-TIME-IN-MILLISECOND
+
+//AWS S3 BUCKET
+
+access.key = YOUR-ACCESS-KEY
+secret.access.key = YOUR-SECRET-KEY
+region = REGION-OF-YOUR-BUCKET
+
+//POSTGRES SETTINGS
+spring.datasource.url=jdbc:postgresql://localhost:5432/anti-social-app
+spring.datasource.username=YOUR-POSTGRES-USERNAME
+spring.datasource.password=YOUR-POSTGRES-PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+//HIBERNATE-SETTINGS
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+//FLYWAY SETTINGS
+spring.flyway.baseline-on-migrate=true
+spring.flyway.out-of-order=true
