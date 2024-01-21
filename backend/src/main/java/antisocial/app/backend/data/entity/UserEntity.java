@@ -13,21 +13,21 @@ public class UserEntity {
     private long Id;
     private String username;
     private String password;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<RoleEntity> roles;
     @OneToMany(mappedBy = "receiver")
     private List<PreassignedUrlEntity> receivedUrls;
     @OneToMany(mappedBy = "sender")
     private List<PreassignedUrlEntity> sentUrls;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<RoleEntity> roles;
     @ElementCollection
-    private List<String> friendsName;
+    private List<String> friendsNames;
     @ElementCollection
-    private List<String> friendRequests;
+    private List<String> friendsRequests;
 
     public UserEntity() {
         roles = new ArrayList<>();
-        friendsName = new ArrayList<>();
-        friendRequests = new ArrayList<>();
+        friendsNames = new ArrayList<>();
+        friendsRequests = new ArrayList<>();
     }
 
     public long getId() {
@@ -46,9 +46,22 @@ public class UserEntity {
         return roles;
     }
 
-    public List<String> getFriendsNames() {
-        return friendsName;
+    public List<PreassignedUrlEntity> getReceivedUrls() {
+        return receivedUrls;
     }
+
+    public List<PreassignedUrlEntity> getSentUrls() {
+        return sentUrls;
+    }
+
+    public List<String> getFriendsNames() {
+        return friendsNames;
+    }
+
+    public List<String> getFriendsRequests() {
+        return friendsRequests;
+    }
+
 
     public void setUsername(String username) {
         this.username = username;
@@ -58,16 +71,5 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<String> getFriendRequests() {
-        return friendRequests;
-    }
-
-    public List<PreassignedUrlEntity> getReceivedUrls() {
-        return receivedUrls;
-    }
-
-    public List<PreassignedUrlEntity> getSentUrls() {
-        return sentUrls;
-    }
 }
 
