@@ -42,7 +42,7 @@ public class UserService implements IUserService{
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(username);
         userEntity.setPassword(password);
-        userEntity.setRoles(role);
+        userEntity.addRole(role);
         userRepository.save(userEntity);
 
     }
