@@ -71,5 +71,9 @@ public class UserEntity {
         this.password = password;
     }
 
+    public void setRoles(RoleEntity roleEntity){
+        this.roles.add(roleEntity);
+    }
+
 }
 
