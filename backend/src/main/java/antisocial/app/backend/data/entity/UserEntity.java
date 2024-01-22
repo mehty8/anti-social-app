@@ -16,9 +16,9 @@ public class UserEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<RoleEntity> roles;
     @OneToMany(mappedBy = "receiver")
-    private List<PreassignedUrlEntity> receivedUrls;
+    private List<PreassignedUrlEntity> receivedPreassignedUrlsDetails;
     @OneToMany(mappedBy = "sender")
-    private List<PreassignedUrlEntity> sentUrls;
+    private List<PreassignedUrlEntity> sentPreassignedUrlsDetails;
     @ElementCollection
     private List<String> friendsNames;
     @ElementCollection
@@ -46,12 +46,12 @@ public class UserEntity {
         return roles;
     }
 
-    public List<PreassignedUrlEntity> getReceivedUrls() {
-        return receivedUrls;
+    public List<PreassignedUrlEntity> getReceivedPreassignedUrlsDetails() {
+        return receivedPreassignedUrlsDetails;
     }
 
-    public List<PreassignedUrlEntity> getSentUrls() {
-        return sentUrls;
+    public List<PreassignedUrlEntity> getSentPreassignedUrlsDetails() {
+        return sentPreassignedUrlsDetails;
     }
 
     public List<String> getFriendsNames() {
@@ -81,8 +81,24 @@ public class UserEntity {
     public void addFriendName(String username){
         this.friendsNames.add(username);
     }
+
+    public void addPreassignedUrlDetails(PreassignedUrlEntity preassignedUrlDetails, String type){
+        if(type.equals("sent")){
+            this.sentPreassignedUrlsDetails.add(preassignedUrlDetails);
+        } else {
+            this.receivedPreassignedUrlsDetails.add(preassignedUrlDetails);
+        }
+    }
     public void removeFriendRequest(String username){
         this.friendsRequests.remove(username);
+    }
+
+    public void removePreassignedUrlDetails(PreassignedUrlEntity preassignedUrlDetails, String type){
+        if(type.equals("sent")){
+            this.sentPreassignedUrlsDetails.remove(preassignedUrlDetails);
+        } else {
+            this.receivedPreassignedUrlsDetails.remove(preassignedUrlDetails);
+        }
     }
 
 }
