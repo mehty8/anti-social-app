@@ -71,8 +71,18 @@ public class UserEntity {
         this.password = password;
     }
 
-    public void setRoles(RoleEntity roleEntity){
+    public void addRole(RoleEntity roleEntity){
         this.roles.add(roleEntity);
+    }
+
+    public void addFriendRequest(String username){
+        this.friendsRequests.add(username);
+    }
+    public void addFriendName(String username){
+        this.friendsNames.add(username);
+    }
+    public void removeFriendRequest(String username){
+        this.friendsRequests.remove(username);
     }
 
 }
