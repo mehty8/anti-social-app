@@ -2,17 +2,22 @@ package antisocial.app.frontend.service;
 
 import antisocial.app.frontend.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.dto.FriendsNamesDto;
+import antisocial.app.frontend.dto.PreassignedUrlToUploadVideo;
 import antisocial.app.frontend.dto.JwtResponseDto;
 import antisocial.app.frontend.dto.LoginRequestDto;
+import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
 import antisocial.app.frontend.dto.ResponseMessageDto;
 import antisocial.app.frontend.dto.VideosDto;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 public interface ApiService {
 
@@ -31,4 +36,16 @@ public interface ApiService {
 
     @GET("video/{endpoint}")
     Call<VideosDto> getVideos(@Path("endpoint")String endpoint, @Header("Authorization") String jwt);
+
+    @POST("video/aws/preassignedurl/put")
+    Call<PreassignedUrlToUploadVideo> getPreassignedUrlToUploadVideo(@Header("Authorization") String jwt,
+                                                                     @Body PreassignedUrlDetailsDto preassignedUrlDto);
+
+    @PUT
+    Call<Void> uploadVideoToS3Bucket(@Url String url, @Body RequestBody video);
+
+    @POST("video/aws/preassignedurl/get/{endpoint}")
+    Call<ResponseMessageDto> getPreassignedUrlToWatch(@Path("endpoint")String endpoint,
+                                                      @Header("Authorization") String jwt,
+                                                      @Body PreassignedUrlDetailsDto preassignedUrlDto);
 }
