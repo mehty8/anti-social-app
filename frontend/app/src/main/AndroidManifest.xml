@@ -36,6 +36,8 @@
         </activity>
         <activity android:name=".page.RegisterLoginActivity">
         </activity>
+        <activity android:name=".page.MainPageActivity">
+        </activity>
     </application>
 
 </manifest>

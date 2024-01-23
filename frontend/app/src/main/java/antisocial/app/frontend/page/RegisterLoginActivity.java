@@ -64,7 +64,6 @@ public class RegisterLoginActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     JwtResponseDto jwtResponse = response.body();
                     sharedPreferencesManager.saveJwt(jwtResponse.getJwt());
-                    Toast.makeText(RegisterLoginActivity.this, sharedPreferencesManager.getJwt(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
