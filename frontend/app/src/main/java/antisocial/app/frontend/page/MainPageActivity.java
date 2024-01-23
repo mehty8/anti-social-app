@@ -172,7 +172,7 @@ public class MainPageActivity extends AppCompatActivity {
             public void onResponse(Call<VideosDto> call, Response<VideosDto> response) {
                 VideosDto videos = response.body();
                 Intent intentVideos = new Intent(MainPageActivity.this, VideosActivity.class);
-                intentVideos.putExtra("videos", new ArrayList<>(videos.getVideoDtos()));
+                intentVideos.putExtra("videos", new ArrayList<>(videos.getVideoDetailsToPlay()));
                 intentVideos.putExtra("type", type);
                 startActivity(intentVideos);
             }

@@ -1,6 +1,8 @@
 package antisocial.app.frontend.dto;
 
-public class VideoDetailsToPlay {
+import java.io.Serializable;
+
+public class VideoDetailsToPlay implements Serializable {
 
     private String preassignedUrl;
     private String videoName;

@@ -5,12 +5,12 @@ import java.util.List;
 
 public class VideosDto {
 
-    private List<VideoDetailsToPlay> videoDetailsToPlays;
+    private List<VideoDetailsToPlay> videoDetailsToPlay;
 
     public VideosDto() {
-        this.videoDetailsToPlays = new ArrayList<>();
+        this.videoDetailsToPlay = new ArrayList<>();
     }
-    public List<VideoDetailsToPlay> getVideoDtos() {
-        return videoDetailsToPlays;
+    public List<VideoDetailsToPlay> getVideoDetailsToPlay() {
+        return videoDetailsToPlay;
     }
 }
