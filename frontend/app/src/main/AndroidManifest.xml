@@ -40,6 +40,8 @@
         </activity>
         <activity android:name=".page.FriendRequestActivity">
         </activity>
+        <activity android:name=".page.VideoRecordActivity">
+        </activity>
     </application>
 
 </manifest>
