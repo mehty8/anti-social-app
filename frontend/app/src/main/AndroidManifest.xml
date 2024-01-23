@@ -38,6 +38,8 @@
         </activity>
         <activity android:name=".page.MainPageActivity">
         </activity>
+        <activity android:name=".page.FriendRequestActivity">
+        </activity>
     </application>
 
 </manifest>
