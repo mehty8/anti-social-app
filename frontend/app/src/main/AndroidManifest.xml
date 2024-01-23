@@ -42,6 +42,8 @@
         </activity>
         <activity android:name=".page.VideoRecordActivity">
         </activity>
+        <activity android:name=".page.VideosActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
         registerManageFilesPermissionLauncher();
         getPermission();
-        sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
     }
 
     private void registerManageFilesPermissionLauncher() {
