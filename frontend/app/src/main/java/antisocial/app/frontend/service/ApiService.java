@@ -2,7 +2,7 @@ package antisocial.app.frontend.service;
 
 import antisocial.app.frontend.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.dto.FriendsNamesDto;
-import antisocial.app.frontend.dto.PreassignedUrlToUploadVideo;
+import antisocial.app.frontend.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.dto.JwtResponseDto;
 import antisocial.app.frontend.dto.LoginRequestDto;
 import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
@@ -38,8 +38,8 @@ public interface ApiService {
     Call<VideosDto> getVideos(@Path("endpoint")String endpoint, @Header("Authorization") String jwt);
 
     @POST("video/aws/preassignedurl/put")
-    Call<PreassignedUrlToUploadVideo> getPreassignedUrlToUploadVideo(@Header("Authorization") String jwt,
-                                                                     @Body PreassignedUrlDetailsDto preassignedUrlDto);
+    Call<PreassignedUrlToUploadVideoDto> getPreassignedUrlToUploadVideo(@Header("Authorization") String jwt,
+                                                                        @Body PreassignedUrlDetailsDto preassignedUrlDto);
 
     @PUT
     Call<Void> uploadVideoToS3Bucket(@Url String url, @Body RequestBody video);

@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import antisocial.app.frontend.ToastCallBack;
-import antisocial.app.frontend.dto.PreassignedUrlToUploadVideo;
+import antisocial.app.frontend.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
 import antisocial.app.frontend.dto.ResponseMessageDto;
 import okhttp3.MediaType;
@@ -41,17 +41,17 @@ public class VideoUploadService {
         PreassignedUrlDetailsDto preassignedUrlDetailsDto = new PreassignedUrlDetailsDto(videoName,
                 "PUT", BUCKET_NAME, TIME_IN_MS_TO_UPLOAD);
         ApiService apiService = ApiClient.getApiServiceDynamic();
-        Call<PreassignedUrlToUploadVideo> call = apiService.getPreassignedUrlToUploadVideo("Bearer " + jwt, preassignedUrlDetailsDto);
-        call.enqueue((new Callback<PreassignedUrlToUploadVideo>() {
+        Call<PreassignedUrlToUploadVideoDto> call = apiService.getPreassignedUrlToUploadVideo("Bearer " + jwt, preassignedUrlDetailsDto);
+        call.enqueue((new Callback<PreassignedUrlToUploadVideoDto>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<PreassignedUrlToUploadVideo> call, Response<PreassignedUrlToUploadVideo> response) {
+            public void onResponse(Call<PreassignedUrlToUploadVideoDto> call, Response<PreassignedUrlToUploadVideoDto> response) {
                 String url = response.body().getPreassignedUrl();
                 uploadVideo(url, videoName, username, jwt, temporaryVideoName, toastCallback);
             }
 
             @Override
-            public void onFailure(Call<PreassignedUrlToUploadVideo> call, Throwable t) {
+            public void onFailure(Call<PreassignedUrlToUploadVideoDto> call, Throwable t) {
                 //Handle error
             }
         }));
