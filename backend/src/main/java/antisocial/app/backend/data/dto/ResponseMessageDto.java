@@ -1,9 +1,9 @@
 package antisocial.app.backend.data.dto;
 
-public class SimpleResponseDto {
+public class ResponseMessageDto {
     private String message;
 
-    public SimpleResponseDto(String message) {
+    public ResponseMessageDto(String message) {
         this.message = message;
     }
 

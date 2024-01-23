@@ -2,7 +2,7 @@ package antisocial.app.backend.controller;
 
 import antisocial.app.backend.data.dto.PreassignedUrlDetailsDto;
 import antisocial.app.backend.data.dto.PreassignedUrlToUploadVideoDto;
-import antisocial.app.backend.data.dto.SimpleResponseDto;
+import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.data.dto.VideosDto;
 import antisocial.app.backend.service.IVideoService;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class VideoController {
     }
 
     @PostMapping("aws/preassignedurl/get/{receiver}")
-    public ResponseEntity<SimpleResponseDto> savePreassignedUrlDetailsToWatchVideo(
+    public ResponseEntity<ResponseMessageDto> savePreassignedUrlDetailsToWatchVideo(
             @PathVariable String receiver, @RequestBody PreassignedUrlDetailsDto preassignedUrlDetailsDto){
 
         String preassignedUrl = videoService.getPreassignedUrl(preassignedUrlDetailsDto);
@@ -44,7 +44,7 @@ public class VideoController {
 
         videoService.savePreassignedUrlDetails(bucketName, videoName, preassignedUrl, receiver, sender);
 
-        SimpleResponseDto simpleResponse = new SimpleResponseDto("Video sent");
+        ResponseMessageDto simpleResponse = new ResponseMessageDto("Video sent");
 
         return ResponseEntity.ok(simpleResponse);
     }

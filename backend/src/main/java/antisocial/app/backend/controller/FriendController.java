@@ -2,7 +2,7 @@ package antisocial.app.backend.controller;
 
 import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.dto.FriendsNamesDto;
-import antisocial.app.backend.data.dto.SimpleResponseDto;
+import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.service.IFriendService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,25 +41,25 @@ public class FriendController {
     }
 
     @PatchMapping("friendrequest/{receiver}")
-    public ResponseEntity<SimpleResponseDto> sendFriendsRequest(@PathVariable String receiver){
+    public ResponseEntity<ResponseMessageDto> sendFriendsRequest(@PathVariable String receiver){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String sender = user.getUsername();
 
         friendService.sendFriendRequest(receiver, sender);
 
-        SimpleResponseDto simpleResponse = new SimpleResponseDto("Request sent");
+        ResponseMessageDto simpleResponse = new ResponseMessageDto("Request sent");
 
         return ResponseEntity.ok(simpleResponse);
     }
 
     @PatchMapping("acceptrequest/{sender}")
-    public ResponseEntity<SimpleResponseDto> acceptFriendRequest(@PathVariable String sender){
+    public ResponseEntity<ResponseMessageDto> acceptFriendRequest(@PathVariable String sender){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
         friendService.acceptFriendRequest(receiver, sender);
 
-        SimpleResponseDto simpleResponse = new SimpleResponseDto("Request accepted");
+        ResponseMessageDto simpleResponse = new ResponseMessageDto("Request accepted");
 
         return ResponseEntity.ok(simpleResponse);
     }
