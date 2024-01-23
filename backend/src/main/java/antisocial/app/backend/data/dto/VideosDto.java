@@ -14,7 +14,4 @@ public class VideosDto {
         return videoDetailsToPlay;
     }
 
-    public void addVideoDetails(VideoDetailsToPlay videoDetailsToPlay){
-        this.videoDetailsToPlay.add(videoDetailsToPlay);
-    }
 }

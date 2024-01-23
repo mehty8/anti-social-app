@@ -75,7 +75,7 @@ public class VideoService implements IVideoService {
 
         preassignedUrlDetails.forEach(video -> {
             VideoDetailsToPlay videoDetailsToPlay = new VideoDetailsToPlay(video.getPreassignedUrl(), video.getVideoName(), video.getReceiver().getUsername());
-            sentVideosDetails.addVideoDetails(videoDetailsToPlay);
+            sentVideosDetails.getVideoDetailsToPlay().add(videoDetailsToPlay);
         });
 
         return sentVideosDetails;
@@ -93,7 +93,7 @@ public class VideoService implements IVideoService {
 
         preassignedUrlDetails.forEach(video -> {
             VideoDetailsToPlay videoDetailsToPlay = new VideoDetailsToPlay(video.getPreassignedUrl(), video.getVideoName(), video.getSender().getUsername());
-            receivedVideosDetails.addVideoDetails(videoDetailsToPlay);
+            receivedVideosDetails.getVideoDetailsToPlay().add(videoDetailsToPlay);
         });
 
         return receivedVideosDetails;
