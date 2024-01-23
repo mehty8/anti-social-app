@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
-import antisocial.app.frontend.ToastCallBack;
+import antisocial.app.frontend.service.ToastCallBack;
 import antisocial.app.frontend.service.VideoUploadService;
 
 public class VideoUploadActivity extends AppCompatActivity {

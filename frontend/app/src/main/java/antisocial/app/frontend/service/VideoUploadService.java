@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import antisocial.app.frontend.ToastCallBack;
 import antisocial.app.frontend.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
 import antisocial.app.frontend.dto.ResponseMessageDto;

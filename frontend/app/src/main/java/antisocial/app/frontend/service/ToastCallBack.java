@@ -1,4 +1,4 @@
-package antisocial.app.frontend;
+package antisocial.app.frontend.service;
 
 public interface ToastCallBack {
 
