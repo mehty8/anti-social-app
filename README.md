@@ -43,7 +43,7 @@ if You wish to run the app, these are the steps to make:
 - The values in CAPITAL, must be replaced with your data:
    - Choose your own jwt secret, make sure it is long enough and does not contain special characters like /*?...
    - Set the expiration time of the jwt in millisecond. However since the logout function is not developed yet, do not set it for longer than 10 minutes.
-   - Then in the AWS section you have to provide your access key, secret key and the region of the bucket.
+   - In the AWS section you have to provide your access key, secret key and the region of the bucket.
    - In the Postgres section provide your postgres username (the owner of the database), and the password.
    - The rest is good as it is, no need to change them.
      
