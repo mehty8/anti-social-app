@@ -23,21 +23,23 @@ So the main target here is inspecting the code. However - since dockerization is
 if You wish to run the app, these are the steps to make:
 
 //AWS
-- Create an account on AWS (it is free of charge)
-- Create an IAM User with s3 full access permission policy
+- Create an account on AWS (it is free of charge).
+- Create an IAM User with s3 full access permission policy.
 - Generate the access key (application running outside AWS), save it and the secret key on your computer.
 - Create a bucket. Name it and choose the closest region to You and that is it.
 
 //Postgress
-- Create a database called "anti-social-app"
+- Create a database called "anti-social-app".
 
 //Android studio
-- Open the frontend in android studio
+- Open the frontend in android studio.
+- If it is not automatical, sync gradle.
 - Have an emulator, preferably api 33 or higher and medium-size with tiramisu.
 - Go to the VideoUploadService class and change the bucket name to your bucket"s name.
 
 //Intellij
-- Open the backend in Intellij (or any other java ide)
+- Open the backend in Intellij (or any other java ide).
+- If it is not autoamtical, load maven.
 - In the resources directory, create a file called "application.properties".
 - Copy the content of the application.properties.template to the created application.properties.
 - The values in CAPITAL, must be replaced with your data:
