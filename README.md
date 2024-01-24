@@ -19,7 +19,7 @@ There are many features to develope, and also some refactoring to align with the
 These are gonna be developed in the months to come but because I'm looking for a job as a junior software developer,
 I made this project public, as a reflection on my current spring boot knowledge.
 
-So the main target here is inspecting the code. However - since docerization is not fully possible due to AWS S3 bucket, there is none at all - 
+So the main target here is inspecting the code. However - since dockerization is not fully possible due to AWS S3 bucket, there is none at all - 
 if You wish to run the app, these are the steps to make:
 
 //AWS
