@@ -19,7 +19,8 @@ What it already can do:
 
 There are many features to develope, and also some refactoring to align with the OOP principles, readability and so on.
 These are gonna be developed in the months to come but because I'm looking for a job as a junior developer,
-I made this project public, as a reflection on my current spring boot knowledge. Therefore it is merely <b>for code isnpection</b>, however - since dockerization is not fully possible due to AWS S3 bucket, there is none at all - if You wish to run the app, these are the steps to make:
+I made this project public, as a reflection on my current spring boot knowledge. 
+Therefore it is merely <b>for code isnpection</b>, however - since dockerization is not fully possible due to AWS S3 bucket, there is none at all - if You wish to run the app, these are the steps to make:
 
 //AWS
 - Create an account on AWS (it is free of charge).
