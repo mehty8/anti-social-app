@@ -96,9 +96,17 @@ public class FriendService implements IFriendService{
 
     /*@Override
     @Async
-    public CompletableFuture<List<String>> findUsers(String username) {
-        System.out.println("This gets till service method");
-        return CompletableFuture.supplyAsync(() -> userRepository.findAllByUsername(username), executorService);
+    public CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername) {
+        UserEntity user = userRepository.findByUsername(userUsername).get();
+        Set<String> friendsNames = user.getFriendsNames();
+        Set<String> friendRequests = user.getFriendsRequests();
+
+        Set<String> usernamesToExclude = new HashSet<>();
+        usernamesToExclude.add(userUsername);
+        usernamesToExclude.addAll(friendsNames);
+        usernamesToExclude.addAll(friendRequests);
+
+        return CompletableFuture.supplyAsync(() -> userRepository.findAllByUsername(usernameToSearch, usernamesToExclude));
     }*/
 
 }

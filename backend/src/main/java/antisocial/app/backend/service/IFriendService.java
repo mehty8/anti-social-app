@@ -17,6 +17,6 @@ public interface IFriendService {
 
     Set<String> findUsers(String usernameToSearch, String userUsername);
 
-    //CompletableFuture<List<String>> findUsers(String username);
+    //CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername);
 
 }
