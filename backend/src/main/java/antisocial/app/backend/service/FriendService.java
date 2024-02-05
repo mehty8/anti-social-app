@@ -6,7 +6,9 @@ import antisocial.app.backend.repository.IUserRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
@@ -29,8 +31,8 @@ public class FriendService implements IFriendService{
     @Override
     public FriendsNamesAndRequestsDto getFriendsNamesAndRequests(String username) {
         UserEntity user = userRepository.findByUsername(username).get();
-        List<String> friendsNames = user.getFriendsNames();
-        List<String> requestsNames = user.getFriendsRequests();
+        Set<String> friendsNames = user.getFriendsNames();
+        Set<String> requestsNames = user.getFriendsRequests();
         FriendsNamesAndRequestsDto friendsNamesAndRequests = new FriendsNamesAndRequestsDto(friendsNames, requestsNames);
         return friendsNamesAndRequests;
     }
@@ -77,22 +79,34 @@ public class FriendService implements IFriendService{
     }*/
 
     @Override
-    public List<String> findUsers(String username) {
-        List<String> usernames = userRepository.findAllByUsername(username);
+    public Set<String> findUsers(String usernameToSearch, String userUsername) {
+        UserEntity user = userRepository.findByUsername(userUsername).get();
+        Set<String> friendsNames = user.getFriendsNames();
+        Set<String> friendRequests = user.getFriendsRequests();
+
+        Set<String> usernamesToExclude = new HashSet<>();
+        usernamesToExclude.add(userUsername);
+        usernamesToExclude.addAll(friendsNames);
+        usernamesToExclude.addAll(friendRequests);
+
+        Set<String> usernames = userRepository.findAllByUsername(usernameToSearch, usernamesToExclude);
         return usernames;
     }
 
 
     /*@Override
     @Async
-    public CompletableFuture<List<String>> findUsers(String username) {
-        System.out.println("This gets till service method");
-        return CompletableFuture.supplyAsync(() -> userRepository.findAllByUsername(username), executorService);
+    public CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername) {
+        UserEntity user = userRepository.findByUsername(userUsername).get();
+        Set<String> friendsNames = user.getFriendsNames();
+        Set<String> friendRequests = user.getFriendsRequests();
+
+        Set<String> usernamesToExclude = new HashSet<>();
+        usernamesToExclude.add(userUsername);
+        usernamesToExclude.addAll(friendsNames);
+        usernamesToExclude.addAll(friendRequests);
+
+        return CompletableFuture.supplyAsync(() -> userRepository.findAllByUsername(usernameToSearch, usernamesToExclude));
     }*/
 
-    @Override
-    public List<String> getFriendsRequests(String username) {
-        UserEntity user = userRepository.findByUsername(username).get();
-        return user.getFriendsRequests();
-    }
 }

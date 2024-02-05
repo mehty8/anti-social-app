@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -32,9 +33,11 @@ public class FriendController {
         return ResponseEntity.ok(friendsNamesAndRequests);
     }
 
-    @GetMapping("finduser/{username}")
-    public ResponseEntity<FriendsNamesDto> getUser(@PathVariable String username){
-        List<String> usernamesString = friendService.findUsers(username);
+    @GetMapping("finduser/{usernameToSearch}")
+    public ResponseEntity<FriendsNamesDto> getUser(@PathVariable String usernameToSearch){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userUsername = user.getUsername();
+        Set<String> usernamesString = friendService.findUsers(usernameToSearch, userUsername);
 
         FriendsNamesDto usernames = new FriendsNamesDto(usernamesString);
 

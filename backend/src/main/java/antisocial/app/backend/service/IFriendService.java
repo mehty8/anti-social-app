@@ -3,6 +3,7 @@ package antisocial.app.backend.service;
 import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public interface IFriendService {
@@ -14,9 +15,8 @@ public interface IFriendService {
 
     //CompletableFuture<Void> acceptFriendRequestAsync(String receiver, String username);
 
-    List<String> findUsers(String username);
+    Set<String> findUsers(String usernameToSearch, String userUsername);
 
-    //CompletableFuture<List<String>> findUsers(String username);
+    //CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername);
 
-    List<String> getFriendsRequests(String username);
 }

@@ -12,7 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -28,8 +30,8 @@ import retrofit2.Response;
 
 public class MainPageActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
-    private List<String> friendsNames;
-    private List<String> friendRequests;
+    private Set<String> friendsNames;
+    private Set<String> friendRequests;
 
 
     @Override
@@ -38,8 +40,8 @@ public class MainPageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-        friendsNames = (List<String>) intent.getSerializableExtra("friends");
-        friendRequests = (List<String>) intent.getSerializableExtra("requests");
+        friendsNames = (Set<String>) intent.getSerializableExtra("friends");
+        friendRequests = (Set<String>) intent.getSerializableExtra("requests");
         setContentView(R.layout.activity_main_page);
         LinearLayout linearLayoutRequests = findViewById(R.id.friendRequest);
         if(friendRequests.isEmpty()){
@@ -80,12 +82,12 @@ public class MainPageActivity extends AppCompatActivity {
                 call.enqueue(new Callback<FriendsNamesDto>() {
                     @Override
                     public void onResponse(Call<FriendsNamesDto> call, Response<FriendsNamesDto> response) {
-                        List<String> friendRequestNames = response.body().getFriendsNames();
+                        Set<String> friendRequestNames = response.body().getFriendsNames();
                         if(friendRequestNames.isEmpty()){
                             Toast.makeText(MainPageActivity.this, "No such user found", Toast.LENGTH_LONG).show();
                         } else {
                             Intent intentFriendRequest = new Intent(MainPageActivity.this, FriendRequestActivity.class);
-                            intentFriendRequest.putExtra("friendRequestNames", new ArrayList<>(friendRequestNames));
+                            intentFriendRequest.putExtra("friendRequestNames", new HashSet<>(friendRequestNames));
                             startActivity(intentFriendRequest);
                         }
                     }

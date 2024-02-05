@@ -3,7 +3,9 @@ package antisocial.app.backend.data.entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class UserEntity {
@@ -20,14 +22,14 @@ public class UserEntity {
     @OneToMany(mappedBy = "sender")
     private List<PreassignedUrlEntity> sentPreassignedUrlsDetails;
     @ElementCollection
-    private List<String> friendsNames;
+    private Set<String> friendsNames;
     @ElementCollection
-    private List<String> friendsRequests;
+    private Set<String> friendsRequests;
 
     public UserEntity() {
         roles = new ArrayList<>();
-        friendsNames = new ArrayList<>();
-        friendsRequests = new ArrayList<>();
+        friendsNames = new HashSet<>();
+        friendsRequests = new HashSet<>();
     }
 
     public long getId() {
@@ -54,11 +56,11 @@ public class UserEntity {
         return sentPreassignedUrlsDetails;
     }
 
-    public List<String> getFriendsNames() {
+    public Set<String> getFriendsNames() {
         return friendsNames;
     }
 
-    public List<String> getFriendsRequests() {
+    public Set<String> getFriendsRequests() {
         return friendsRequests;
     }
 

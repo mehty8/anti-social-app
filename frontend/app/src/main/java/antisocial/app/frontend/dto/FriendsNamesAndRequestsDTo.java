@@ -1,23 +1,24 @@
 package antisocial.app.frontend.dto;
 
 import java.util.List;
+import java.util.Set;
 
 public class FriendsNamesAndRequestsDTo {
 
-    private List<String> friendsNames;
+    private Set<String> friendsNames;
 
-    private List<String> requestsNames;
+    private Set<String> requestsNames;
 
-    public FriendsNamesAndRequestsDTo(List<String> friendsNames, List<String> requestsNames) {
+    public FriendsNamesAndRequestsDTo(Set<String> friendsNames, Set<String> requestsNames) {
         this.friendsNames = friendsNames;
         this.requestsNames = requestsNames;
     }
 
-    public List<String> getFriendsNames() {
+    public Set<String> getFriendsNames() {
         return friendsNames;
     }
 
-    public List<String> getRequestsNames() {
+    public Set<String> getRequestsNames() {
         return requestsNames;
     }
 }
