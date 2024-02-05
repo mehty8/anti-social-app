@@ -60,3 +60,23 @@ public class UserService implements IUserService{
         return jwtStringDto;
     }
 }
+
+//Just an example
+/*
+@Async
+    @Override
+    public CompletableFuture<Void> addNewUser(LoginDto loginDto) {
+        return CompletableFuture.runAsync(() -> {
+            RoleEntity role = roleRepository.findByRoleName("User").get();
+
+            String username = loginDto.getUsername();
+            String password = encoder.encode(loginDto.getPassword());
+
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUsername(username);
+            userEntity.setPassword(password);
+            userEntity.addRole(role);
+
+            userRepository.save(userEntity);
+        });
+    }*/
