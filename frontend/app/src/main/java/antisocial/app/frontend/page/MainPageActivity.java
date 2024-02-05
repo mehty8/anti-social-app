@@ -30,8 +30,8 @@ import retrofit2.Response;
 
 public class MainPageActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
-    private List<String> friendsNames;
-    private List<String> friendRequests;
+    private Set<String> friendsNames;
+    private Set<String> friendRequests;
 
 
     @Override
@@ -40,8 +40,8 @@ public class MainPageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-        friendsNames = (List<String>) intent.getSerializableExtra("friends");
-        friendRequests = (List<String>) intent.getSerializableExtra("requests");
+        friendsNames = (Set<String>) intent.getSerializableExtra("friends");
+        friendRequests = (Set<String>) intent.getSerializableExtra("requests");
         setContentView(R.layout.activity_main_page);
         LinearLayout linearLayoutRequests = findViewById(R.id.friendRequest);
         if(friendRequests.isEmpty()){

@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import antisocial.app.frontend.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.page.MainPageActivity;
@@ -94,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<FriendsNamesAndRequestsDTo> call, Response<FriendsNamesAndRequestsDTo> response) {
                     FriendsNamesAndRequestsDTo friendsAndRequests = response.body();
                     Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
-                    intent.putExtra("friends", new ArrayList<>(friendsAndRequests.getFriendsNames()));
-                    intent.putExtra("requests", new ArrayList<>(friendsAndRequests.getRequestsNames()));
+                    intent.putExtra("friends", new HashSet<>(friendsAndRequests.getFriendsNames()));
+                    intent.putExtra("requests", new HashSet<>(friendsAndRequests.getRequestsNames()));
                     startActivity(intent);
                 }
 
