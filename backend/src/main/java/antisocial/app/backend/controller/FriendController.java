@@ -33,11 +33,11 @@ public class FriendController {
         return ResponseEntity.ok(friendsNamesAndRequests);
     }
 
-    @GetMapping("finduser/{username}")
-    public ResponseEntity<FriendsNamesDto> getUser(@PathVariable String username){
+    @GetMapping("finduser/{usernameToSearch}")
+    public ResponseEntity<FriendsNamesDto> getUser(@PathVariable String usernameToSearch){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String usernameToExclude = user.getUsername();
-        Set<String> usernamesString = friendService.findUsers(username, usernameToExclude);
+        String userUsername = user.getUsername();
+        Set<String> usernamesString = friendService.findUsers(usernameToSearch, userUsername);
 
         FriendsNamesDto usernames = new FriendsNamesDto(usernamesString);
 

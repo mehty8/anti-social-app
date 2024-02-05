@@ -15,9 +15,8 @@ public interface IFriendService {
 
     //CompletableFuture<Void> acceptFriendRequestAsync(String receiver, String username);
 
-    Set<String> findUsers(String username, String usernameToExclude);
+    Set<String> findUsers(String usernameToSearch, String userUsername);
 
     //CompletableFuture<List<String>> findUsers(String username);
 
-    List<String> getFriendsRequests(String username);
 }
