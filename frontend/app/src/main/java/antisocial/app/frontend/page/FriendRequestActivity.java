@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Set;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -23,14 +24,14 @@ import retrofit2.Response;
 
 public class FriendRequestActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
-    private List<String> friendRequestNames;
+    private Set<String> friendRequestNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-        friendRequestNames = (List<String>) intent.getSerializableExtra("friendRequestNames");
+        friendRequestNames = (Set<String>) intent.getSerializableExtra("friendRequestNames");
         setContentView(R.layout.activity_friend_request);
         LinearLayout linearLayout = findViewById(R.id.containerLayout);
         loadFriendRequestNames(linearLayout);
