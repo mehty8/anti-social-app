@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
@@ -77,8 +78,8 @@ public class FriendService implements IFriendService{
     }*/
 
     @Override
-    public List<String> findUsers(String username) {
-        List<String> usernames = userRepository.findAllByUsername(username);
+    public Set<String> findUsers(String username, String usernameToExclude) {
+        Set<String> usernames = userRepository.findAllByUsername(username, usernameToExclude);
         return usernames;
     }
 
