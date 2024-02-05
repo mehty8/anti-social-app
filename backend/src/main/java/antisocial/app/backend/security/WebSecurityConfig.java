@@ -60,7 +60,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("user/**").permitAll()
                                 .requestMatchers("video/**").hasAuthority("User")
-                                .requestMatchers("friends/**").hasAuthority("User")
+                                .requestMatchers("friend/**").hasAuthority("User")
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
 

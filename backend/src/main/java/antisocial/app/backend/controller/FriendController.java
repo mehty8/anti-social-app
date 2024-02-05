@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/friend")
@@ -40,6 +41,13 @@ public class FriendController {
         return ResponseEntity.ok(usernames);
     }
 
+
+    /*@GetMapping("finduser/{username}")
+    public CompletableFuture<ResponseEntity<FriendsNamesDto>> getUser(@PathVariable String username) {
+    return friendService.findUsers(username).thenApply(usernamesString
+            -> ResponseEntity.ok(new FriendsNamesDto(usernamesString)));
+    }*/
+
     @PatchMapping("friendrequest/{receiver}")
     public ResponseEntity<ResponseMessageDto> sendFriendsRequest(@PathVariable String receiver){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -63,4 +71,14 @@ public class FriendController {
 
         return ResponseEntity.ok(simpleResponse);
     }
+
+    /*
+    * @PatchMapping("acceptrequest/{sender}")
+    public CompletableFuture<ResponseEntity<ResponseMessageDto>> acceptFriendRequest(@PathVariable String sender){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String receiver = user.getUsername();
+
+        return friendService.acceptFriendRequestAsync(receiver, sender).thenApply(aVoid ->
+                ResponseEntity.ok(new ResponseMessageDto("Request accepted")));
+    }*/
 }
