@@ -38,19 +38,33 @@ public class RegisterLoginActivity extends AppCompatActivity {
 
         EditText editTextUsername = findViewById(R.id.editTextUsername);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
-        Button buttonLogin = findViewById(R.id.buttonLogin);
 
+        Button buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = editTextUsername.getText().toString();
+                if(!checkUsername(username)){
+                    Toast.makeText(RegisterLoginActivity.this,
+                            "Username can only have letters, numbers and underscore",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 String password = editTextPassword.getText().toString();
+                PasswordCheck passwordCheck = checkPassword(password);
+                if(!passwordCheck.isValid()){
+                    Toast.makeText(RegisterLoginActivity.this,
+                            passwordCheck.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 loginUser(username, password);
             }
         });
 
         Button buttonRegister = findViewById(R.id.buttonRegister);
-
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,9 +146,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }
-
             }
-
             @Override
             public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
                 Toast.makeText(RegisterLoginActivity.this,
