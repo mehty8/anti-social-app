@@ -1,6 +1,6 @@
 package antisocial.app.backend.service;
 
-import antisocial.app.backend.data.dto.JwtStringDto;
+import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.LoginDto;
 import antisocial.app.backend.data.entity.RoleEntity;
 import antisocial.app.backend.data.entity.UserEntity;
@@ -56,16 +56,16 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public JwtStringDto login(LoginDto loginDto){
+    public JwtResponseDto login(LoginDto loginDto){
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        JwtStringDto jwtStringDto = new JwtStringDto(jwt);
+        JwtResponseDto jwtResponseDto = new JwtResponseDto(jwt);
 
-        return jwtStringDto;
+        return jwtResponseDto;
     }
 
     private void checkUsername(String username){
