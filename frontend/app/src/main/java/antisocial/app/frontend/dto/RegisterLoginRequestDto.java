@@ -1,11 +1,11 @@
 package antisocial.app.frontend.dto;
 
-public class LoginRequestDto {
+public class RegisterLoginRequestDto {
 
     private String username;
     private String password;
 
-    public LoginRequestDto(String username, String password) {
+    public RegisterLoginRequestDto(String username, String password) {
         this.username = username;
         this.password = password;
     }

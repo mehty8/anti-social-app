@@ -4,7 +4,7 @@ import antisocial.app.frontend.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.dto.FriendsNamesDto;
 import antisocial.app.frontend.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.dto.JwtResponseDto;
-import antisocial.app.frontend.dto.LoginRequestDto;
+import antisocial.app.frontend.dto.RegisterLoginRequestDto;
 import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
 import antisocial.app.frontend.dto.ResponseMessageDto;
 import antisocial.app.frontend.dto.VideosDto;
@@ -24,8 +24,11 @@ public interface ApiService {
     @GET("friend")
     Call<FriendsNamesAndRequestsDTo> getFriendsNamesAndRequests(@Header("Authorization") String jwt);
 
-    @POST("user/{endpoint}")
-    Call<JwtResponseDto> loginUser(@Path("endpoint") String endpoint, @Body LoginRequestDto loginRequest);
+    @POST("user/register")
+    Call<ResponseMessageDto> registerUser(@Body RegisterLoginRequestDto registerLoginRequestDto);
+
+    @POST("user/login")
+    Call<JwtResponseDto> loginUser(@Body RegisterLoginRequestDto loginRequest);
 
     @PATCH("friend/{requesttype}/{endpoint}")
     Call<ResponseMessageDto> sendOrAcceptFriendRequest(@Path("requesttype") String requesttype,
