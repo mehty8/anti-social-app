@@ -9,11 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
+
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
 import antisocial.app.frontend.dto.JwtResponseDto;
-import antisocial.app.frontend.dto.LoginRequestDto;
+import antisocial.app.frontend.dto.RegisterLoginRequestDto;
+import antisocial.app.frontend.dto.ResponseMessageDto;
 import antisocial.app.frontend.service.ApiClient;
 import antisocial.app.frontend.service.ApiService;
 import retrofit2.Call;
@@ -55,9 +60,9 @@ public class RegisterLoginActivity extends AppCompatActivity {
         });
     }
     private void loginUser(String username, String password){
-        LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
+        RegisterLoginRequestDto registerLoginRequestDto = new RegisterLoginRequestDto(username, password);
         ApiService apiService = ApiClient.getApiServiceDynamic();
-        Call<JwtResponseDto> call = apiService.loginUser("login", loginRequestDto);
+        Call<JwtResponseDto> call = apiService.loginUser(registerLoginRequestDto);
         call.enqueue(new Callback<JwtResponseDto>() {
             @Override
             public void onResponse(Call<JwtResponseDto> call, Response<JwtResponseDto> response) {
@@ -77,19 +82,29 @@ public class RegisterLoginActivity extends AppCompatActivity {
     }
 
     private void registerUser(String username, String password){
-        LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
+        RegisterLoginRequestDto registerLoginRequestDto = new RegisterLoginRequestDto(username, password);
         ApiService apiService = ApiClient.getApiServiceDynamic();
-        Call<JwtResponseDto> call = apiService.loginUser("register", loginRequestDto);
-        call.enqueue(new Callback<JwtResponseDto>() {
+        Call<ResponseMessageDto> call = apiService.registerUser(registerLoginRequestDto);
+        call.enqueue(new Callback<ResponseMessageDto>() {
             @Override
-            public void onResponse(Call<JwtResponseDto> call, Response<JwtResponseDto> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(RegisterLoginActivity.this, "Registration successful, now please login", Toast.LENGTH_LONG).show();
+            public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
+                if(response.isSuccessful()) {
+                    String responseMes = response.body().getMessage();
+                    Toast.makeText(RegisterLoginActivity.this, responseMes + ", now please login", Toast.LENGTH_LONG).show();
+                } else {
+                    try {
+                        ResponseMessageDto responseMes = new Gson().fromJson(response.errorBody().string(), ResponseMessageDto.class);
+                        String errorMes = responseMes.getMessage();
+                        Toast.makeText(RegisterLoginActivity.this, errorMes + ", please try again accordingly", Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+
             }
 
             @Override
-            public void onFailure(Call<JwtResponseDto> call, Throwable t) {
+            public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
                 Toast.makeText(RegisterLoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

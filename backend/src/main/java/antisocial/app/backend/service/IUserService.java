@@ -5,7 +5,7 @@ import antisocial.app.backend.data.dto.LoginDto;
 
 public interface IUserService {
 
-    void addNewUser(LoginDto loginDto);
+    void registerNewUser(LoginDto loginDto);
 
     JwtStringDto login(LoginDto loginDto);
 }

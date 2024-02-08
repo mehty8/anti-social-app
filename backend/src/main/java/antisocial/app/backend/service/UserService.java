@@ -4,6 +4,7 @@ import antisocial.app.backend.data.dto.JwtStringDto;
 import antisocial.app.backend.data.dto.LoginDto;
 import antisocial.app.backend.data.entity.RoleEntity;
 import antisocial.app.backend.data.entity.UserEntity;
+import antisocial.app.backend.errorHandling.exception.RegisterException;
 import antisocial.app.backend.repository.IRoleRepository;
 import antisocial.app.backend.repository.IUserRepository;
 import antisocial.app.backend.security.JwtUtils;
@@ -35,16 +36,23 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public void addNewUser(LoginDto loginDto) {
+    public void registerNewUser(LoginDto loginDto) {
         String username = loginDto.getUsername();
-        String password = encoder.encode(loginDto.getPassword());
+        String password = loginDto.getPassword();
+
+        checkUsername(username);
+        checkPassword(password);
+
+        String passwordEncoded = encoder.encode(password);
+
         RoleEntity role = roleRepository.findByRoleName("User").get();
+
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(username);
-        userEntity.setPassword(password);
+        userEntity.setPassword(passwordEncoded);
         userEntity.addRole(role);
-        userRepository.save(userEntity);
 
+        userRepository.save(userEntity);
     }
 
     @Override
@@ -58,6 +66,21 @@ public class UserService implements IUserService{
         JwtStringDto jwtStringDto = new JwtStringDto(jwt);
 
         return jwtStringDto;
+    }
+
+    private void checkUsername(String username){
+        if(userRepository.findByUsername(username).isPresent()){
+            throw new RegisterException("Username is already taken!");
+        } else if(!username.matches("\\w+")){
+            throw new RegisterException("Username can only have letters, numbers and underscore");
+        }
+    }
+
+    private void checkPassword(String password){
+        if(!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")){
+            throw new RegisterException("Password must be at least 8 characters long and have" +
+                    " at least 1 uppercase, 1 lowercase and 1 digit!");
+        }
     }
 }
 
