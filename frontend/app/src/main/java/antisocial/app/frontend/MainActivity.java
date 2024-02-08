@@ -17,10 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashSet;
 
-import antisocial.app.frontend.dto.FriendsNamesAndRequestsDTo;
+import antisocial.app.frontend.data.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.page.MainPageActivity;
 import antisocial.app.frontend.page.RegisterLoginActivity;
 import antisocial.app.frontend.service.ApiClient;

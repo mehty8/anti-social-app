@@ -13,15 +13,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
-import antisocial.app.frontend.dto.FriendsNamesDto;
-import antisocial.app.frontend.dto.VideosDto;
-import antisocial.app.frontend.dto.ResponseMessageDto;
+import antisocial.app.frontend.data.dto.FriendsNamesDto;
+import antisocial.app.frontend.data.dto.VideosDto;
+import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.service.ApiClient;
 import antisocial.app.frontend.service.ApiService;
 import retrofit2.Call;
