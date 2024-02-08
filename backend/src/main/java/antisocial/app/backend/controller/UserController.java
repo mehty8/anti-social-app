@@ -1,15 +1,16 @@
 package antisocial.app.backend.controller;
 
-import antisocial.app.backend.data.dto.JwtStringDto;
+import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.LoginDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.errorHandling.exception.RegisterException;
-import antisocial.app.backend.security.AuthEntryPointJwt;
 import antisocial.app.backend.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,8 +42,14 @@ public class UserController {
         }
     }
     @PostMapping("login")
-    public ResponseEntity<JwtStringDto> login(@RequestBody LoginDto loginDto){
-        JwtStringDto jwtStringDto = userService.login(loginDto);
-        return ResponseEntity.ok(jwtStringDto);
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
+        try{
+            JwtResponseDto jwtResponseDto = userService.login(loginDto);
+            return ResponseEntity.ok(jwtResponseDto);
+        } catch (Exception ex){
+            return ex instanceof BadCredentialsException
+                    ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessageDto("Invalid Password or/and username"))
+                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessageDto("Sorry, something went wrong, try again please"));
+        }
     }
 }
