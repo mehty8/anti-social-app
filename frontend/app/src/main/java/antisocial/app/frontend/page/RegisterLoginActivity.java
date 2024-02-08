@@ -71,6 +71,14 @@ public class RegisterLoginActivity extends AppCompatActivity {
                     sharedPreferencesManager.saveJwt(jwtResponse.getJwt());
                     Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
                     startActivity(intent);
+                } else {
+                    try {
+                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(), ResponseMessageDto.class);
+                        String errorMes = responseBody.getMessage();
+                        Toast.makeText(RegisterLoginActivity.this, errorMes, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 
@@ -93,8 +101,8 @@ public class RegisterLoginActivity extends AppCompatActivity {
                     Toast.makeText(RegisterLoginActivity.this, responseMes + ", now please login", Toast.LENGTH_LONG).show();
                 } else {
                     try {
-                        ResponseMessageDto responseMes = new Gson().fromJson(response.errorBody().string(), ResponseMessageDto.class);
-                        String errorMes = responseMes.getMessage();
+                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(), ResponseMessageDto.class);
+                        String errorMes = responseBody.getMessage();
                         Toast.makeText(RegisterLoginActivity.this, errorMes + ", please try again accordingly", Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
