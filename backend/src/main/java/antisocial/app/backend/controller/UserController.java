@@ -37,7 +37,8 @@ public class UserController {
         } catch (Exception ex){
             logger.error(ex.getMessage());
             ResponseMessageDto responseMessage = new ResponseMessageDto(ex.getMessage());
-            return ex instanceof RegisterException ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage)
+            return ex instanceof RegisterException
+                    ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage)
                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
