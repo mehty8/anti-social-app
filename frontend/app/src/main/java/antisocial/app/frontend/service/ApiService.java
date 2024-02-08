@@ -1,13 +1,13 @@
 package antisocial.app.frontend.service;
 
-import antisocial.app.frontend.dto.FriendsNamesAndRequestsDTo;
-import antisocial.app.frontend.dto.FriendsNamesDto;
-import antisocial.app.frontend.dto.PreassignedUrlToUploadVideoDto;
-import antisocial.app.frontend.dto.JwtResponseDto;
-import antisocial.app.frontend.dto.RegisterLoginRequestDto;
-import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
-import antisocial.app.frontend.dto.ResponseMessageDto;
-import antisocial.app.frontend.dto.VideosDto;
+import antisocial.app.frontend.data.dto.FriendsNamesAndRequestsDTo;
+import antisocial.app.frontend.data.dto.FriendsNamesDto;
+import antisocial.app.frontend.data.dto.PreassignedUrlToUploadVideoDto;
+import antisocial.app.frontend.data.dto.JwtResponseDto;
+import antisocial.app.frontend.data.dto.RegisterLoginRequestDto;
+import antisocial.app.frontend.data.dto.PreassignedUrlDetailsDto;
+import antisocial.app.frontend.data.dto.ResponseMessageDto;
+import antisocial.app.frontend.data.dto.VideosDto;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

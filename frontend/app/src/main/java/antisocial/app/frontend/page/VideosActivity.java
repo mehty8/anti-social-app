@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 import antisocial.app.frontend.R;
-import antisocial.app.frontend.dto.VideoDetailsToPlay;
+import antisocial.app.frontend.data.dto.VideoDetailsToPlay;
 
 public class VideosActivity extends AppCompatActivity {
     private List<VideoDetailsToPlay> videos;

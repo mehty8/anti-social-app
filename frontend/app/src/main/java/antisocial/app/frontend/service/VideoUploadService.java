@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import antisocial.app.frontend.dto.PreassignedUrlToUploadVideoDto;
-import antisocial.app.frontend.dto.PreassignedUrlDetailsDto;
-import antisocial.app.frontend.dto.ResponseMessageDto;
+import antisocial.app.frontend.data.dto.PreassignedUrlToUploadVideoDto;
+import antisocial.app.frontend.data.dto.PreassignedUrlDetailsDto;
+import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;

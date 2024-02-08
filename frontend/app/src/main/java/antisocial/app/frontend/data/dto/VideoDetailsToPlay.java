@@ -1,4 +1,4 @@
-package antisocial.app.frontend.dto;
+package antisocial.app.frontend.data.dto;
 
 import java.io.Serializable;
 
