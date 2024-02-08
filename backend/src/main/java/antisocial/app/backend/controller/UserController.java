@@ -32,25 +32,40 @@ public class UserController {
     public ResponseEntity<ResponseMessageDto> register(@RequestBody LoginDto loginDto){
         try {
             userService.registerNewUser(loginDto);
-            ResponseMessageDto responseMessage = new ResponseMessageDto("User Registered");
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessageDto("User Registered"));
+
         } catch (Exception ex){
             logger.error(ex.getMessage());
-            ResponseMessageDto responseMessage = new ResponseMessageDto(ex.getMessage());
+
+            String responseMes = ex instanceof RegisterException
+                    ? ex.getMessage()
+                    : "Sorry, something went wrong, try again please";
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto(responseMes);
+
             return ex instanceof RegisterException
-                    ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage)
-                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                    ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessageDto)
+                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageDto);
         }
     }
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
         try{
             JwtResponseDto jwtResponseDto = userService.login(loginDto);
+
             return ResponseEntity.ok(jwtResponseDto);
+
         } catch (Exception ex){
+            logger.error(ex.getMessage());
+
+            String responseMes = ex instanceof BadCredentialsException
+                    ? "Invalid Password or/and username"
+                    : "Sorry, something went wrong, try again please";
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto(responseMes);
+
             return ex instanceof BadCredentialsException
-                    ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessageDto("Invalid Password or/and username"))
-                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessageDto("Sorry, something went wrong, try again please"));
+                    ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessageDto)
+                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageDto);
         }
     }
 }
