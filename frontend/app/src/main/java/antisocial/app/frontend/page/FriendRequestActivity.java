@@ -8,12 +8,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
+import antisocial.app.frontend.adapter.IAdapter;
+import antisocial.app.frontend.adapter.UserFinderAdapter;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.service.ApiClient;
 import antisocial.app.frontend.service.ApiService;
@@ -23,58 +28,19 @@ import retrofit2.Response;
 
 public class FriendRequestActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
-    private Set<String> friendRequestNames;
+    private Set<String> userNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-        friendRequestNames = (Set<String>) intent.getSerializableExtra("friendRequestNames");
+        userNames = (Set<String>) intent.getSerializableExtra("friendRequestNames");
         setContentView(R.layout.activity_friend_request);
-        LinearLayout linearLayout = findViewById(R.id.containerLayout);
-        loadFriendRequestNames(linearLayout);
-    }
 
-    private void loadFriendRequestNames(LinearLayout linearLayout){
-        friendRequestNames.forEach(friendsName -> {
-            TextView textView = new TextView(this);
-            textView.setText(friendsName);
-            textView.setBackgroundResource(R.drawable.rectangle_curvy_background);
-            textView.setPadding(16, 16, 16, 16);
-            textView.setTag(friendsName);
-
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String friendsName = (String) view.getTag();
-                    ApiService apiService = ApiClient.getApiServiceDynamic();
-                    Call<ResponseMessageDto> call = apiService.sendOrAcceptFriendRequest("friendrequest", friendsName,"Bearer " + sharedPreferencesManager.getJwt());
-                    call.enqueue(new Callback<ResponseMessageDto>() {
-                        @Override
-                        public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
-                            Toast.makeText(FriendRequestActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(FriendRequestActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
-                            Toast.makeText(FriendRequestActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    Intent intent = new Intent(FriendRequestActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-            linearLayout.addView(textView);
-
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-            layoutParams.setMargins(0, 0, 0, 16);
-            textView.setLayoutParams(layoutParams);
-
-        });
+        RecyclerView recyclerViewFriendRequest = findViewById(R.id.recyclerViewUserFinder);
+        recyclerViewFriendRequest.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.Adapter userFinderAdapter = new UserFinderAdapter(userNames, FriendRequestActivity.this);
+        recyclerViewFriendRequest.setAdapter(userFinderAdapter);
     }
 }

@@ -2,25 +2,30 @@ package antisocial.app.frontend.page;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
+import antisocial.app.frontend.adapter.FriendListAdapter;
+import antisocial.app.frontend.adapter.FriendRequestAdapter;
+import antisocial.app.frontend.adapter.IAdapter;
 import antisocial.app.frontend.data.dto.FriendsNamesDto;
 import antisocial.app.frontend.data.dto.VideosDto;
-import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.service.ApiClient;
 import antisocial.app.frontend.service.ApiService;
 import retrofit2.Call;
@@ -31,6 +36,7 @@ public class MainPageActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
     private Set<String> friendsNames;
     private Set<String> friendRequests;
+    private List<IAdapter> adapters;
 
 
     @Override
@@ -41,18 +47,18 @@ public class MainPageActivity extends AppCompatActivity {
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
         friendsNames = (Set<String>) intent.getSerializableExtra("friends");
         friendRequests = (Set<String>) intent.getSerializableExtra("requests");
+        Log.i("Check friends in mainPAge", "" + friendsNames.size());
+
+        adapters = new ArrayList<>();
+        IAdapter requestAdapter = new FriendRequestAdapter(friendRequests, MainPageActivity.this);
+        IAdapter friendAdapter = new FriendListAdapter(friendsNames, MainPageActivity.this);
+        adapters.add(requestAdapter);
+        adapters.add(friendAdapter);
+
         setContentView(R.layout.activity_main_page);
-        LinearLayout linearLayoutRequests = findViewById(R.id.friendRequest);
-        if(friendRequests.isEmpty()){
-            setNoRequests(linearLayoutRequests);
-        } else {
-            loadRequests(linearLayoutRequests);
-        }
-        LinearLayout linearLayoutFriends = findViewById(R.id.containerLayout);
-        loadFriends(linearLayoutFriends);
+
 
         Button buttonSentVideos = findViewById(R.id.buttonSentVideos);
-
         buttonSentVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +67,6 @@ public class MainPageActivity extends AppCompatActivity {
         });
 
         Button buttonReceivedVideos = findViewById(R.id.buttonReceivedVideos);
-
         buttonReceivedVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +74,9 @@ public class MainPageActivity extends AppCompatActivity {
             }
         });
 
+
         EditText editTexFriendName = findViewById(R.id.editTextFriendName);
         Button buttonFriendSearch = findViewById(R.id.buttonFindFriend);
-
         buttonFriendSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +95,6 @@ public class MainPageActivity extends AppCompatActivity {
                             startActivity(intentFriendRequest);
                         }
                     }
-
                     @Override
                     public void onFailure(Call<FriendsNamesDto> call, Throwable t) {
                         Toast.makeText(MainPageActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
@@ -99,70 +103,12 @@ public class MainPageActivity extends AppCompatActivity {
             }
         });
 
-    }
-    private void loadFriends(LinearLayout linearLayout){
-        friendsNames.forEach(friendsName -> {
-            TextView textView = new TextView(this);
-            textView.setText(friendsName);
-            textView.setBackgroundResource(R.drawable.rectangle_curvy_background);
-            textView.setPadding(16, 16, 16, 16);
-            textView.setTag(friendsName);
+        RecyclerView recyclerViewFriendRequest = findViewById(R.id.recyclerViewFriendRequests);
+        setRequestAndFriendList(recyclerViewFriendRequest, "Request");
+        RecyclerView recyclerViewFriendList = findViewById(R.id.recyclerViewFriends);
+        setRequestAndFriendList(recyclerViewFriendList, "Friend");
 
 
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String friendsName = (String) view.getTag();
-                    Intent intent = new Intent(MainPageActivity.this, VideoRecordActivity.class);
-                    intent.putExtra("username", friendsName);
-                    startActivity(intent);
-                }
-            });
-
-            linearLayout.addView(textView);
-
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-            layoutParams.setMargins(0, 0, 0, 16);
-            textView.setLayoutParams(layoutParams);
-
-        });
-    }
-
-    private void loadRequests(LinearLayout linearLayout){
-        friendRequests.forEach(requestsName -> {
-            TextView textView = new TextView(this);
-            textView.setText(requestsName);
-            textView.setBackgroundResource(R.drawable.rectangle_curvy_background);
-            textView.setPadding(16, 16, 16, 16);
-            textView.setTag(requestsName);
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String requestsName = (String) view.getTag();
-                    ApiService apiService = ApiClient.getApiServiceDynamic();
-                    Call<ResponseMessageDto> call = apiService.sendOrAcceptFriendRequest("acceptrequest", requestsName, "Bearer " + sharedPreferencesManager.getJwt());
-                    call.enqueue(new Callback<ResponseMessageDto>() {
-                        @Override
-                        public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
-                            Toast.makeText(MainPageActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(MainPageActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
-                            Toast.makeText(MainPageActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            });
-            linearLayout.addView(textView);
-
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-            layoutParams.setMargins(0, 0, 0, 16);
-            textView.setLayoutParams(layoutParams);
-        });
     }
 
     private void getVideosActivity(String type){
@@ -185,13 +131,10 @@ public class MainPageActivity extends AppCompatActivity {
         });
     }
 
-    private void setNoRequests(LinearLayout linearLayout){
-        TextView textView = new TextView(this);
-        textView.setText("No Requests");
-        textView.setPadding(16, 16, 16, 16);
-        linearLayout.addView(textView);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-        layoutParams.setMargins(0, 0, 0, 16);
-        textView.setLayoutParams(layoutParams);
+    private void setRequestAndFriendList(RecyclerView recyclerView, String type){
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.Adapter adapter = (RecyclerView.Adapter) adapters.stream().filter(adapterNeeded
+                        -> adapterNeeded.isNeeded(type)).collect(Collectors.toList()).get(0);
+        recyclerView.setAdapter(adapter);
     }
 }
