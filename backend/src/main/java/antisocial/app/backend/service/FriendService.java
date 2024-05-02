@@ -39,22 +39,26 @@ public class FriendService implements IFriendService{
 
     @Override
     public void sendFriendRequest(String receiver, String sender) {
-        UserEntity userReceive = userRepository.findByUsername(receiver).get();
-        userReceive.addFriendRequest(sender);
-        userRepository.save(userReceive);
+        UserEntity userReceiver = userRepository.findByUsername(receiver).get();
+        UserEntity userSender = userRepository.findByUsername(sender).get();
+        userReceiver.addFriendRequest(sender);
+        userSender.addSentFriendRequest(receiver);
+        userRepository.save(userReceiver);
+        userRepository.save(userSender);
     }
 
     @Override
     public void acceptFriendRequest(String receiver, String sender) {
-        UserEntity userReceive = userRepository.findByUsername(receiver).get();
-        UserEntity userSend = userRepository.findByUsername(sender).get();
+        UserEntity userReceiver = userRepository.findByUsername(receiver).get();
+        UserEntity userSender = userRepository.findByUsername(sender).get();
 
-        userReceive.addFriendName(userSend.getUsername());
-        userSend.addFriendName(userReceive.getUsername());
-        userReceive.removeFriendRequest(userSend.getUsername());
+        userReceiver.addFriendName(userSender.getUsername());
+        userSender.addFriendName(userReceiver.getUsername());
+        userReceiver.removeFriendRequest(userSender.getUsername());
+        userSender.removeSentFriendRequest(userReceiver.getUsername());
 
-        userRepository.save(userReceive);
-        userRepository.save(userSend);
+        userRepository.save(userReceiver);
+        userRepository.save(userSender);
     }
 
     /*
@@ -83,11 +87,13 @@ public class FriendService implements IFriendService{
         UserEntity user = userRepository.findByUsername(userUsername).get();
         Set<String> friendsNames = user.getFriendsNames();
         Set<String> friendRequests = user.getFriendsRequests();
+        Set<String> sentFriendsRequests = user.getFriendsRequestsSent();
 
         Set<String> usernamesToExclude = new HashSet<>();
         usernamesToExclude.add(userUsername);
         usernamesToExclude.addAll(friendsNames);
         usernamesToExclude.addAll(friendRequests);
+        usernamesToExclude.addAll(sentFriendsRequests);
 
         Set<String> usernames = userRepository.findAllByUsername(usernameToSearch, usernamesToExclude);
         return usernames;
