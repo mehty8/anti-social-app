@@ -25,11 +25,14 @@ public class UserEntity {
     private Set<String> friendsNames;
     @ElementCollection
     private Set<String> friendsRequests;
+    @ElementCollection
+    private Set<String> friendsRequestsSent;
 
     public UserEntity() {
         roles = new ArrayList<>();
         friendsNames = new HashSet<>();
         friendsRequests = new HashSet<>();
+        friendsRequestsSent = new HashSet<>();
     }
 
     public long getId() {
@@ -64,6 +67,9 @@ public class UserEntity {
         return friendsRequests;
     }
 
+    public Set<String> getFriendsRequestsSent() {
+        return friendsRequestsSent;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -91,8 +97,9 @@ public class UserEntity {
             this.receivedPreassignedUrlsDetails.add(preassignedUrlDetails);
         }
     }
-    public void removeFriendRequest(String username){
-        this.friendsRequests.remove(username);
+
+    public void addSentFriendRequest(String username){
+        this.friendsRequestsSent.add(username);
     }
 
     public void removePreassignedUrlDetails(PreassignedUrlEntity preassignedUrlDetails, String type){
@@ -101,6 +108,14 @@ public class UserEntity {
         } else {
             this.receivedPreassignedUrlsDetails.remove(preassignedUrlDetails);
         }
+    }
+
+    public void removeFriendRequest(String username){
+        this.friendsRequests.remove(username);
+    }
+
+    public void removeSentFriendRequest(String username){
+        this.friendsRequestsSent.remove(username);
     }
 
 }
