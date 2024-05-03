@@ -2,18 +2,13 @@ package antisocial.app.frontend.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.card.MaterialCardView;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -28,7 +23,6 @@ import retrofit2.Response;
 public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
     private TextView textView;
     private Context context;
-
     private SharedPreferencesManager sharedPreferencesManager;
 
     public FriendRequestViewHolder(@NonNull View itemView, Context context) {
@@ -36,35 +30,51 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
         this.textView = itemView.findViewById(R.id.textViewFriendRequestItem);
         this.context = context;
         sharedPreferencesManager = new SharedPreferencesManager(context.getApplicationContext());
+
+        Button acceptButton = itemView.findViewById(R.id.buttonAccept);
+        Button denyButton = itemView.findViewById(R.id.buttonDeny);
+
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFriendRequest("acceptrequest", textView.getTag().toString());
+            }
+        });
+
+        denyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFriendRequest("denyrequest", textView.getTag().toString());
+            }
+        });
     }
 
     public void bind(String requestName){
         textView.setText(requestName);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
-        textView.setPadding(16, 16, 16, 16);
         textView.setTag(requestName);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String requestsName = (String) view.getTag();
-                ApiService apiService = ApiClient.getApiServiceDynamic();
-                Call<ResponseMessageDto> call = apiService.sendOrAcceptFriendRequest("acceptrequest", requestsName, "Bearer " + sharedPreferencesManager.getJwt());
-                call.enqueue(new Callback<ResponseMessageDto>() {
-                    @Override
-                    public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
-                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(context, MainActivity.class);
-                        context.startActivity(intent);
-                    }
+    }
 
-                    @Override
-                    public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
-                        Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+    private void handleFriendRequest(String type, String requestsName){
+        ApiService apiService = ApiClient.getApiServiceDynamic();
+        Call<ResponseMessageDto> call = apiService.sendOrHandleFriendRequest(type, requestsName,
+                "Bearer " + sharedPreferencesManager.getJwt());
+        call.enqueue(new Callback<ResponseMessageDto>() {
+            @Override
+            public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
+                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 }
+
+/*textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+        textView.setPadding(16, 16, 16, 16);*/

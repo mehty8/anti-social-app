@@ -75,6 +75,20 @@ public class FriendController {
         return ResponseEntity.ok(simpleResponse);
     }
 
+    @PatchMapping("denyrequest/{sender}")
+    public ResponseEntity<ResponseMessageDto> denyFriendRequest(@PathVariable String sender){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String receiver = user.getUsername();
+
+        friendService.denyFriendRequest(receiver, sender);
+
+        ResponseMessageDto simpleResponse = new ResponseMessageDto("Request denied");
+
+        return ResponseEntity.ok(simpleResponse);
+    }
+
+
+
     /*
     * @PatchMapping("acceptrequest/{sender}")
     public CompletableFuture<ResponseEntity<ResponseMessageDto>> acceptFriendRequest(@PathVariable String sender){

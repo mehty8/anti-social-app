@@ -39,7 +39,7 @@ public class FriendListViewHolder extends RecyclerView.ViewHolder{
 
     public void bind(String friendName){
         textView.setText(friendName);
-        textView.setGravity(Gravity.LEFT);
+        textView.setGravity(Gravity.CENTER);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         textView.setTextColor(ContextCompat.getColor(context, R.color.black));
         textView.setPadding(16, 16, 16, 16);
