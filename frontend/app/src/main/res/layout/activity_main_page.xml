@@ -59,14 +59,14 @@
                 android:layout_weight="1"
                 android:hint="Search users"
                 android:inputType="textPersonName"
-                android:backgroundTint="#C86400"/>
+                android:backgroundTint="@color/sunsetDarkOrange"/>
 
             <Button
                 android:id="@+id/buttonFindFriend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Go"
-                android:backgroundTint="#C86400"
+                android:backgroundTint="@color/sunsetDarkOrange"
                 android:layout_marginStart="8dp"/>
 
         </LinearLayout>
