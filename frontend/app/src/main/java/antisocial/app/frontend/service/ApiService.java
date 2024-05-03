@@ -31,7 +31,7 @@ public interface ApiService {
     Call<JwtResponseDto> loginUser(@Body RegisterLoginRequestDto loginRequest);
 
     @PATCH("friend/{requesttype}/{endpoint}")
-    Call<ResponseMessageDto> sendOrAcceptFriendRequest(@Path("requesttype") String requesttype,
+    Call<ResponseMessageDto> sendOrHandleFriendRequest(@Path("requesttype") String requesttype,
                                                        @Path("endpoint") String endpoint,
                                                        @Header("Authorization") String jwt);
     @GET("friend/finduser/{endpoint}")
