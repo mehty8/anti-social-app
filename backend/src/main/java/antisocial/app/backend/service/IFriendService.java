@@ -17,6 +17,8 @@ public interface IFriendService {
 
     Set<String> findUsers(String usernameToSearch, String userUsername);
 
+    void denyFriendRequest(String receiver, String sender);
+
     //CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername);
 
 }

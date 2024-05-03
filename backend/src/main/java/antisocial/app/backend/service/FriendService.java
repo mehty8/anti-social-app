@@ -61,6 +61,18 @@ public class FriendService implements IFriendService{
         userRepository.save(userSender);
     }
 
+    @Override
+    public void denyFriendRequest(String receiver, String sender) {
+        UserEntity userReceiver = userRepository.findByUsername(receiver).get();
+        UserEntity userSender = userRepository.findByUsername(sender).get();
+        userReceiver.removeFriendRequest(userSender.getUsername());
+        userSender.removeSentFriendRequest(userReceiver.getUsername());
+
+        userRepository.save(userReceiver);
+        userRepository.save(userSender);
+
+    }
+
     /*
     @Override
     @Async
@@ -98,6 +110,7 @@ public class FriendService implements IFriendService{
         Set<String> usernames = userRepository.findAllByUsername(usernameToSearch, usernamesToExclude);
         return usernames;
     }
+
 
 
     /*@Override
