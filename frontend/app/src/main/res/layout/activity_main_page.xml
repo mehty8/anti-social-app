@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:text="Sent Videos"
             app:cornerRadius="20dp"
+            app:strokeColor="@color/button_stroke_selector"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
         <com.google.android.material.button.MaterialButton
@@ -31,6 +32,7 @@
             android:layout_weight="1"
             android:text="Received Videos"
             app:cornerRadius="20dp"
+            app:strokeColor="@color/button_stroke_selector"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
