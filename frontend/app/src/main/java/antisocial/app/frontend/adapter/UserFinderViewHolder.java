@@ -47,7 +47,7 @@ public class UserFinderViewHolder extends RecyclerView.ViewHolder{
             public void onClick(View view) {
                 String friendsName = (String) view.getTag();
                 ApiService apiService = ApiClient.getApiServiceDynamic();
-                Call<ResponseMessageDto> call = apiService.sendOrAcceptFriendRequest("friendrequest", friendsName,"Bearer " + sharedPreferencesManager.getJwt());
+                Call<ResponseMessageDto> call = apiService.sendOrHandleFriendRequest("friendrequest", friendsName,"Bearer " + sharedPreferencesManager.getJwt());
                 call.enqueue(new Callback<ResponseMessageDto>() {
                     @Override
                     public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
