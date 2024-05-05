@@ -17,5 +17,7 @@
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:layout_marginLeft="15dp"
-        android:text="Video Details Placeholder" />
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/card_ripple" />
 </com.google.android.material.card.MaterialCardView>

@@ -15,5 +15,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:gravity="center_vertical"
-        android:text="Friend Name Placeholder" />
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/card_ripple" />
 </com.google.android.material.card.MaterialCardView>
