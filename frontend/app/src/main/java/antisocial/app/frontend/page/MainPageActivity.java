@@ -47,7 +47,6 @@ public class MainPageActivity extends AppCompatActivity {
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
         friendsNames = (Set<String>) intent.getSerializableExtra("friends");
         friendRequests = (Set<String>) intent.getSerializableExtra("requests");
-        Log.i("Check friends in mainPAge", "" + friendsNames.size());
 
         adapters = new ArrayList<>();
         IAdapter requestAdapter = new FriendRequestAdapter(friendRequests, MainPageActivity.this);
