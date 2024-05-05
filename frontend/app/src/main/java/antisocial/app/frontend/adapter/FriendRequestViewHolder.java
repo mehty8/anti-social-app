@@ -3,12 +3,13 @@ package antisocial.app.frontend.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -31,8 +32,8 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
         this.context = context;
         sharedPreferencesManager = new SharedPreferencesManager(context.getApplicationContext());
 
-        Button acceptButton = itemView.findViewById(R.id.buttonAccept);
-        Button denyButton = itemView.findViewById(R.id.buttonDeny);
+        MaterialButton acceptButton = itemView.findViewById(R.id.buttonAccept);
+        MaterialButton denyButton = itemView.findViewById(R.id.buttonDeny);
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
