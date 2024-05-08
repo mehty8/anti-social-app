@@ -92,9 +92,6 @@ public class VideoRecordActivity extends AppCompatActivity {
                 } else if (ActivityCompat.checkSelfPermission(VideoRecordActivity.this, Manifest.permission.RECORD_AUDIO)
                         != PackageManager.PERMISSION_GRANTED) {
                     activityResultLauncher.launch(Manifest.permission.RECORD_AUDIO);
-                } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && ActivityCompat.checkSelfPermission(VideoRecordActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 } else {
                     captureVideo();
                 }
@@ -113,7 +110,7 @@ public class VideoRecordActivity extends AppCompatActivity {
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(VideoRecordActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(VideoRecordActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             activityResultLauncher.launch(Manifest.permission.CAMERA);
         } else {
             startCamera(cameraFacing);

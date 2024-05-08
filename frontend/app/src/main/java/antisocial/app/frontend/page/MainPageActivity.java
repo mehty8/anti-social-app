@@ -1,13 +1,15 @@
 package antisocial.app.frontend.page;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +35,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainPageActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher<String[]> activityResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result ->
+            {
+                for (String permission : result.keySet()) {
+                    if (!result.get(permission)) {
+                        Toast.makeText(this, "All permissions needed to record video",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+            });
     private SharedPreferencesManager sharedPreferencesManager;
     private Set<String> friendsNames;
     private Set<String> friendRequests;
@@ -42,6 +56,8 @@ public class MainPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getVideoPermissions();
 
         Intent intent = getIntent();
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
@@ -107,7 +123,14 @@ public class MainPageActivity extends AppCompatActivity {
         RecyclerView recyclerViewFriendList = findViewById(R.id.recyclerViewFriends);
         setRequestAndFriendList(recyclerViewFriendList, "Friend");
 
+    }
 
+
+    private void getVideoPermissions(){
+        activityResultLauncher.launch(new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+        });
     }
 
     private void getVideosActivity(String type){
