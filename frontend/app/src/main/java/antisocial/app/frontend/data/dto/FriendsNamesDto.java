@@ -1,6 +1,5 @@
 package antisocial.app.frontend.data.dto;
 
-import java.util.List;
 import java.util.Set;
 
 public class FriendsNamesDto {

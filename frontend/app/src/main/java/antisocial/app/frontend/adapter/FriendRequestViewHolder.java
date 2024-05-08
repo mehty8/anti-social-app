@@ -74,8 +74,3 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
         });
     }
 }
-
-/*textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
-        textView.setPadding(16, 16, 16, 16);*/

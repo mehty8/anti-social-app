@@ -8,23 +8,13 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
-import antisocial.app.frontend.SharedPreferencesManager;
-import antisocial.app.frontend.data.dto.ResponseMessageDto;
-import antisocial.app.frontend.page.MainPageActivity;
 import antisocial.app.frontend.page.VideoRecordActivity;
-import antisocial.app.frontend.service.ApiClient;
-import antisocial.app.frontend.service.ApiService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class FriendListViewHolder extends RecyclerView.ViewHolder{
 

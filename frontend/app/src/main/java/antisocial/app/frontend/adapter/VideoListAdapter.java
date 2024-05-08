@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.data.dto.VideoDetailsToPlay;
