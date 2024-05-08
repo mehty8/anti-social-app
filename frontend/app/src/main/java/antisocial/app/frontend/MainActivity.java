@@ -29,35 +29,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityResultLauncher<Intent> manageFilesPermissionLauncher;
+    private ActivityResultLauncher<Intent> manageFilesPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+                    try {
+                        validateJwt();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    Toast.makeText(this, "Sorry this app only works on android 11 or above", Toast.LENGTH_LONG).show();
+                    }
+            });
     private SharedPreferencesManager sharedPreferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-        registerManageFilesPermissionLauncher();
         getPermission();
     }
-
-    private void registerManageFilesPermissionLauncher() {
-        manageFilesPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        if (Environment.isExternalStorageManager()) {
-                            try {
-                                validateJwt();
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            Toast.makeText(this, "Permission required to proceed", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-
 
     private void getPermission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
@@ -73,11 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            try {
-                validateJwt();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            Toast.makeText(this, "Sorry this app only works on android 11 or above", Toast.LENGTH_LONG).show();
         }
     }
 
