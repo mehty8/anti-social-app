@@ -105,9 +105,9 @@ public class RegisterLoginActivity extends AppCompatActivity {
                     try {
                         ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
                                 ResponseMessageDto.class);
-                        String errorMes = responseBody.getMessage();
+                        String errorMessage = responseBody.getMessage();
                         Toast.makeText(RegisterLoginActivity.this,
-                                errorMes,
+                                errorMessage,
                                 Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
