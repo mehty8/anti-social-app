@@ -1,7 +1,6 @@
 package antisocial.app.frontend.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListViewHolder
     public FriendListAdapter(Set<String> friendNames, Context context) {
         this.friendNames = new ArrayList<>(friendNames);
         this.layoutInflater = LayoutInflater.from(context);
-        Log.i("Check friends in Adapter constructor", "" + friendNames.size());
     }
 
     @Override
@@ -35,13 +33,11 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListViewHolder
     @Override
     public FriendListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_friend_list, parent, false);
-        Log.i("Check friends in Adapter onCreateViewHolder", "" + friendNames.size());
         return new FriendListViewHolder(view, layoutInflater.getContext());
     }
 
     @Override
     public void onBindViewHolder(@NonNull FriendListViewHolder holder, int position) {
-        Log.i("Check friends in Adapter onBindViewHolder", "" + friendNames.size());
         String friendName = friendNames.get(position);
         holder.bind(friendName);
     }
