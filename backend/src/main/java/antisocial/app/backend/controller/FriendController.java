@@ -56,7 +56,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String sender = user.getUsername();
 
-        friendService.sendFriendRequest(receiver, sender);
+        friendService.handleFriendRequest(receiver, sender, "requested");
 
         ResponseMessageDto simpleResponse = new ResponseMessageDto("Request sent");
 
@@ -68,7 +68,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
-        friendService.acceptFriendRequest(receiver, sender);
+        friendService.handleFriendRequest(receiver, sender, "accepted");
 
         ResponseMessageDto simpleResponse = new ResponseMessageDto("Request accepted");
 
@@ -80,7 +80,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
-        friendService.denyFriendRequest(receiver, sender);
+        friendService.handleFriendRequest(receiver, sender, "denied");
 
         ResponseMessageDto simpleResponse = new ResponseMessageDto("Request denied");
 

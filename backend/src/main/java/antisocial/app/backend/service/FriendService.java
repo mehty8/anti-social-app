@@ -3,14 +3,10 @@ package antisocial.app.backend.service;
 import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.entity.UserEntity;
 import antisocial.app.backend.repository.IUserRepository;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 
 @Service
 public class FriendService implements IFriendService{
@@ -38,39 +34,24 @@ public class FriendService implements IFriendService{
     }
 
     @Override
-    public void sendFriendRequest(String receiver, String sender) {
-        UserEntity userReceiver = userRepository.findByUsername(receiver).get();
-        UserEntity userSender = userRepository.findByUsername(sender).get();
-        userReceiver.addFriendRequest(sender);
-        userSender.addSentFriendRequest(receiver);
-        userRepository.save(userReceiver);
-        userRepository.save(userSender);
-    }
-
-    @Override
-    public void acceptFriendRequest(String receiver, String sender) {
+    public void handleFriendRequest(String receiver, String sender, String type) {
         UserEntity userReceiver = userRepository.findByUsername(receiver).get();
         UserEntity userSender = userRepository.findByUsername(sender).get();
 
-        userReceiver.addFriendName(userSender.getUsername());
-        userSender.addFriendName(userReceiver.getUsername());
-        userReceiver.removeFriendRequest(userSender.getUsername());
-        userSender.removeSentFriendRequest(userReceiver.getUsername());
+        if(type.equals("requested")){
+            userReceiver.addFriendRequest(sender);
+            userSender.addSentFriendRequest(receiver);
+        } else if(type.equals("accepted")){
+            userReceiver.addFriendName(sender);
+            userSender.addFriendName(receiver);
+        }
+        if(type.equals("accepted") || type.equals("denied")){
+            userReceiver.removeFriendRequest(sender);
+            userSender.removeSentFriendRequest(receiver);
+        }
 
         userRepository.save(userReceiver);
         userRepository.save(userSender);
-    }
-
-    @Override
-    public void denyFriendRequest(String receiver, String sender) {
-        UserEntity userReceiver = userRepository.findByUsername(receiver).get();
-        UserEntity userSender = userRepository.findByUsername(sender).get();
-        userReceiver.removeFriendRequest(userSender.getUsername());
-        userSender.removeSentFriendRequest(userReceiver.getUsername());
-
-        userRepository.save(userReceiver);
-        userRepository.save(userSender);
-
     }
 
     /*

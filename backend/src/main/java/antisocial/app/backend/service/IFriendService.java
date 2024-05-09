@@ -9,15 +9,11 @@ import java.util.concurrent.CompletableFuture;
 public interface IFriendService {
     FriendsNamesAndRequestsDto getFriendsNamesAndRequests(String username);
 
-    void sendFriendRequest(String username, String sender);
-
-    void acceptFriendRequest(String receiver, String username);
+    void handleFriendRequest(String receiver, String sender, String type);
 
     //CompletableFuture<Void> acceptFriendRequestAsync(String receiver, String username);
 
     Set<String> findUsers(String usernameToSearch, String userUsername);
-
-    void denyFriendRequest(String receiver, String sender);
 
     //CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername);
 
