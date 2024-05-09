@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Base64;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -38,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    Toast.makeText(this, "Sorry this app only works on android 11 or above", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
                     }
             });
     private SharedPreferencesManager sharedPreferencesManager;
@@ -64,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(this, "Sorry this app only works on android 11 or above", Toast.LENGTH_LONG).show();
+            setContentView(R.layout.activity_android10_or_lower);
+            TextView text = findViewById(R.id.android10OrLower);
+            String message = "You are using android "  + Build.VERSION.RELEASE + ". \n" +
+                    "Sorry this app only works on android 11 or above!";
+            text.setText(message);
         }
     }
 
