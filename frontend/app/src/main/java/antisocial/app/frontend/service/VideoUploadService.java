@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -35,6 +34,11 @@ public class VideoUploadService {
         getPreassignedUrl(jwt, videoName, username, temporaryVideoName, toastCallback);
     }
 
+    public void videoCancel(String temporaryVideoName, ToastCallBack toastCallBack){
+        deleteFile(temporaryVideoName);
+        toastCallBack.displayToast("Video sending cancelled");
+    }
+
     private void getPreassignedUrl(String jwt, String videoName, String username, String temporaryVideoName, ToastCallBack toastCallback) {
 
         PreassignedUrlDetailsDto preassignedUrlDetailsDto = new PreassignedUrlDetailsDto(videoName,
@@ -51,7 +55,7 @@ public class VideoUploadService {
 
             @Override
             public void onFailure(Call<PreassignedUrlToUploadVideoDto> call, Throwable t) {
-                //Handle error
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         }));
     }
@@ -67,19 +71,13 @@ public class VideoUploadService {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                try {
-                    deleteFile(temporaryVideoName);
-                } catch (Exception ex){
-                    Log.e("videoUploadService", "error occurred" + ex.getMessage() );
-                } finally {
-                    savePreassignedUrl(videoName, username, jwt, toastCallBack);
-                }
+                deleteFile(temporaryVideoName);
+                savePreassignedUrl(videoName, username, jwt, toastCallBack);
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
-                //Handle error
             }
         });
 
@@ -96,7 +94,7 @@ public class VideoUploadService {
                     int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
                     filePath = cursor.getString(columnIndex);
                 } else {
-                    // Handle error or log a message
+                    Toast.makeText(context, "There is no such video file", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -110,23 +108,22 @@ public class VideoUploadService {
             try{
                 int success = context.getContentResolver().delete(contentUri, null, null);
                 if(success > 0){
-                    Toast.makeText(context, "delete successfull", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Delete Successful", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(context, "NOT DELETED", Toast.LENGTH_LONG).show();
                 }
             } catch (SecurityException ex){
                 Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("VideoDeletProblem", "Error caused by " + ex.getMessage());
                 ex.printStackTrace();
             }
-
+        } else{
+            Toast.makeText(context, "There is no such video file", Toast.LENGTH_LONG).show();
         }
     }
 
     private Uri getUri(String videoName){
         Uri queryUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
         String[] projection = {MediaStore.Video.Media._ID};
-
         String selection = MediaStore.Video.Media.DISPLAY_NAME + "=?";
         String[] selectionArgs = new String[]{videoName};
 
@@ -134,10 +131,8 @@ public class VideoUploadService {
             if (cursor != null && cursor.moveToFirst()) {
                 int idColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
                 long videoId = cursor.getLong(idColumnIndex);
-
                 return ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, videoId);
             } else {
-
                 return null;
             }
         }
