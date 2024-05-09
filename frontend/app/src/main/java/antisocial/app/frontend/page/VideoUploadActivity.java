@@ -70,12 +70,22 @@ public class VideoUploadActivity extends AppCompatActivity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(VideoUploadActivity.this, MainActivity.class);
-                startActivity(intent);
+                videoUploadService.videoCancel(temporaryVideoName + ".mp4", new ToastCallBack() {
+                    @Override
+                    public void displayToast(String message) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(VideoUploadActivity.this, message, Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(VideoUploadActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
                 dialog.dismiss();
             }
         });
-
         dialog.show();
     }
 }
