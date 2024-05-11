@@ -14,10 +14,11 @@
         android:id="@+id/textViewVideoListItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textColor="@color/black"
         android:gravity="center_vertical"
         android:layout_marginLeft="15dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="@drawable/card_ripple" />
+
 </com.google.android.material.card.MaterialCardView>

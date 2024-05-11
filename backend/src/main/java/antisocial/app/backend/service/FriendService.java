@@ -10,19 +10,14 @@ import java.util.Set;
 
 @Service
 public class FriendService implements IFriendService{
+
     private IUserRepository userRepository;
+
 
     public FriendService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-
-    /*private ExecutorService executorService;
-
-    public FriendService(IUserRepository userRepository, ExecutorService executorService) {
-        this.userRepository = userRepository;
-        this.executorService = executorService;
-    }*/
 
     @Override
     public FriendsNamesAndRequestsDto getFriendsNamesAndRequests(String username) {
@@ -30,6 +25,7 @@ public class FriendService implements IFriendService{
         Set<String> friendsNames = user.getFriendsNames();
         Set<String> requestsNames = user.getFriendsRequests();
         FriendsNamesAndRequestsDto friendsNamesAndRequests = new FriendsNamesAndRequestsDto(friendsNames, requestsNames);
+
         return friendsNamesAndRequests;
     }
 
@@ -45,6 +41,7 @@ public class FriendService implements IFriendService{
             userReceiver.addFriendName(sender);
             userSender.addFriendName(receiver);
         }
+
         if(type.equals("accepted") || type.equals("denied")){
             userReceiver.removeFriendRequest(sender);
             userSender.removeSentFriendRequest(receiver);
@@ -53,27 +50,6 @@ public class FriendService implements IFriendService{
         userRepository.save(userReceiver);
         userRepository.save(userSender);
     }
-
-    /*
-    @Override
-    @Async
-    public CompletableFuture<Void> acceptFriendRequestAsync(String receiver, String sender){
-        acceptFriendRequest(receiver, sender);
-        return CompletableFuture.completedFuture(null);
-    }
-
-    @Transactional
-    public void acceptFriendRequest(String receiver, String sender) {
-        UserEntity userReceive = userRepository.findByUsername(receiver).get();
-        UserEntity userSend = userRepository.findByUsername(sender).get();
-
-        userReceive.addFriendName(userSend.getUsername());
-        userSend.addFriendName(userReceive.getUsername());
-        userReceive.removeFriendRequest(userSend.getUsername());
-
-        userRepository.save(userReceive);
-        userRepository.save(userSend);
-    }*/
 
     @Override
     public Set<String> findUsers(String usernameToSearch, String userUsername) {
@@ -89,24 +65,8 @@ public class FriendService implements IFriendService{
         usernamesToExclude.addAll(sentFriendsRequests);
 
         Set<String> usernames = userRepository.findAllByUsername(usernameToSearch, usernamesToExclude);
+
         return usernames;
     }
-
-
-
-    /*@Override
-    @Async
-    public CompletableFuture<Set<String>> findUsers(String usernameToSearch, String userUsername) {
-        UserEntity user = userRepository.findByUsername(userUsername).get();
-        Set<String> friendsNames = user.getFriendsNames();
-        Set<String> friendRequests = user.getFriendsRequests();
-
-        Set<String> usernamesToExclude = new HashSet<>();
-        usernamesToExclude.add(userUsername);
-        usernamesToExclude.addAll(friendsNames);
-        usernamesToExclude.addAll(friendRequests);
-
-        return CompletableFuture.supplyAsync(() -> userRepository.findAllByUsername(usernameToSearch, usernamesToExclude));
-    }*/
 
 }

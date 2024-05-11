@@ -15,12 +15,16 @@ public class UserEntity {
     private long Id;
     private String username;
     private String password;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<RoleEntity> roles;
+
     @OneToMany(mappedBy = "receiver")
     private List<PreassignedUrlEntity> receivedPreassignedUrlsDetails;
+
     @OneToMany(mappedBy = "sender")
     private List<PreassignedUrlEntity> sentPreassignedUrlsDetails;
+
     @ElementCollection
     private Set<String> friendsNames;
     @ElementCollection
@@ -86,6 +90,7 @@ public class UserEntity {
     public void addFriendRequest(String username){
         this.friendsRequests.add(username);
     }
+
     public void addFriendName(String username){
         this.friendsNames.add(username);
     }

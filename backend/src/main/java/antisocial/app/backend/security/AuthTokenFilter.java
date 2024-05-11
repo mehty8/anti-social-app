@@ -17,11 +17,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
+
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
-
     private final JwtUtils jwtUtils;
-
     private final UserDetailsService userDetailsService;
+
 
     public AuthTokenFilter(JwtUtils jwtUtils, UserDetailsService userDetailsService) {
         this.jwtUtils = jwtUtils;

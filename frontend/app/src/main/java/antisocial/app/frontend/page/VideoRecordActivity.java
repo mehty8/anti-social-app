@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -110,7 +109,8 @@ public class VideoRecordActivity extends AppCompatActivity {
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(VideoRecordActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(VideoRecordActivity.this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
             activityResultLauncher.launch(Manifest.permission.CAMERA);
         } else {
             startCamera(cameraFacing);
@@ -132,8 +132,8 @@ public class VideoRecordActivity extends AppCompatActivity {
                     preview.setSurfaceProvider(previewView.getSurfaceProvider());
                     Recorder recorder = new Recorder.Builder().setQualitySelector(QualitySelector.from(Quality.HIGHEST))
                             .build();
-                    videoCapture = VideoCapture.withOutput(recorder);
 
+                    videoCapture = VideoCapture.withOutput(recorder);
 
                     provider.unbindAll();
 
@@ -183,11 +183,13 @@ public class VideoRecordActivity extends AppCompatActivity {
     private void captureVideo() {
         capture.setImageResource(R.drawable.baseline_stop_circle_24);
         Recording recording1 = recording;
+
         if (recording1 != null) {
             recording1.stop();
             recording = null;
             return;
         }
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, TEMPORARY_VIDEO_NAME);
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
@@ -196,17 +198,11 @@ public class VideoRecordActivity extends AppCompatActivity {
         MediaStoreOutputOptions options = new MediaStoreOutputOptions.Builder(getContentResolver(),
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI).setContentValues(contentValues).build();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            //activityResultLauncher.launch(Manifest.permission.RECORD_AUDIO);
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+        if (ActivityCompat.checkSelfPermission(VideoRecordActivity.this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            activityResultLauncher.launch(Manifest.permission.RECORD_AUDIO);
         }
+
         recording = videoCapture.getOutput().prepareRecording(VideoRecordActivity.this, options).withAudioEnabled()
                 .start(ContextCompat.getMainExecutor(VideoRecordActivity.this), new Consumer<VideoRecordEvent>() {
                     @Override

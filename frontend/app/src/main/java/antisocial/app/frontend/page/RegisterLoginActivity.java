@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
-import antisocial.app.frontend.data.PasswordCheck;
+import antisocial.app.frontend.service.CredentialCheck;
 import antisocial.app.frontend.data.dto.JwtResponseDto;
 import antisocial.app.frontend.data.dto.RegisterLoginRequestDto;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
@@ -44,23 +46,10 @@ public class RegisterLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String username = editTextUsername.getText().toString();
-                if(!checkUsername(username)){
-                    Toast.makeText(RegisterLoginActivity.this,
-                            "Username can only have letters, numbers and underscore",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
                 String password = editTextPassword.getText().toString();
-                PasswordCheck passwordCheck = checkPassword(password);
-                if(!passwordCheck.isValid()){
-                    Toast.makeText(RegisterLoginActivity.this,
-                            passwordCheck.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    return;
+                if(checkCredentials(username, password)){
+                    loginUser(username, password);
                 }
-
-                loginUser(username, password);
             }
         });
 
@@ -69,23 +58,10 @@ public class RegisterLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = editTextUsername.getText().toString();
-                if(!checkUsername(username)){
-                    Toast.makeText(RegisterLoginActivity.this,
-                            "Username can only have letters, numbers and underscore",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
                 String password = editTextPassword.getText().toString();
-                PasswordCheck passwordCheck = checkPassword(password);
-                if(!passwordCheck.isValid()){
-                    Toast.makeText(RegisterLoginActivity.this,
-                            passwordCheck.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    return;
+                if(checkCredentials(username, password)){
+                    registerUser(username, password);
                 }
-
-                registerUser(username, password);
             }
         });
     }
@@ -156,27 +132,47 @@ public class RegisterLoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkUsername(String username){
-        return username.matches("\\w+");
+    private boolean checkCredentials(String username, String password){
+        List<CredentialCheck> credentialChecks = new ArrayList<>();
+        credentialChecks.add(checkUsername(username));
+        credentialChecks.add(checkPassword(password));
+        for(int i = 0; i < credentialChecks.size(); i++){
+            if(!credentialChecks.get(i).isValid()){
+                Toast.makeText(RegisterLoginActivity.this,
+                        credentialChecks.get(i).getMessage(),
+                        Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        return true;
     }
 
-    private PasswordCheck checkPassword(String password){
+    private CredentialCheck checkUsername(String username){
+        if(!username.matches("\\w+")){
+            String message = "Username can only have letters, numbers and underscore";
+            CredentialCheck credentialCheck = new CredentialCheck(false, message);
+            return credentialCheck;
+        }
+        return new CredentialCheck(true, "ok");
+    }
+
+    private CredentialCheck checkPassword(String password){
         if(!password.matches("^(?=.*[a-z])(?=.*[A-Z]).{1,}$")){
             String message = "Password must contain at least 1 upper case and 1 lower case";
-            PasswordCheck passwordCheck = new PasswordCheck(false, message);
-            return passwordCheck;
+            CredentialCheck credentialCheck = new CredentialCheck(false, message);
+            return credentialCheck;
 
         } else if(!password.matches("^(?=.*\\d).{1,}")){
             String message = "Password must contain at least one digit";
-            PasswordCheck passwordCheck = new PasswordCheck(false, message);
-            return passwordCheck;
+            CredentialCheck credentialCheck = new CredentialCheck(false, message);
+            return credentialCheck;
 
         } else if(!password.matches("^.{8,}$")){
             String message = "Password must be at least 8 characters long";
-            PasswordCheck passwordCheck = new PasswordCheck(false, message);
-            return passwordCheck;
+            CredentialCheck credentialCheck = new CredentialCheck(false, message);
+            return credentialCheck;
         }
 
-        return new PasswordCheck(true, "ok");
+        return new CredentialCheck(true, "ok");
     }
 }

@@ -7,6 +7,7 @@
     android:padding="16dp"
     tools:context=".page.RegisterLoginActivity">
 
+    <!-- Username input field-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutUsername"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -26,6 +27,7 @@
             android:hint="Username" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Password input field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Base64;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityResultLauncher<Intent> manageFilesPermissionLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> manageFilesPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
                     try {
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            setContentView(R.layout.activity_android10_or_lower);
+            setContentView(R.layout.activity_main_android10_or_lower);
             TextView text = findViewById(R.id.android10OrLower);
             String message = "You are using android "  + Build.VERSION.RELEASE + ". \n" +
                     "Sorry this app only works on android 11 or above!";
@@ -96,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<FriendsNamesAndRequestsDTo> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainActivity.this, RegisterLoginActivity.class);
                     startActivity(intent);
                 }

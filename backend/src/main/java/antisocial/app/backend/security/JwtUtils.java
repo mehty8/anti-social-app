@@ -15,6 +15,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
+
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${antisocial.app.jwtSecret}")
@@ -22,6 +23,7 @@ public class JwtUtils {
 
     @Value("${antisocial.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
 
     public String generateJwtToken(Authentication authentication) {
 

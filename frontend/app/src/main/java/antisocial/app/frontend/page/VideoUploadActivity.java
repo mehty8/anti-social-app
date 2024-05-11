@@ -20,6 +20,7 @@ import antisocial.app.frontend.service.VideoUploadService;
 public class VideoUploadActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
     private VideoUploadService videoUploadService;
+    private static String EXTENSION = ".mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -27,6 +28,7 @@ public class VideoUploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_upload);
         videoUploadService = new VideoUploadService(this);
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
+
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
         String temporaryVideoName = intent.getStringExtra("videoName");
@@ -50,7 +52,7 @@ public class VideoUploadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String videoName = editText.getText().toString();
                 videoUploadService.videoUpload(sharedPreferencesManager.getJwt(), videoName, username,
-                        temporaryVideoName + ".mp4", new ToastCallBack() {
+                        temporaryVideoName + EXTENSION, new ToastCallBack() {
                             @Override
                             public void displayToast(String message) {
                                 runOnUiThread(new Runnable() {
@@ -70,7 +72,7 @@ public class VideoUploadActivity extends AppCompatActivity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                videoUploadService.videoCancel(temporaryVideoName + ".mp4", new ToastCallBack() {
+                videoUploadService.videoCancel(temporaryVideoName + EXTENSION, new ToastCallBack() {
                     @Override
                     public void displayToast(String message) {
                         runOnUiThread(new Runnable() {
@@ -86,6 +88,7 @@ public class VideoUploadActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
         dialog.show();
     }
 }

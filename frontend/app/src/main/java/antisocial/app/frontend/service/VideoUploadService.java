@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class VideoUploadService {
 
     public void videoCancel(String temporaryVideoName, ToastCallBack toastCallBack){
         deleteFile(temporaryVideoName);
-        toastCallBack.displayToast("Video sending cancelled");
+        toastCallBack.displayToast("Video sending cancelled, Video deleted");
     }
 
     private void getPreassignedUrl(String jwt, String videoName, String username, String temporaryVideoName, ToastCallBack toastCallback) {
@@ -80,7 +81,6 @@ public class VideoUploadService {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     private String getFilePath(String videoName) {
@@ -108,9 +108,9 @@ public class VideoUploadService {
             try{
                 int success = context.getContentResolver().delete(contentUri, null, null);
                 if(success > 0){
-                    Toast.makeText(context, "Delete Successful", Toast.LENGTH_LONG).show();
+                    Log.i("Delete video in deleteFile method", "Delete Successful");
                 } else {
-                    Toast.makeText(context, "NOT DELETED", Toast.LENGTH_LONG).show();
+                    Log.i("Delete video in deleteFile method", "Not Deleted");
                 }
             } catch (SecurityException ex){
                 Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -135,6 +135,9 @@ public class VideoUploadService {
             } else {
                 return null;
             }
+        } catch (Exception exception){
+            Toast.makeText(context, exception.getMessage(), Toast.LENGTH_LONG).show();
+            return null;
         }
     }
 

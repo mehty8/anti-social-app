@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView for Usernames -->
+    <!-- RecyclerView for video list item -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewVideoList"
         android:layout_width="0dp"

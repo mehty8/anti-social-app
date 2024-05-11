@@ -1,7 +1,7 @@
 package antisocial.app.backend.controller;
 
 import antisocial.app.backend.data.dto.JwtResponseDto;
-import antisocial.app.backend.data.dto.LoginDto;
+import antisocial.app.backend.data.dto.RegisterLoginDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.errorHandling.exception.RegisterException;
 import antisocial.app.backend.service.IUserService;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,46 +23,51 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+
     public UserController(IUserService userService) {
         this.userService = userService;
     }
 
+
     @PostMapping("register")
-    public ResponseEntity<ResponseMessageDto> register(@RequestBody LoginDto loginDto){
+    public ResponseEntity<ResponseMessageDto> register(@RequestBody RegisterLoginDto registerLoginDto){
         try {
-            userService.registerNewUser(loginDto);
+            userService.registerNewUser(registerLoginDto);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessageDto("User Registered"));
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto("User Registered");
 
-        } catch (Exception ex){
-            logger.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseMessageDto);
 
-            String responseMes = ex instanceof RegisterException
-                    ? ex.getMessage()
+        } catch (Exception exception){
+            logger.error(exception.getMessage());
+
+            String responseMes = exception instanceof RegisterException
+                    ? exception.getMessage()
                     : "Sorry, something went wrong, try again please";
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(responseMes);
 
-            return ex instanceof RegisterException
+            return exception instanceof RegisterException
                     ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessageDto)
                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageDto);
         }
     }
+
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<?> login(@RequestBody RegisterLoginDto registerLoginDto){
         try{
-            JwtResponseDto jwtResponseDto = userService.login(loginDto);
+            JwtResponseDto jwtResponseDto = userService.login(registerLoginDto);
 
             return ResponseEntity.ok(jwtResponseDto);
 
-        } catch (Exception ex){
-            logger.error(ex.getMessage());
+        } catch (Exception exception){
+            logger.error(exception.getMessage());
 
-            String responseMes = ex instanceof BadCredentialsException
+            String responseMes = exception instanceof BadCredentialsException
                     ? "Invalid Password or/and username"
                     : "Sorry, something went wrong, try again please";
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(responseMes);
 
-            return ex instanceof BadCredentialsException
+            return exception instanceof BadCredentialsException
                     ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessageDto)
                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageDto);
         }
