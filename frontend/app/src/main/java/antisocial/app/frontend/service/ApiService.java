@@ -25,10 +25,10 @@ public interface ApiService {
     Call<FriendsNamesAndRequestsDTo> getFriendsNamesAndRequests(@Header("Authorization") String jwt);
 
     @POST("user/register")
-    Call<ResponseMessageDto> registerUser(@Body RegisterLoginRequestDto registerLoginRequestDto);
+    Call<ResponseMessageDto> registerUser(@Body RegisterLoginRequestDto registerRequestDto);
 
     @POST("user/login")
-    Call<JwtResponseDto> loginUser(@Body RegisterLoginRequestDto loginRequest);
+    Call<JwtResponseDto> loginUser(@Body RegisterLoginRequestDto loginRequestDto);
 
     @PATCH("friend/{requesttype}/{endpoint}")
     Call<ResponseMessageDto> sendOrHandleFriendRequest(@Path("requesttype") String requesttype,
@@ -42,7 +42,7 @@ public interface ApiService {
 
     @POST("video/aws/preassignedurl/put")
     Call<PreassignedUrlToUploadVideoDto> getPreassignedUrlToUploadVideo(@Header("Authorization") String jwt,
-                                                                        @Body PreassignedUrlDetailsDto preassignedUrlDto);
+                                                                        @Body PreassignedUrlDetailsDto preassignedUrlDetailsDto);
 
     @PUT
     Call<Void> uploadVideoToS3Bucket(@Url String url, @Body RequestBody video);
@@ -50,5 +50,5 @@ public interface ApiService {
     @POST("video/aws/preassignedurl/get/{endpoint}")
     Call<ResponseMessageDto> getPreassignedUrlToWatch(@Path("endpoint")String endpoint,
                                                       @Header("Authorization") String jwt,
-                                                      @Body PreassignedUrlDetailsDto preassignedUrlDto);
+                                                      @Body PreassignedUrlDetailsDto preassignedUrlDetailsDto);
 }

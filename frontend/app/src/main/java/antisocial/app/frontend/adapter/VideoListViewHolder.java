@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import antisocial.app.frontend.R;
@@ -32,16 +31,14 @@ public class VideoListViewHolder extends RecyclerView.ViewHolder {
         String nameToDisplay = toOrFrom + ": " + videoName;
         textView.setText(nameToDisplay);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
         textView.setPadding(16, 16, 16, 16);
-        textView.setTag(preAssignedUrl);
+        textView.setTag(toOrFrom);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String preassignedUrl = (String) view.getTag();
                 Intent intent = new Intent(context, VideoPlayActivity.class);
-                intent.putExtra("url", preassignedUrl);
+                intent.putExtra("url", preAssignedUrl);
                 context.startActivity(intent);
             }
         });

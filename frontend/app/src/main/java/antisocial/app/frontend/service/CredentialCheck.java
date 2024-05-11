@@ -1,10 +1,10 @@
-package antisocial.app.frontend.data;
+package antisocial.app.frontend.service;
 
-public class PasswordCheck {
+public class CredentialCheck {
     private boolean isValid;
     private String message;
 
-    public PasswordCheck(boolean isValid, String message) {
+    public CredentialCheck(boolean isValid, String message) {
         this.isValid = isValid;
         this.message = message;
     }

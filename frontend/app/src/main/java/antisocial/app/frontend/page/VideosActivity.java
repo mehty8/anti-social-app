@@ -16,8 +16,6 @@ import antisocial.app.frontend.data.dto.VideoDetailsToPlay;
 public class VideosActivity extends AppCompatActivity {
     private List<VideoDetailsToPlay> videos;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
