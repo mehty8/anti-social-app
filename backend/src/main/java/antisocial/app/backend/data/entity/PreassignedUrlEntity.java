@@ -12,13 +12,15 @@ public class PreassignedUrlEntity {
     private long id;
     private String videoName;
     private String preassignedUrl;
-
     private String bucketName;
     private LocalDateTime expirationTime;
+
     @ManyToOne
     private UserEntity receiver;
+
     @ManyToOne
     private UserEntity sender;
+
 
     public PreassignedUrlEntity() {
         this.expirationTime = LocalDateTime.now().plusHours(12);

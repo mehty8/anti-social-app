@@ -11,7 +11,6 @@ public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
-
     private String roleName;
 
     public long getId() {

@@ -13,6 +13,7 @@ import java.util.Set;
 
 @Repository
 public interface IUserRepository extends JpaRepository<UserEntity, Long> {
+
     @Query(value = "select * from user_entity where username = :username", nativeQuery = true)
     Optional<UserEntity> findByUsername(@Param("username") String username);
 

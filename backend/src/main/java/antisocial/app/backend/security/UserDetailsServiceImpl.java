@@ -16,6 +16,7 @@ import java.util.List;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+
     private final IUserRepository userRepository;
 
     public UserDetailsServiceImpl(IUserRepository userRepository) {
@@ -28,9 +29,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
+
         for (RoleEntity role : userEntity.getRoles()) {
             roles.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
-        return new User(userEntity.getUsername(), userEntity.getPassword(), roles);
+        User user = new User(userEntity.getUsername(), userEntity.getPassword(), roles);
+
+        return user;
     }
 }

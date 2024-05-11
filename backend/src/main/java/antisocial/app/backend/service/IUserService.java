@@ -1,11 +1,12 @@
 package antisocial.app.backend.service;
 
 import antisocial.app.backend.data.dto.JwtResponseDto;
-import antisocial.app.backend.data.dto.LoginDto;
+import antisocial.app.backend.data.dto.RegisterLoginDto;
 
 public interface IUserService {
 
-    void registerNewUser(LoginDto loginDto);
+    void registerNewUser(RegisterLoginDto registerLoginDto);
 
-    JwtResponseDto login(LoginDto loginDto);
+    JwtResponseDto login(RegisterLoginDto registerLoginDto);
+
 }
