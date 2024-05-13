@@ -51,21 +51,26 @@ public class VideoUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String videoName = editText.getText().toString();
-                videoUploadService.videoUpload(sharedPreferencesManager.getJwt(), videoName, username,
-                        temporaryVideoName + EXTENSION, new ToastCallBack() {
-                            @Override
-                            public void displayToast(String message) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(VideoUploadActivity.this, message, Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(VideoUploadActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
-                            }
-                        });
-                dialog.dismiss();
+
+                if(videoName.isEmpty()){
+                    Toast.makeText(VideoUploadActivity.this, "You have to name your video", Toast.LENGTH_LONG).show();
+                } else {
+                    videoUploadService.videoUpload(sharedPreferencesManager.getJwt(), videoName, username,
+                            temporaryVideoName + EXTENSION, new ToastCallBack() {
+                                @Override
+                                public void displayToast(String message) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(VideoUploadActivity.this, message, Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(VideoUploadActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
+                            });
+                    dialog.dismiss();
+                }
             }
         });
 
