@@ -115,12 +115,12 @@ public class UserEntity {
         }
     }
 
-    public void removeFriendRequest(String username){
-        this.friendsRequests.remove(username);
+    public boolean removeFriendRequest(String username){
+        return this.friendsRequests.remove(username);
     }
 
-    public void removeSentFriendRequest(String username){
-        this.friendsRequestsSent.remove(username);
+    public boolean removeSentFriendRequest(String username){
+        return this.friendsRequestsSent.remove(username);
     }
 
 }

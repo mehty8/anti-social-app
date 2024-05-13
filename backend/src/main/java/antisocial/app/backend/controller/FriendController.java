@@ -1,9 +1,11 @@
 package antisocial.app.backend.controller;
 
+import antisocial.app.backend.component.CatchException;
 import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.dto.FriendsNamesDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.service.IFriendService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -17,31 +19,44 @@ public class FriendController {
 
     private IFriendService friendService;
 
+    private CatchException catchException;
 
-    public FriendController(IFriendService friendService) {
+
+    public FriendController(IFriendService friendService, CatchException catchException) {
         this.friendService = friendService;
+        this.catchException = catchException;
     }
 
 
     @GetMapping
-    public ResponseEntity<FriendsNamesAndRequestsDto> getFriendsNamesAndRequests(){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = user.getUsername();
+    public ResponseEntity<?> getFriendsNamesAndRequests(){
+        try {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = user.getUsername();
 
-        FriendsNamesAndRequestsDto friendsNamesAndRequests = friendService.getFriendsNamesAndRequests(username);
+            FriendsNamesAndRequestsDto friendsNamesAndRequests = friendService.getFriendsNamesAndRequests(username);
 
-        return ResponseEntity.ok(friendsNamesAndRequests);
+            return ResponseEntity.ok(friendsNamesAndRequests);
+        } catch (Exception exception){
+
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
+        }
     }
 
     @GetMapping("finduser/{usernameToSearch}")
-    public ResponseEntity<FriendsNamesDto> getUser(@PathVariable String usernameToSearch){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userUsername = user.getUsername();
-        Set<String> usernamesString = friendService.findUsers(usernameToSearch, userUsername);
+    public ResponseEntity<?> getUser(@PathVariable String usernameToSearch){
+        try {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String userUsername = user.getUsername();
+            Set<String> usernamesString = friendService.findUsers(usernameToSearch, userUsername);
 
-        FriendsNamesDto usernames = new FriendsNamesDto(usernamesString);
+            FriendsNamesDto usernames = new FriendsNamesDto(usernamesString);
 
-        return ResponseEntity.ok(usernames);
+            return ResponseEntity.ok(usernames);
+        } catch (Exception exception){
+
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
+        }
     }
 
     @PatchMapping("friendrequest/{receiver}")
@@ -49,11 +64,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String sender = user.getUsername();
 
-        friendService.handleFriendRequest(receiver, sender, "requested");
-
-        ResponseMessageDto simpleResponse = new ResponseMessageDto("Request sent");
-
-        return ResponseEntity.ok(simpleResponse);
+        return friendRequestHandling(receiver, sender, "requested", "Request sent");
     }
 
     @PatchMapping("acceptrequest/{sender}")
@@ -61,11 +72,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
-        friendService.handleFriendRequest(receiver, sender, "accepted");
-
-        ResponseMessageDto simpleResponse = new ResponseMessageDto("Request accepted");
-
-        return ResponseEntity.ok(simpleResponse);
+        return friendRequestHandling(receiver,sender, "accepted", "Request accepted");
     }
 
     @PatchMapping("denyrequest/{sender}")
@@ -73,10 +80,21 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
-        friendService.handleFriendRequest(receiver, sender, "denied");
+        return friendRequestHandling(receiver, sender, "denied", "Request denied");
+    }
 
-        ResponseMessageDto simpleResponse = new ResponseMessageDto("Request denied");
 
-        return ResponseEntity.ok(simpleResponse);
+    private ResponseEntity<ResponseMessageDto> friendRequestHandling(String receiver, String sender,
+                                                                     String type, String message){
+        try {
+            friendService.handleFriendRequest(receiver, sender, type);
+
+            ResponseMessageDto simpleResponse = new ResponseMessageDto(message);
+
+            return ResponseEntity.ok(simpleResponse);
+        } catch (Exception exception){
+
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
+        }
     }
 }

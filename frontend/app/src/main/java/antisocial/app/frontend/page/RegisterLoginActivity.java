@@ -107,16 +107,16 @@ public class RegisterLoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
                 if(response.isSuccessful()) {
-                    String responseMes = response.body().getMessage();
-                    Toast.makeText(RegisterLoginActivity.this, responseMes + ", " +
+                    String responseMessage = response.body().getMessage();
+                    Toast.makeText(RegisterLoginActivity.this, responseMessage + ", " +
                             "now please login",
                             Toast.LENGTH_LONG).show();
                 } else {
                     try {
                         ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(), ResponseMessageDto.class);
-                        String errorMes = responseBody.getMessage();
+                        String errorMessage = responseBody.getMessage();
                         Toast.makeText(RegisterLoginActivity.this,
-                                errorMes + ", please try again accordingly",
+                                errorMessage + ", please try again accordingly",
                                 Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

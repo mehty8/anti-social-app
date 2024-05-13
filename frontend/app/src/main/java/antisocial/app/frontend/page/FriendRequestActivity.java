@@ -10,19 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Set;
 
 import antisocial.app.frontend.R;
-import antisocial.app.frontend.SharedPreferencesManager;
 import antisocial.app.frontend.adapter.UserFinderAdapter;
 
 
 public class FriendRequestActivity extends AppCompatActivity {
-    private SharedPreferencesManager sharedPreferencesManager;
     private Set<String> userNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
         userNames = (Set<String>) intent.getSerializableExtra("friendRequestNames");
         setContentView(R.layout.activity_friend_request);
 

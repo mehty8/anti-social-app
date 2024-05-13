@@ -1,15 +1,12 @@
 package antisocial.app.backend.controller;
 
+import antisocial.app.backend.component.CatchException;
 import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.RegisterLoginDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
-import antisocial.app.backend.errorHandling.exception.RegisterException;
 import antisocial.app.backend.service.IUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +18,12 @@ public class UserController {
 
     private IUserService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private CatchException catchException;
 
 
-    public UserController(IUserService userService) {
+    public UserController(IUserService userService, CatchException catchException) {
         this.userService = userService;
+        this.catchException = catchException;
     }
 
 
@@ -38,17 +36,9 @@ public class UserController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(responseMessageDto);
 
-        } catch (Exception exception){
-            logger.error(exception.getMessage());
+        } catch (Exception exception) {
 
-            String responseMes = exception instanceof RegisterException
-                    ? exception.getMessage()
-                    : "Sorry, something went wrong, try again please";
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto(responseMes);
-
-            return exception instanceof RegisterException
-                    ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessageDto)
-                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageDto);
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
         }
     }
 
@@ -60,16 +50,9 @@ public class UserController {
             return ResponseEntity.ok(jwtResponseDto);
 
         } catch (Exception exception){
-            logger.error(exception.getMessage());
 
-            String responseMes = exception instanceof BadCredentialsException
-                    ? "Invalid Password or/and username"
-                    : "Sorry, something went wrong, try again please";
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto(responseMes);
-
-            return exception instanceof BadCredentialsException
-                    ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMessageDto)
-                    : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageDto);
+            return catchException.catchException(exception, "Invalid Password or/and username",
+                    HttpStatus.UNAUTHORIZED, this.getClass());
         }
     }
 }
