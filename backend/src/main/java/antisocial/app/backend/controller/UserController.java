@@ -29,6 +29,7 @@ public class UserController {
 
     @PostMapping("register")
     public ResponseEntity<ResponseMessageDto> register(@RequestBody RegisterLoginDto registerLoginDto){
+
         try {
             userService.registerNewUser(registerLoginDto);
 
@@ -44,6 +45,7 @@ public class UserController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody RegisterLoginDto registerLoginDto){
+
         try{
             JwtResponseDto jwtResponseDto = userService.login(registerLoginDto);
 

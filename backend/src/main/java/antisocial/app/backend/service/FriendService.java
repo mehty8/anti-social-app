@@ -66,13 +66,13 @@ public class FriendService implements IFriendService{
     public Set<String> findUsers(String usernameToSearch, String userUsername) {
         UserEntity user = userRepository.findByUsername(userUsername).get();
         Set<String> friendsNames = user.getFriendsNames();
-        Set<String> friendRequests = user.getFriendsRequests();
+        Set<String> friendsRequests = user.getFriendsRequests();
         Set<String> sentFriendsRequests = user.getFriendsRequestsSent();
 
         Set<String> usernamesToExclude = new HashSet<>();
         usernamesToExclude.add(userUsername);
         usernamesToExclude.addAll(friendsNames);
-        usernamesToExclude.addAll(friendRequests);
+        usernamesToExclude.addAll(friendsRequests);
         usernamesToExclude.addAll(sentFriendsRequests);
 
         Set<String> usernames = userRepository.findAllByUsername(usernameToSearch, usernamesToExclude);

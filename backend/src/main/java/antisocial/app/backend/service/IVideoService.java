@@ -13,8 +13,4 @@ public interface IVideoService {
 
     VideosDto getVideos(String username, String type);
 
-    //VideosDto getSentVideosDetails(String username);
-
-    //VideosDto getReceivedVideosDetails(String username);
-
 }

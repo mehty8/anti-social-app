@@ -29,12 +29,14 @@ public class VideoController {
     @PostMapping("aws/preassignedurl/put")
     public ResponseEntity<?> getPreassignedUrlToUploadVideo(
             @RequestBody PreassignedUrlDetailsDto preassignedUrlDetailsDto){
+
         try {
             String preassignedUrl = videoService.getPreassignedUrl(preassignedUrlDetailsDto);
 
             PreassignedUrlToUploadVideoDto preassignedUrlToUploadVideo = new PreassignedUrlToUploadVideoDto(preassignedUrl);
 
             return ResponseEntity.ok(preassignedUrlToUploadVideo);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, null, null, this.getClass());
@@ -44,6 +46,7 @@ public class VideoController {
     @PostMapping("aws/preassignedurl/get/{receiver}")
     public ResponseEntity<ResponseMessageDto> savePreassignedUrlDetailsToWatchVideo(
             @PathVariable String receiver, @RequestBody PreassignedUrlDetailsDto preassignedUrlDetailsDto){
+
         try {
             String preassignedUrl = videoService.getPreassignedUrl(preassignedUrlDetailsDto);
 
@@ -57,6 +60,7 @@ public class VideoController {
             ResponseMessageDto simpleResponse = new ResponseMessageDto("Video sent");
 
             return ResponseEntity.ok(simpleResponse);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, null, null, this.getClass());
@@ -65,6 +69,7 @@ public class VideoController {
 
     @GetMapping("sent")
     public ResponseEntity<?> getSentVideosDetails(){
+
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = user.getUsername();
@@ -72,6 +77,7 @@ public class VideoController {
             VideosDto sentVideosDetails = videoService.getVideos(username, "Sent");
 
             return ResponseEntity.ok(sentVideosDetails);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, null, null, this.getClass());
@@ -80,6 +86,7 @@ public class VideoController {
 
     @GetMapping("received")
     public ResponseEntity<?> getReceivedVideosDetails(){
+
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = user.getUsername();
@@ -87,6 +94,7 @@ public class VideoController {
             VideosDto receivedVideosDetails = videoService.getVideos(username, "Received");
 
             return ResponseEntity.ok(receivedVideosDetails);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, null, null, this.getClass());

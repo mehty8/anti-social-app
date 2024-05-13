@@ -30,6 +30,7 @@ public class FriendController {
 
     @GetMapping
     public ResponseEntity<?> getFriendsNamesAndRequests(){
+
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = user.getUsername();
@@ -37,6 +38,7 @@ public class FriendController {
             FriendsNamesAndRequestsDto friendsNamesAndRequests = friendService.getFriendsNamesAndRequests(username);
 
             return ResponseEntity.ok(friendsNamesAndRequests);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
@@ -45,6 +47,7 @@ public class FriendController {
 
     @GetMapping("finduser/{usernameToSearch}")
     public ResponseEntity<?> getUser(@PathVariable String usernameToSearch){
+
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String userUsername = user.getUsername();
@@ -53,6 +56,7 @@ public class FriendController {
             FriendsNamesDto usernames = new FriendsNamesDto(usernamesString);
 
             return ResponseEntity.ok(usernames);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
@@ -92,6 +96,7 @@ public class FriendController {
             ResponseMessageDto simpleResponse = new ResponseMessageDto(message);
 
             return ResponseEntity.ok(simpleResponse);
+
         } catch (Exception exception){
 
             return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
