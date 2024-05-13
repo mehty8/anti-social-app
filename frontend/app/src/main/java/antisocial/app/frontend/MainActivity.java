@@ -14,13 +14,17 @@ import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
 import antisocial.app.frontend.data.dto.FriendsNamesAndRequestsDTo;
+import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.page.MainPageActivity;
 import antisocial.app.frontend.page.RegisterLoginActivity;
 import antisocial.app.frontend.service.ApiClient;
@@ -85,11 +89,25 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback<FriendsNamesAndRequestsDTo>() {
                 @Override
                 public void onResponse(Call<FriendsNamesAndRequestsDTo> call, Response<FriendsNamesAndRequestsDTo> response) {
-                    FriendsNamesAndRequestsDTo friendsAndRequests = response.body();
-                    Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
-                    intent.putExtra("friends", new HashSet<>(friendsAndRequests.getFriendsNames()));
-                    intent.putExtra("requests", new HashSet<>(friendsAndRequests.getRequestsNames()));
-                    startActivity(intent);
+                    if(response.isSuccessful()){
+                        FriendsNamesAndRequestsDTo friendsAndRequests = response.body();
+                        Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
+                        intent.putExtra("friends", new HashSet<>(friendsAndRequests.getFriendsNames()));
+                        intent.putExtra("requests", new HashSet<>(friendsAndRequests.getRequestsNames()));
+                        startActivity(intent);
+                    } else {
+                        try {
+                            ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
+                                    ResponseMessageDto.class);
+                            String errorMessage = responseBody.getMessage();
+                            Toast.makeText(MainActivity.this,
+                                    errorMessage,
+                                    Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
                 }
 
                 @Override

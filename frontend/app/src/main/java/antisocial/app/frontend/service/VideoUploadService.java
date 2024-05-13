@@ -9,11 +9,15 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
+import java.io.IOException;
 
 import antisocial.app.frontend.data.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.data.dto.PreassignedUrlDetailsDto;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
+import antisocial.app.frontend.page.MainPageActivity;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -40,7 +44,8 @@ public class VideoUploadService {
         toastCallBack.displayToast("Video sending cancelled, Video deleted");
     }
 
-    private void getPreassignedUrl(String jwt, String videoName, String username, String temporaryVideoName, ToastCallBack toastCallback) {
+    private void getPreassignedUrl(String jwt, String videoName, String username,
+                                   String temporaryVideoName, ToastCallBack toastCallback) {
 
         PreassignedUrlDetailsDto preassignedUrlDetailsDto = new PreassignedUrlDetailsDto(videoName,
                 "PUT", BUCKET_NAME, TIME_IN_MS_TO_UPLOAD);
@@ -50,8 +55,19 @@ public class VideoUploadService {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<PreassignedUrlToUploadVideoDto> call, Response<PreassignedUrlToUploadVideoDto> response) {
-                String url = response.body().getPreassignedUrl();
-                uploadVideo(url, videoName, username, jwt, temporaryVideoName, toastCallback);
+                if(response.isSuccessful()){
+                    String url = response.body().getPreassignedUrl();
+                    uploadVideo(url, videoName, username, jwt, temporaryVideoName, toastCallback);
+                } else {
+                    try {
+                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
+                                ResponseMessageDto.class);
+                        String errorMessage = responseBody.getMessage();
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
 
             @Override
@@ -150,7 +166,19 @@ public class VideoUploadService {
         call.enqueue((new Callback<ResponseMessageDto>() {
             @Override
             public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
-                toastcallback.displayToast(response.body().getMessage());
+                if(response.isSuccessful()){
+                    toastcallback.displayToast(response.body().getMessage());
+                } else {
+                    try {
+                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
+                                ResponseMessageDto.class);
+                        String errorMessage = responseBody.getMessage();
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             }
 
             @Override

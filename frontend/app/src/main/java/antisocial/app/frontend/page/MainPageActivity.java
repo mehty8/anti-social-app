@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +30,7 @@ import antisocial.app.frontend.adapter.FriendListAdapter;
 import antisocial.app.frontend.adapter.FriendRequestAdapter;
 import antisocial.app.frontend.adapter.IAdapter;
 import antisocial.app.frontend.data.dto.FriendsNamesDto;
+import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.data.dto.VideosDto;
 import antisocial.app.frontend.service.ApiClient;
 import antisocial.app.frontend.service.ApiService;
@@ -102,12 +106,25 @@ public class MainPageActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<FriendsNamesDto> call, Response<FriendsNamesDto> response) {
                         Set<String> friendRequestNames = response.body().getFriendsNames();
-                        if(friendRequestNames.isEmpty()){
-                            Toast.makeText(MainPageActivity.this, "No such user found", Toast.LENGTH_LONG).show();
+                        if(response.isSuccessful()){
+                            if(friendRequestNames.isEmpty()){
+                                Toast.makeText(MainPageActivity.this, "No such user found", Toast.LENGTH_LONG).show();
+                            } else {
+                                Intent intentFriendRequest = new Intent(MainPageActivity.this, FriendRequestActivity.class);
+                                intentFriendRequest.putExtra("friendRequestNames", new HashSet<>(friendRequestNames));
+                                startActivity(intentFriendRequest);
+                            }
                         } else {
-                            Intent intentFriendRequest = new Intent(MainPageActivity.this, FriendRequestActivity.class);
-                            intentFriendRequest.putExtra("friendRequestNames", new HashSet<>(friendRequestNames));
-                            startActivity(intentFriendRequest);
+                            try {
+                                ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
+                                        ResponseMessageDto.class);
+                                String errorMessage = responseBody.getMessage();
+                                Toast.makeText(MainPageActivity.this,
+                                        errorMessage,
+                                        Toast.LENGTH_LONG).show();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
                     @Override
@@ -139,11 +156,24 @@ public class MainPageActivity extends AppCompatActivity {
         call.enqueue(new Callback<VideosDto>() {
             @Override
             public void onResponse(Call<VideosDto> call, Response<VideosDto> response) {
-                VideosDto videos = response.body();
-                Intent intentVideos = new Intent(MainPageActivity.this, VideosActivity.class);
-                intentVideos.putExtra("videos", new ArrayList<>(videos.getVideoDetailsToPlay()));
-                intentVideos.putExtra("type", type);
-                startActivity(intentVideos);
+                if(response.isSuccessful()){
+                    VideosDto videos = response.body();
+                    Intent intentVideos = new Intent(MainPageActivity.this, VideosActivity.class);
+                    intentVideos.putExtra("videos", new ArrayList<>(videos.getVideoDetailsToPlay()));
+                    intentVideos.putExtra("type", type);
+                    startActivity(intentVideos);
+                } else {
+                    try {
+                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
+                                ResponseMessageDto.class);
+                        String errorMessage = responseBody.getMessage();
+                        Toast.makeText(MainPageActivity.this,
+                                errorMessage,
+                                Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
 
             @Override

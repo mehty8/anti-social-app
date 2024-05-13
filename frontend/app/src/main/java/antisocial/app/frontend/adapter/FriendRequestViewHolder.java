@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -62,9 +65,20 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
         call.enqueue(new Callback<ResponseMessageDto>() {
             @Override
             public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
-                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
+                if(response.isSuccessful()){
+                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, MainActivity.class);
+                    context.startActivity(intent);
+                } else {
+                    try {
+                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
+                                ResponseMessageDto.class);
+                        String errorMessage = responseBody.getMessage();
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
 
             @Override
