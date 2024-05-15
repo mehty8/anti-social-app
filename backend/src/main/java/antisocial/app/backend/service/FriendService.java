@@ -4,9 +4,11 @@ import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.entity.UserEntity;
 import antisocial.app.backend.errorHandling.exception.FriendRequestException;
 import antisocial.app.backend.repository.IUserRepository;
+import antisocial.app.backend.service.friendRequest.IHandleFriendRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -14,9 +16,12 @@ public class FriendService implements IFriendService{
 
     private IUserRepository userRepository;
 
+    private List<IHandleFriendRequest> handleFriendRequests;
 
-    public FriendService(IUserRepository userRepository) {
+
+    public FriendService(IUserRepository userRepository, List<IHandleFriendRequest> handleFriendRequests) {
         this.userRepository = userRepository;
+        this.handleFriendRequests = handleFriendRequests;
     }
 
 
@@ -40,23 +45,9 @@ public class FriendService implements IFriendService{
         UserEntity userReceiver = userRepository.findByUsername(receiver).get();
         UserEntity userSender = userRepository.findByUsername(sender).get();
 
-        if(type.equals("accepted") || type.equals("denied")){
-            boolean isSenderRemoved = userReceiver.removeFriendRequest(sender);
-            boolean isReceiverRemoved = userSender.removeSentFriendRequest(receiver);
-
-            if(!isReceiverRemoved || !isSenderRemoved){
-                throw new FriendRequestException("User did not receive friend request");
-            }
-        }
-
-        if(type.equals("requested")){
-            userReceiver.addFriendRequest(sender);
-            userSender.addSentFriendRequest(receiver);
-        } else if(type.equals("accepted")){
-            userReceiver.addFriendName(sender);
-            userSender.addFriendName(receiver);
-        }
-
+        IHandleFriendRequest handleFriendRequest = handleFriendRequests.stream().filter(request ->
+                request.isNeeded(type)).toList().get(0);
+        handleFriendRequest.handleRequest(userReceiver, userSender);
 
         userRepository.save(userReceiver);
         userRepository.save(userSender);
