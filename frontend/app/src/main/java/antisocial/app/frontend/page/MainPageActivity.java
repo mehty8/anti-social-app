@@ -165,11 +165,4 @@ public class MainPageActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*private void setRequestAndFriendList(RecyclerView recyclerView, String type){
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerView.Adapter adapter = (RecyclerView.Adapter) adapters.stream().filter(adapterNeeded
-                        -> adapterNeeded.isNeeded(type)).collect(Collectors.toList()).get(0);
-        recyclerView.setAdapter(adapter);
-    }*/
 }

@@ -70,8 +70,7 @@ public class VideoService implements IVideoService {
         userRepository.save(receiver);
         userRepository.save(sender);
     }
-
-    //do something with this, create an interface with different handling classes for instance
+    
     @Override
     public VideosDto getVideos(String username, String type) {
         UserEntity userEntity = userRepository.findByUsername(username).get();
@@ -107,24 +106,3 @@ public class VideoService implements IVideoService {
         });
     }
 }
-
-/*List<PreassignedUrlEntity> preassignedUrlDetails = type.equals("Sent")
-                ? user.getSentPreassignedUrlsDetails()
-                : user.getReceivedPreassignedUrlsDetails();
-
-        deleteExpiredUrls(preassignedUrlDetails);
-
-        VideosDto videosDetails = new VideosDto();
-
-        preassignedUrlDetails.forEach(video -> {
-            String senderOrReceiver = type.equals("Sent")
-                    ? video.getReceiver().getUsername()
-                    : video.getSender().getUsername();
-
-            VideoDetailsToPlay videoDetailsToPlay = new VideoDetailsToPlay(video.getPreassignedUrl(),
-                    video.getVideoName(), senderOrReceiver);
-
-            videosDetails.getVideoDetailsToPlay().add(videoDetailsToPlay);
-        });
-
-        return videosDetails;*/
