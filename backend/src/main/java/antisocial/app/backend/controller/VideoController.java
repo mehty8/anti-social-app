@@ -1,11 +1,12 @@
 package antisocial.app.backend.controller;
 
-import antisocial.app.backend.component.CatchException;
+import antisocial.app.backend.errorHandling.exception.component.CatchException;
 import antisocial.app.backend.data.dto.PreassignedUrlDetailsDto;
 import antisocial.app.backend.data.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.data.dto.VideosDto;
 import antisocial.app.backend.service.IVideoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -39,7 +40,7 @@ public class VideoController {
 
         } catch (Exception exception){
 
-            return catchException.catchException(exception, null, null, this.getClass());
+            return catchException.catchException(exception, exception.getMessage(), null, this.getClass());
         }
     }
 
@@ -63,7 +64,7 @@ public class VideoController {
 
         } catch (Exception exception){
 
-            return catchException.catchException(exception, null, null, this.getClass());
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
         }
     }
 
@@ -80,7 +81,7 @@ public class VideoController {
 
         } catch (Exception exception){
 
-            return catchException.catchException(exception, null, null, this.getClass());
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
         }
     }
 
@@ -97,7 +98,7 @@ public class VideoController {
 
         } catch (Exception exception){
 
-            return catchException.catchException(exception, null, null, this.getClass());
+            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
         }
     }
 }
