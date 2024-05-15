@@ -1,4 +1,4 @@
-package antisocial.app.frontend.service;
+package antisocial.app.frontend.service.api;
 
 import antisocial.app.frontend.data.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.data.dto.FriendsNamesDto;
