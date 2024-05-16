@@ -9,15 +9,13 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.File;
-import java.io.IOException;
 
 import antisocial.app.frontend.data.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.data.dto.PreassignedUrlDetailsDto;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
-import antisocial.app.frontend.page.MainPageActivity;
+import antisocial.app.frontend.service.api.ApiClient;
+import antisocial.app.frontend.service.api.ApiService;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -31,8 +29,11 @@ public class VideoUploadService {
     private static int TIME_IN_MS_TO_GET = 1000 * 60 * 60 * 12;
     private Context context;
 
+    private HandleResponseFailure handleResponseFailure;
+
     public VideoUploadService(Context context) {
         this.context = context;
+        handleResponseFailure = new HandleResponseFailure();
     }
 
     public void videoUpload(String jwt, String videoName, String username, String temporaryVideoName, ToastCallBack toastCallback){
@@ -59,14 +60,7 @@ public class VideoUploadService {
                     String url = response.body().getPreassignedUrl();
                     uploadVideo(url, videoName, username, jwt, temporaryVideoName, toastCallback);
                 } else {
-                    try {
-                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                ResponseMessageDto.class);
-                        String errorMessage = responseBody.getMessage();
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    handleResponseFailure.responseError(response, context, "");
                 }
             }
 
@@ -169,14 +163,7 @@ public class VideoUploadService {
                 if(response.isSuccessful()){
                     toastcallback.displayToast(response.body().getMessage());
                 } else {
-                    try {
-                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                ResponseMessageDto.class);
-                        String errorMessage = responseBody.getMessage();
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    handleResponseFailure.responseError(response, context, "");
                 }
 
             }

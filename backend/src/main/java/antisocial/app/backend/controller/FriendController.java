@@ -1,6 +1,6 @@
 package antisocial.app.backend.controller;
 
-import antisocial.app.backend.component.CatchException;
+import antisocial.app.backend.errorHandling.exception.component.CatchException;
 import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.dto.FriendsNamesDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
@@ -68,7 +68,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String sender = user.getUsername();
 
-        return friendRequestHandling(receiver, sender, "requested", "Request sent");
+        return friendRequestHandling(receiver, sender, "Send", "Request sent");
     }
 
     @PatchMapping("acceptrequest/{sender}")
@@ -76,7 +76,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
-        return friendRequestHandling(receiver,sender, "accepted", "Request accepted");
+        return friendRequestHandling(receiver,sender, "Accept", "Request accepted");
     }
 
     @PatchMapping("denyrequest/{sender}")
@@ -84,7 +84,7 @@ public class FriendController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
-        return friendRequestHandling(receiver, sender, "denied", "Request denied");
+        return friendRequestHandling(receiver, sender, "Deny", "Request denied");
     }
 
 

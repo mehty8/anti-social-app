@@ -11,18 +11,12 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.google.gson.Gson;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
@@ -30,10 +24,11 @@ import antisocial.app.frontend.adapter.FriendListAdapter;
 import antisocial.app.frontend.adapter.FriendRequestAdapter;
 import antisocial.app.frontend.adapter.IAdapter;
 import antisocial.app.frontend.data.dto.FriendsNamesDto;
-import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.data.dto.VideosDto;
-import antisocial.app.frontend.service.ApiClient;
-import antisocial.app.frontend.service.ApiService;
+import antisocial.app.frontend.service.api.ApiClient;
+import antisocial.app.frontend.service.api.ApiService;
+import antisocial.app.frontend.service.HandleAdapters;
+import antisocial.app.frontend.service.HandleResponseFailure;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,7 +50,8 @@ public class MainPageActivity extends AppCompatActivity {
     private Set<String> friendsNames;
     private Set<String> friendRequests;
     private List<IAdapter> adapters;
-
+    private HandleResponseFailure handleResponseFailure;
+    private HandleAdapters handleAdapters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +69,11 @@ public class MainPageActivity extends AppCompatActivity {
         IAdapter friendAdapter = new FriendListAdapter(friendsNames, MainPageActivity.this);
         adapters.add(requestAdapter);
         adapters.add(friendAdapter);
+
+        handleResponseFailure = new HandleResponseFailure();
+
+        handleAdapters = new HandleAdapters(adapters);
+
 
         setContentView(R.layout.activity_main_page);
 
@@ -115,16 +116,7 @@ public class MainPageActivity extends AppCompatActivity {
                                 startActivity(intentFriendRequest);
                             }
                         } else {
-                            try {
-                                ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                        ResponseMessageDto.class);
-                                String errorMessage = responseBody.getMessage();
-                                Toast.makeText(MainPageActivity.this,
-                                        errorMessage,
-                                        Toast.LENGTH_LONG).show();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                            handleResponseFailure.responseError(response, MainPageActivity.this, "");
                         }
                     }
                     @Override
@@ -136,9 +128,9 @@ public class MainPageActivity extends AppCompatActivity {
         });
 
         RecyclerView recyclerViewFriendRequest = findViewById(R.id.recyclerViewFriendRequests);
-        setRequestAndFriendList(recyclerViewFriendRequest, "Request");
+        handleAdapters.setAdapter(recyclerViewFriendRequest, "Request", MainPageActivity.this);
         RecyclerView recyclerViewFriendList = findViewById(R.id.recyclerViewFriends);
-        setRequestAndFriendList(recyclerViewFriendList, "Friend");
+        handleAdapters.setAdapter(recyclerViewFriendList, "Friend", MainPageActivity.this);
 
     }
 
@@ -163,16 +155,7 @@ public class MainPageActivity extends AppCompatActivity {
                     intentVideos.putExtra("type", type);
                     startActivity(intentVideos);
                 } else {
-                    try {
-                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                ResponseMessageDto.class);
-                        String errorMessage = responseBody.getMessage();
-                        Toast.makeText(MainPageActivity.this,
-                                errorMessage,
-                                Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    handleResponseFailure.responseError(response, MainPageActivity.this, "");
                 }
             }
 
@@ -181,12 +164,5 @@ public class MainPageActivity extends AppCompatActivity {
                 Toast.makeText(MainPageActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void setRequestAndFriendList(RecyclerView recyclerView, String type){
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerView.Adapter adapter = (RecyclerView.Adapter) adapters.stream().filter(adapterNeeded
-                        -> adapterNeeded.isNeeded(type)).collect(Collectors.toList()).get(0);
-        recyclerView.setAdapter(adapter);
     }
 }

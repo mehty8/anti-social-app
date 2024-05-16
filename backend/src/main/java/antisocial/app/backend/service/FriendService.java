@@ -4,9 +4,11 @@ import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.entity.UserEntity;
 import antisocial.app.backend.errorHandling.exception.FriendRequestException;
 import antisocial.app.backend.repository.IUserRepository;
+import antisocial.app.backend.service.friendRequest.IHandleFriendRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -14,17 +16,22 @@ public class FriendService implements IFriendService{
 
     private IUserRepository userRepository;
 
+    private List<IHandleFriendRequest> handleFriendRequests;
 
-    public FriendService(IUserRepository userRepository) {
+
+    public FriendService(IUserRepository userRepository, List<IHandleFriendRequest> handleFriendRequests) {
         this.userRepository = userRepository;
+        this.handleFriendRequests = handleFriendRequests;
     }
 
 
     @Override
     public FriendsNamesAndRequestsDto getFriendsNamesAndRequests(String username) {
-        UserEntity user = userRepository.findByUsername(username).get();
-        Set<String> friendsNames = user.getFriendsNames();
-        Set<String> requestsNames = user.getFriendsRequests();
+        UserEntity userEntity = userRepository.findByUsername(username).get();
+
+        Set<String> friendsNames = userEntity.getFriendsNames();
+        Set<String> requestsNames = userEntity.getFriendsRequests();
+
         FriendsNamesAndRequestsDto friendsNamesAndRequests = new FriendsNamesAndRequestsDto(friendsNames, requestsNames);
 
         return friendsNamesAndRequests;
@@ -40,23 +47,10 @@ public class FriendService implements IFriendService{
         UserEntity userReceiver = userRepository.findByUsername(receiver).get();
         UserEntity userSender = userRepository.findByUsername(sender).get();
 
-        if(type.equals("accepted") || type.equals("denied")){
-            boolean isSenderRemoved = userReceiver.removeFriendRequest(sender);
-            boolean isReceiverRemoved = userSender.removeSentFriendRequest(receiver);
-
-            if(!isReceiverRemoved || !isSenderRemoved){
-                throw new FriendRequestException("User did not receive friend request");
-            }
-        }
-
-        if(type.equals("requested")){
-            userReceiver.addFriendRequest(sender);
-            userSender.addSentFriendRequest(receiver);
-        } else if(type.equals("accepted")){
-            userReceiver.addFriendName(sender);
-            userSender.addFriendName(receiver);
-        }
-
+        IHandleFriendRequest handleFriendRequest = handleFriendRequests.stream().filter(request ->
+                request.isNeeded(type)).findFirst().orElseThrow(() ->
+                new FriendRequestException("There is no such request"));
+        handleFriendRequest.handleRequest(userReceiver, userSender);
 
         userRepository.save(userReceiver);
         userRepository.save(userSender);
@@ -64,10 +58,11 @@ public class FriendService implements IFriendService{
 
     @Override
     public Set<String> findUsers(String usernameToSearch, String userUsername) {
-        UserEntity user = userRepository.findByUsername(userUsername).get();
-        Set<String> friendsNames = user.getFriendsNames();
-        Set<String> friendsRequests = user.getFriendsRequests();
-        Set<String> sentFriendsRequests = user.getFriendsRequestsSent();
+        UserEntity userEntity = userRepository.findByUsername(userUsername).get();
+
+        Set<String> friendsNames = userEntity.getFriendsNames();
+        Set<String> friendsRequests = userEntity.getFriendsRequests();
+        Set<String> sentFriendsRequests = userEntity.getFriendsRequestsSent();
 
         Set<String> usernamesToExclude = new HashSet<>();
         usernamesToExclude.add(userUsername);

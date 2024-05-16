@@ -10,16 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.gson.Gson;
-
-import java.io.IOException;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
-import antisocial.app.frontend.service.ApiClient;
-import antisocial.app.frontend.service.ApiService;
+import antisocial.app.frontend.service.HandleResponseFailure;
+import antisocial.app.frontend.service.api.ApiClient;
+import antisocial.app.frontend.service.api.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,11 +27,14 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private SharedPreferencesManager sharedPreferencesManager;
 
+    private HandleResponseFailure handleResponseFailure;
+
     public FriendRequestViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         this.textView = itemView.findViewById(R.id.textViewFriendRequestItem);
         this.context = context;
         sharedPreferencesManager = new SharedPreferencesManager(context.getApplicationContext());
+        handleResponseFailure = new HandleResponseFailure();
 
         MaterialButton acceptButton = itemView.findViewById(R.id.buttonAccept);
         MaterialButton denyButton = itemView.findViewById(R.id.buttonDeny);
@@ -70,14 +71,7 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                 } else {
-                    try {
-                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                ResponseMessageDto.class);
-                        String errorMessage = responseBody.getMessage();
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    handleResponseFailure.responseError(response, context, "");
                 }
             }
 

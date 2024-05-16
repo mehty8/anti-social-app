@@ -1,6 +1,6 @@
 package antisocial.app.backend.controller;
 
-import antisocial.app.backend.component.CatchException;
+import antisocial.app.backend.errorHandling.exception.component.CatchException;
 import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.RegisterLoginDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;

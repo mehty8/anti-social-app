@@ -1,19 +1,20 @@
 package antisocial.app.backend.service;
 
 import antisocial.app.backend.data.dto.PreassignedUrlDetailsDto;
-import antisocial.app.backend.data.dto.VideoDetailsToPlay;
 import antisocial.app.backend.data.dto.VideosDto;
 import antisocial.app.backend.data.entity.PreassignedUrlEntity;
 import antisocial.app.backend.data.entity.UserEntity;
+import antisocial.app.backend.errorHandling.exception.VideoRequestException;
 import antisocial.app.backend.repository.IPreassignedUrlRepository;
 import antisocial.app.backend.repository.IUserRepository;
+import antisocial.app.backend.service.videoRequest.VideoRequest;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,12 +23,16 @@ public class VideoService implements IVideoService {
     private AmazonS3 s3Client;
     private IUserRepository userRepository;
     private IPreassignedUrlRepository preassignedUrlRepository;
+    private List<VideoRequest> videoRequests;
 
 
-    public VideoService(AmazonS3 s3Client, IUserRepository userRepository, IPreassignedUrlRepository preassignedUrlRepository) {
+    public VideoService(AmazonS3 s3Client, IUserRepository userRepository,
+                        IPreassignedUrlRepository preassignedUrlRepository,
+                        List<VideoRequest> videoRequests) {
         this.s3Client = s3Client;
         this.userRepository = userRepository;
         this.preassignedUrlRepository = preassignedUrlRepository;
+        this.videoRequests = videoRequests;
     }
 
     @Override
@@ -47,8 +52,9 @@ public class VideoService implements IVideoService {
     public void savePreassignedUrlDetails(String bucketName, String videoName, String preassignedUrl,
                                           String usernameOfReceiver, String usernameOfSender) {
 
-        UserEntity receiver = userRepository.findByUsername(usernameOfReceiver).get();
         UserEntity sender = userRepository.findByUsername(usernameOfSender).get();
+        UserEntity receiver = userRepository.findByUsername(usernameOfReceiver).orElseThrow(() ->
+                new BadCredentialsException("There is no such user"));
 
         PreassignedUrlEntity preassignedUrlEntity = new PreassignedUrlEntity();
         preassignedUrlEntity.setVideoName(videoName);
@@ -64,38 +70,27 @@ public class VideoService implements IVideoService {
         userRepository.save(receiver);
         userRepository.save(sender);
     }
-
+    
     @Override
     public VideosDto getVideos(String username, String type) {
-        UserEntity user = userRepository.findByUsername(username).get();
+        UserEntity userEntity = userRepository.findByUsername(username).get();
 
-        List<PreassignedUrlEntity> preassignedUrlDetails = type.equals("Sent")
-                ? user.getSentPreassignedUrlsDetails()
-                : user.getReceivedPreassignedUrlsDetails();
+        VideoRequest videoRequest = videoRequests.stream().filter(neededVideo -> neededVideo.isNeeded(type))
+                        .findFirst().orElseThrow(() -> new VideoRequestException("There is no such video request"));
 
-        deleteExpiredUrls(preassignedUrlDetails);
+        videoRequest.setPreassignedUrlEntities(userEntity);
 
-        VideosDto videosDetails = new VideosDto();
+        List<PreassignedUrlEntity> expiredPreassignedUrls = videoRequest.getExpiredPreassignedUrls();
 
-        preassignedUrlDetails.forEach(video -> {
-            String senderOrReceiver = type.equals("Sent")
-                    ? video.getReceiver().getUsername()
-                    : video.getSender().getUsername();
+        deleteExpiredUrls(expiredPreassignedUrls);
 
-            VideoDetailsToPlay videoDetailsToPlay = new VideoDetailsToPlay(video.getPreassignedUrl(),
-                    video.getVideoName(), senderOrReceiver);
+        VideosDto videosDto = videoRequest.getVideos();
 
-            videosDetails.getVideoDetailsToPlay().add(videoDetailsToPlay);
-        });
-
-        return videosDetails;
+        return videosDto;
     }
 
-    private void deleteExpiredUrls(List<PreassignedUrlEntity> videoUrls){
-        List<PreassignedUrlEntity> expiredPreassignedUrlsDetails = videoUrls.stream().filter(url
-                -> url.getExpirationTime().isBefore(LocalDateTime.now())).toList();
-
-        expiredPreassignedUrlsDetails.forEach(PreassignedUrlDetails -> {
+    private void deleteExpiredUrls(List<PreassignedUrlEntity> expiredPreassignedUrls){
+        expiredPreassignedUrls.forEach(PreassignedUrlDetails -> {
             UserEntity sender = PreassignedUrlDetails.getSender();
             UserEntity receiver = PreassignedUrlDetails.getReceiver();
 
@@ -109,6 +104,5 @@ public class VideoService implements IVideoService {
             userRepository.save(receiver);
             preassignedUrlRepository.delete(PreassignedUrlDetails);
         });
-
     }
 }

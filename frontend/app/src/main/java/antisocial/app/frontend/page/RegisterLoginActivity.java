@@ -9,27 +9,30 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
-import antisocial.app.frontend.service.CredentialCheck;
+import antisocial.app.frontend.service.credential.CheckPassword;
+import antisocial.app.frontend.service.credential.CheckUsername;
 import antisocial.app.frontend.data.dto.JwtResponseDto;
 import antisocial.app.frontend.data.dto.RegisterLoginRequestDto;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
-import antisocial.app.frontend.service.ApiClient;
-import antisocial.app.frontend.service.ApiService;
+import antisocial.app.frontend.service.api.ApiClient;
+import antisocial.app.frontend.service.api.ApiService;
+import antisocial.app.frontend.service.HandleResponseFailure;
+import antisocial.app.frontend.service.credential.ICheckCredential;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterLoginActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
+    private HandleResponseFailure handleResponseFailure;
+    private List<ICheckCredential> checkCredentials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,14 @@ public class RegisterLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_login);
 
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
+
+        handleResponseFailure = new HandleResponseFailure();
+
+        CheckUsername checkUsername = new CheckUsername();
+        CheckPassword checkPassword = new CheckPassword();
+        checkCredentials = new ArrayList<>();
+        checkCredentials.add(checkUsername);
+        checkCredentials.add(checkPassword);
 
         EditText editTextUsername = findViewById(R.id.editTextUsername);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
@@ -47,7 +58,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String username = editTextUsername.getText().toString();
                 String password = editTextPassword.getText().toString();
-                if(checkCredentials(username, password)){
+                if(checkingCredentials(username, password)){
                     loginUser(username, password);
                 }
             }
@@ -59,7 +70,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = editTextUsername.getText().toString();
                 String password = editTextPassword.getText().toString();
-                if(checkCredentials(username, password)){
+                if(checkingCredentials(username, password)){
                     registerUser(username, password);
                 }
             }
@@ -78,16 +89,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    try {
-                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                ResponseMessageDto.class);
-                        String errorMessage = responseBody.getMessage();
-                        Toast.makeText(RegisterLoginActivity.this,
-                                errorMessage,
-                                Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    handleResponseFailure.responseError(response, RegisterLoginActivity.this, "");
                 }
             }
             @Override
@@ -112,15 +114,8 @@ public class RegisterLoginActivity extends AppCompatActivity {
                             "now please login",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    try {
-                        ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(), ResponseMessageDto.class);
-                        String errorMessage = responseBody.getMessage();
-                        Toast.makeText(RegisterLoginActivity.this,
-                                errorMessage + ", please try again accordingly",
-                                Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                   handleResponseFailure.responseError(response, RegisterLoginActivity.this,
+                           ", please try again accordingly");
                 }
             }
             @Override
@@ -132,47 +127,25 @@ public class RegisterLoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkCredentials(String username, String password){
-        List<CredentialCheck> credentialChecks = new ArrayList<>();
-        credentialChecks.add(checkUsername(username));
-        credentialChecks.add(checkPassword(password));
-        for(int i = 0; i < credentialChecks.size(); i++){
-            if(!credentialChecks.get(i).isValid()){
-                Toast.makeText(RegisterLoginActivity.this,
-                        credentialChecks.get(i).getMessage(),
-                        Toast.LENGTH_LONG).show();
-                return false;
-            }
+    private boolean checkingCredentials(String username, String password){
+        ICheckCredential checkUsername = checkCredentials.stream().filter(credential ->
+                credential.isNeeded("Username")).collect(Collectors.toList()).get(0);
+        boolean isUsernameValid = checkUsername.checkCredential(username,
+                RegisterLoginActivity.this);
+
+        if(!isUsernameValid){
+            return false;
         }
+
+        ICheckCredential checkPassword = checkCredentials.stream().filter(credential ->
+                credential.isNeeded("Password")).collect(Collectors.toList()).get(0);
+        boolean isPasswordValid = checkPassword.checkCredential(password,
+                RegisterLoginActivity.this);
+
+        if(!isPasswordValid){
+            return false;
+        }
+
         return true;
-    }
-
-    private CredentialCheck checkUsername(String username){
-        if(!username.matches("\\w+")){
-            String message = "Username can only have letters, numbers and underscore";
-            CredentialCheck credentialCheck = new CredentialCheck(false, message);
-            return credentialCheck;
-        }
-        return new CredentialCheck(true, "ok");
-    }
-
-    private CredentialCheck checkPassword(String password){
-        if(!password.matches("^(?=.*[a-z])(?=.*[A-Z]).{1,}$")){
-            String message = "Password must contain at least 1 upper case and 1 lower case";
-            CredentialCheck credentialCheck = new CredentialCheck(false, message);
-            return credentialCheck;
-
-        } else if(!password.matches("^(?=.*\\d).{1,}")){
-            String message = "Password must contain at least one digit";
-            CredentialCheck credentialCheck = new CredentialCheck(false, message);
-            return credentialCheck;
-
-        } else if(!password.matches("^.{8,}$")){
-            String message = "Password must be at least 8 characters long";
-            CredentialCheck credentialCheck = new CredentialCheck(false, message);
-            return credentialCheck;
-        }
-
-        return new CredentialCheck(true, "ok");
     }
 }

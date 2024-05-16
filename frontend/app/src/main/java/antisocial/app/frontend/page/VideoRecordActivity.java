@@ -38,7 +38,6 @@ import java.util.concurrent.Executors;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
-import antisocial.app.frontend.SharedPreferencesManager;
 
 public class VideoRecordActivity extends AppCompatActivity {
     ImageButton capture;
@@ -62,8 +61,6 @@ public class VideoRecordActivity extends AppCompatActivity {
                         }
                     });
 
-    private SharedPreferencesManager sharedPreferencesManager;
-
     private String username;
 
     private static String TEMPORARY_VIDEO_NAME = "temporaryVideo";
@@ -80,7 +77,6 @@ public class VideoRecordActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
-        sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
 
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +113,6 @@ public class VideoRecordActivity extends AppCompatActivity {
         }
 
         executorService = Executors.newSingleThreadExecutor();
-
     }
 
     public void startCamera(int cameraFacing) {

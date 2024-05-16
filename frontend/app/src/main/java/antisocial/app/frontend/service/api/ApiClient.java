@@ -1,4 +1,4 @@
-package antisocial.app.frontend.service;
+package antisocial.app.frontend.service.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

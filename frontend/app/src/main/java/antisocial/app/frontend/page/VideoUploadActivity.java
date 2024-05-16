@@ -46,6 +46,7 @@ public class VideoUploadActivity extends AppCompatActivity {
         Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
 
         AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
