@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
 import antisocial.app.frontend.adapter.FriendListAdapter;
@@ -131,6 +132,16 @@ public class MainPageActivity extends AppCompatActivity {
         handleAdapters.setAdapter(recyclerViewFriendRequest, "Request", MainPageActivity.this);
         RecyclerView recyclerViewFriendList = findViewById(R.id.recyclerViewFriends);
         handleAdapters.setAdapter(recyclerViewFriendList, "Friend", MainPageActivity.this);
+
+        Button refreshButton = findViewById(R.id.buttonRefresh);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentMainActivity = new Intent(MainPageActivity.this, MainActivity.class);
+                startActivity(intentMainActivity);
+            }
+        });
 
     }
 

@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="Accept"
             android:background="@android:color/transparent"
-            android:textColor="@color/button_text_color"
+            android:textColor="@color/button_deny_or_accept_friend_request_text_color"
             android:padding="10dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="Deny"
             android:background="@android:color/transparent"
-            android:textColor="@color/button_text_color"
+            android:textColor="@color/button_deny_or_accept_friend_request_text_color"
             android:padding="10dp" />
 
     </LinearLayout>
