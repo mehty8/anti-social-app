@@ -27,9 +27,11 @@ public class FriendService implements IFriendService{
 
     @Override
     public FriendsNamesAndRequestsDto getFriendsNamesAndRequests(String username) {
-        UserEntity user = userRepository.findByUsername(username).get();
-        Set<String> friendsNames = user.getFriendsNames();
-        Set<String> requestsNames = user.getFriendsRequests();
+        UserEntity userEntity = userRepository.findByUsername(username).get();
+
+        Set<String> friendsNames = userEntity.getFriendsNames();
+        Set<String> requestsNames = userEntity.getFriendsRequests();
+
         FriendsNamesAndRequestsDto friendsNamesAndRequests = new FriendsNamesAndRequestsDto(friendsNames, requestsNames);
 
         return friendsNamesAndRequests;
@@ -46,7 +48,8 @@ public class FriendService implements IFriendService{
         UserEntity userSender = userRepository.findByUsername(sender).get();
 
         IHandleFriendRequest handleFriendRequest = handleFriendRequests.stream().filter(request ->
-                request.isNeeded(type)).toList().get(0);
+                request.isNeeded(type)).findFirst().orElseThrow(() ->
+                new FriendRequestException("There is no such request"));
         handleFriendRequest.handleRequest(userReceiver, userSender);
 
         userRepository.save(userReceiver);
@@ -55,10 +58,11 @@ public class FriendService implements IFriendService{
 
     @Override
     public Set<String> findUsers(String usernameToSearch, String userUsername) {
-        UserEntity user = userRepository.findByUsername(userUsername).get();
-        Set<String> friendsNames = user.getFriendsNames();
-        Set<String> friendsRequests = user.getFriendsRequests();
-        Set<String> sentFriendsRequests = user.getFriendsRequestsSent();
+        UserEntity userEntity = userRepository.findByUsername(userUsername).get();
+
+        Set<String> friendsNames = userEntity.getFriendsNames();
+        Set<String> friendsRequests = userEntity.getFriendsRequests();
+        Set<String> sentFriendsRequests = userEntity.getFriendsRequestsSent();
 
         Set<String> usernamesToExclude = new HashSet<>();
         usernamesToExclude.add(userUsername);
