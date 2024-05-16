@@ -14,19 +14,16 @@ import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
 import antisocial.app.frontend.data.dto.FriendsNamesAndRequestsDTo;
-import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.page.MainPageActivity;
 import antisocial.app.frontend.page.RegisterLoginActivity;
+import antisocial.app.frontend.service.HandleResponseFailure;
 import antisocial.app.frontend.service.api.ApiClient;
 import antisocial.app.frontend.service.api.ApiService;
 import retrofit2.Call;
@@ -49,10 +46,13 @@ public class MainActivity extends AppCompatActivity {
             });
     private SharedPreferencesManager sharedPreferencesManager;
 
+    private HandleResponseFailure handleResponseFailure;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
+        handleResponseFailure = new HandleResponseFailure();
         getPermission();
     }
 
@@ -95,17 +95,10 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("friends", new HashSet<>(friendsAndRequests.getFriendsNames()));
                         intent.putExtra("requests", new HashSet<>(friendsAndRequests.getRequestsNames()));
                         startActivity(intent);
+                        /*
+                                    then change the api level to 30*/
                     } else {
-                        try {
-                            ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
-                                    ResponseMessageDto.class);
-                            String errorMessage = responseBody.getMessage();
-                            Toast.makeText(MainActivity.this,
-                                    errorMessage,
-                                    Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        handleResponseFailure.responseError(response, MainActivity.this, "");
                     }
 
                 }
