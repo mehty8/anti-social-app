@@ -10,6 +10,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +50,7 @@ public class JwtUtils {
     }
 
     @PostConstruct
-    private void initJwtSetters(){
+    private void initJwtSetters() throws ParseException {
         setJwtSecret();
         setJwtExpirationTime();
     }
@@ -92,11 +94,12 @@ public class JwtUtils {
         return false;
     }
 
-    private void setJwtSecret(){
+    private void setJwtSecret() throws ParseException {
         if(jwtSecret == null){
             GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(jwtSecretName);
             GetSecretValueResult getSecretValueResult = awsSecretsManager.getSecretValue(getSecretValueRequest);
-            jwtSecret = getSecretValueResult.getSecretString();
+            String jwtSecretEntry = getSecretValueResult.getSecretString();
+            jwtSecret = new JSONParser(jwtSecretEntry).parseObject().get("JWTSecret").toString();
         }
     }
 
