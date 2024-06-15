@@ -10,16 +10,27 @@ android {
         applicationId = "antisocial.app.frontend"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        create("releaseConfig") {
+            keyAlias = "antisocialapp"
+            keyPassword = System.getenv("Android Keystore password")
+            storeFile = file(System.getenv("Android Keystore path"))
+            storePassword = System.getenv("Android Keystore password")
+        }
+    }
+
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("releaseConfig")
         }
     }
     compileOptions {
