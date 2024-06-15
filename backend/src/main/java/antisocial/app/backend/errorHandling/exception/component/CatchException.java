@@ -27,8 +27,6 @@ public class CatchException {
             }
         }
 
-        System.out.println(message);
-
         message = "Sorry, something went wrong, try again please";
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
