@@ -95,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("friends", new HashSet<>(friendsAndRequests.getFriendsNames()));
                         intent.putExtra("requests", new HashSet<>(friendsAndRequests.getRequestsNames()));
                         startActivity(intent);
-                        /*
-                                    then change the api level to 30*/
                     } else {
                         handleResponseFailure.responseError(response, MainActivity.this, "");
                     }
