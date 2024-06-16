@@ -21,24 +21,16 @@ public class CatchException {
 
     public ResponseEntity<ResponseMessageDto> catchException(Exception exception, String message,
                                                              HttpStatus httpStatus, Class<?> controllerClass){
-        for(IExceptionFinder exceptionHandler : exceptionHandlers){
-            if(exceptionHandler.isNeeded(exception)){
-                return handleException(exception, message, httpStatus, controllerClass);
-            }
-        }
 
-        message = "Sorry, something went wrong, try again please";
-        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        ResponseMessageDto responseMessageDto = new ResponseMessageDto(message);
-
-        return ResponseEntity.status(httpStatus).body(responseMessageDto);
-    }
-
-    private ResponseEntity<ResponseMessageDto> handleException(Exception exception, String message,
-                                                               HttpStatus httpStatus, Class<?> controllerClass) {
         Logger logger = LoggerFactory.getLogger(controllerClass);
         logger.error(exception.getMessage());
+
+        boolean myExceptionHandler = exceptionHandlers.stream().anyMatch(exceptionNeeded -> exceptionNeeded.isNeeded(exception));
+
+        if(!myExceptionHandler){
+            message = "Sorry, something went wrong, try again please";
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 
         ResponseMessageDto responseMessageDto = new ResponseMessageDto(message);
 
