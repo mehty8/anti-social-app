@@ -1,5 +1,7 @@
 package antisocial.app.frontend.page;
 
+import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +25,6 @@ import antisocial.app.frontend.data.dto.RegisterLoginRequestDto;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import antisocial.app.frontend.service.api.ApiClient;
 import antisocial.app.frontend.service.api.ApiService;
-import antisocial.app.frontend.service.HandleResponseFailure;
 import antisocial.app.frontend.service.credential.ICheckCredential;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +32,6 @@ import retrofit2.Response;
 
 public class RegisterLoginActivity extends AppCompatActivity {
     private SharedPreferencesManager sharedPreferencesManager;
-    private HandleResponseFailure handleResponseFailure;
     private List<ICheckCredential> checkCredentials;
 
     @Override
@@ -40,8 +40,6 @@ public class RegisterLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_login);
 
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-
-        handleResponseFailure = new HandleResponseFailure();
 
         CheckUsername checkUsername = new CheckUsername();
         CheckPassword checkPassword = new CheckPassword();
@@ -89,7 +87,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    handleResponseFailure.responseError(response, RegisterLoginActivity.this, "");
+                    responseError(response, RegisterLoginActivity.this, "");
                 }
             }
             @Override
@@ -114,7 +112,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                             "now please login",
                             Toast.LENGTH_LONG).show();
                 } else {
-                   handleResponseFailure.responseError(response, RegisterLoginActivity.this,
+                   responseError(response, RegisterLoginActivity.this,
                            ", please try again accordingly");
                 }
             }
