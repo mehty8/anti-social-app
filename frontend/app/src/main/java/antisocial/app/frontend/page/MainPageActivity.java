@@ -1,5 +1,7 @@
 package antisocial.app.frontend.page;
 
+import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
+
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +31,6 @@ import antisocial.app.frontend.data.dto.VideosDto;
 import antisocial.app.frontend.service.api.ApiClient;
 import antisocial.app.frontend.service.api.ApiService;
 import antisocial.app.frontend.service.HandleAdapters;
-import antisocial.app.frontend.service.HandleResponseFailure;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,7 +52,6 @@ public class MainPageActivity extends AppCompatActivity {
     private Set<String> friendsNames;
     private Set<String> friendRequests;
     private List<IAdapter> adapters;
-    private HandleResponseFailure handleResponseFailure;
     private HandleAdapters handleAdapters;
 
     @Override
@@ -70,8 +70,6 @@ public class MainPageActivity extends AppCompatActivity {
         IAdapter friendAdapter = new FriendListAdapter(friendsNames, MainPageActivity.this);
         adapters.add(requestAdapter);
         adapters.add(friendAdapter);
-
-        handleResponseFailure = new HandleResponseFailure();
 
         handleAdapters = new HandleAdapters(adapters);
 
@@ -117,7 +115,7 @@ public class MainPageActivity extends AppCompatActivity {
                                 startActivity(intentFriendRequest);
                             }
                         } else {
-                            handleResponseFailure.responseError(response, MainPageActivity.this, "");
+                            responseError(response, MainPageActivity.this, "");
                         }
                     }
                     @Override
@@ -166,7 +164,7 @@ public class MainPageActivity extends AppCompatActivity {
                     intentVideos.putExtra("type", type);
                     startActivity(intentVideos);
                 } else {
-                    handleResponseFailure.responseError(response, MainPageActivity.this, "");
+                    responseError(response, MainPageActivity.this, "");
                 }
             }
 

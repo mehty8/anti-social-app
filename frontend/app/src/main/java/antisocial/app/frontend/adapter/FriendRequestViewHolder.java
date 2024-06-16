@@ -1,5 +1,7 @@
 package antisocial.app.frontend.adapter;
 
+import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -15,7 +17,6 @@ import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
 import antisocial.app.frontend.data.dto.ResponseMessageDto;
-import antisocial.app.frontend.service.HandleResponseFailure;
 import antisocial.app.frontend.service.api.ApiClient;
 import antisocial.app.frontend.service.api.ApiService;
 import retrofit2.Call;
@@ -27,14 +28,11 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private SharedPreferencesManager sharedPreferencesManager;
 
-    private HandleResponseFailure handleResponseFailure;
-
     public FriendRequestViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         this.textView = itemView.findViewById(R.id.textViewFriendRequestItem);
         this.context = context;
         sharedPreferencesManager = new SharedPreferencesManager(context.getApplicationContext());
-        handleResponseFailure = new HandleResponseFailure();
 
         MaterialButton acceptButton = itemView.findViewById(R.id.buttonAccept);
         MaterialButton denyButton = itemView.findViewById(R.id.buttonDeny);
@@ -71,7 +69,7 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                 } else {
-                    handleResponseFailure.responseError(response, context, "");
+                    responseError(response, context, "");
                 }
             }
 

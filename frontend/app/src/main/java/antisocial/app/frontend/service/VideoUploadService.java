@@ -1,5 +1,7 @@
 package antisocial.app.frontend.service;
 
+import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
+
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
@@ -29,20 +31,17 @@ public class VideoUploadService {
     private static int TIME_IN_MS_TO_GET = 1000 * 60 * 60 * 12;
     private Context context;
 
-    private HandleResponseFailure handleResponseFailure;
-
     public VideoUploadService(Context context) {
         this.context = context;
-        handleResponseFailure = new HandleResponseFailure();
     }
 
     public void videoUpload(String jwt, String videoName, String username, String temporaryVideoName, ToastCallBack toastCallback){
         getPreassignedUrl(jwt, videoName, username, temporaryVideoName, toastCallback);
     }
 
-    public void videoCancel(String temporaryVideoName, ToastCallBack toastCallBack){
+    public void videoCancel(String temporaryVideoName, String message, ToastCallBack toastCallBack){
         deleteFile(temporaryVideoName);
-        toastCallBack.displayToast("Video sending cancelled, Video deleted");
+        toastCallBack.displayToast(message);
     }
 
     private void getPreassignedUrl(String jwt, String videoName, String username,
@@ -60,7 +59,7 @@ public class VideoUploadService {
                     String url = response.body().getPreassignedUrl();
                     uploadVideo(url, videoName, username, jwt, temporaryVideoName, toastCallback);
                 } else {
-                    handleResponseFailure.responseError(response, context, "");
+                    responseError(response, context, "");
                 }
             }
 
@@ -163,7 +162,7 @@ public class VideoUploadService {
                 if(response.isSuccessful()){
                     toastcallback.displayToast(response.body().getMessage());
                 } else {
-                    handleResponseFailure.responseError(response, context, "");
+                    responseError(response, context, "");
                 }
 
             }

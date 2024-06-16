@@ -11,7 +11,8 @@ import antisocial.app.frontend.data.dto.ResponseMessageDto;
 import retrofit2.Response;
 
 public class HandleResponseFailure {
-    public void responseError(Response<?> response, Context context, String additionalMessage){
+
+    public static void responseError(Response<?> response, Context context, String additionalMessage){
         try {
             ResponseMessageDto responseBody = new Gson().fromJson(response.errorBody().string(),
                     ResponseMessageDto.class);

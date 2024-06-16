@@ -1,5 +1,8 @@
 package antisocial.app.frontend;
 
+import static antisocial.app.frontend.service.CheckJwtExpiration.expired;
+import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,20 +13,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
 import antisocial.app.frontend.data.dto.FriendsNamesAndRequestsDTo;
 import antisocial.app.frontend.page.MainPageActivity;
 import antisocial.app.frontend.page.RegisterLoginActivity;
-import antisocial.app.frontend.service.HandleResponseFailure;
 import antisocial.app.frontend.service.api.ApiClient;
 import antisocial.app.frontend.service.api.ApiService;
 import retrofit2.Call;
@@ -46,13 +45,10 @@ public class MainActivity extends AppCompatActivity {
             });
     private SharedPreferencesManager sharedPreferencesManager;
 
-    private HandleResponseFailure handleResponseFailure;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
-        handleResponseFailure = new HandleResponseFailure();
         getPermission();
     }
 
@@ -80,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void validateJwt() throws JSONException {
         String jwt = sharedPreferencesManager.getJwt();
-        if(jwt == null || expired(jwt)){
+        if(jwt == null || expired(jwt, 0)){
             Intent intent = new Intent(MainActivity.this, RegisterLoginActivity.class);
             startActivity(intent);
         } else {
@@ -95,10 +91,8 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("friends", new HashSet<>(friendsAndRequests.getFriendsNames()));
                         intent.putExtra("requests", new HashSet<>(friendsAndRequests.getRequestsNames()));
                         startActivity(intent);
-                        /*
-                                    then change the api level to 30*/
                     } else {
-                        handleResponseFailure.responseError(response, MainActivity.this, "");
+                        responseError(response, MainActivity.this, "");
                     }
 
                 }
@@ -112,15 +106,5 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
-    }
-
-    private boolean expired(String jwt) throws JSONException {
-        String jwtExpStringCoded = jwt.split("\\.")[1];
-        String body = new String(Base64.decode(jwtExpStringCoded, Base64.URL_SAFE), StandardCharsets.UTF_8);
-        JSONObject object = new JSONObject(body);
-        long exp = object.getLong("exp");
-        long currentTime = System.currentTimeMillis() / 1000;
-
-        return exp <= currentTime;
     }
 }

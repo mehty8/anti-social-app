@@ -25,4 +25,8 @@ public class SharedPreferencesManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(JWT_NAME, null);
     }
+
+    public void deleteJwt(){
+        context.deleteSharedPreferences(PREFERENCE_NAME);
+    }
 }

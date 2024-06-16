@@ -1,5 +1,7 @@
 package antisocial.app.frontend.page;
 
+import static antisocial.app.frontend.service.CheckJwtExpiration.expired;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -51,26 +55,24 @@ public class VideoUploadActivity extends AppCompatActivity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String videoName = editText.getText().toString();
+                try {
+                    if(expired(sharedPreferencesManager.getJwt(), 0)){
+                        String message = "Video not sent cause session expired, " +
+                                "please login and make the video again";
+                        cancelVideo(temporaryVideoName, message);
+                        dialog.dismiss();
+                    } else {
+                        String videoName = editText.getText().toString();
 
-                if(videoName.isEmpty()){
-                    Toast.makeText(VideoUploadActivity.this, "You have to name your video", Toast.LENGTH_LONG).show();
-                } else {
-                    videoUploadService.videoUpload(sharedPreferencesManager.getJwt(), videoName, username,
-                            temporaryVideoName + EXTENSION, new ToastCallBack() {
-                                @Override
-                                public void displayToast(String message) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(VideoUploadActivity.this, message, Toast.LENGTH_LONG).show();
-                                            Intent intent = new Intent(VideoUploadActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                }
-                            });
-                    dialog.dismiss();
+                        if(videoName.isEmpty()){
+                            Toast.makeText(VideoUploadActivity.this, "You have to name your video", Toast.LENGTH_LONG).show();
+                        } else {
+                            sendVideo(temporaryVideoName, videoName, username);
+                            dialog.dismiss();
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
@@ -78,7 +80,18 @@ public class VideoUploadActivity extends AppCompatActivity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                videoUploadService.videoCancel(temporaryVideoName + EXTENSION, new ToastCallBack() {
+                String message = "Video sending cancelled, Video deleted";
+                cancelVideo(temporaryVideoName, message);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void sendVideo(String temporaryVideoName, String videoName, String username){
+        videoUploadService.videoUpload(sharedPreferencesManager.getJwt(), videoName, username,
+                temporaryVideoName + EXTENSION, new ToastCallBack() {
                     @Override
                     public void displayToast(String message) {
                         runOnUiThread(new Runnable() {
@@ -91,10 +104,21 @@ public class VideoUploadActivity extends AppCompatActivity {
                         });
                     }
                 });
-                dialog.dismiss();
+    }
+
+    private void cancelVideo(String temporaryVideoName, String message){
+        videoUploadService.videoCancel(temporaryVideoName + EXTENSION, message, new ToastCallBack() {
+            @Override
+            public void displayToast(String message) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(VideoUploadActivity.this, message, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(VideoUploadActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         });
-
-        dialog.show();
     }
 }
