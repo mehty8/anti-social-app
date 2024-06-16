@@ -33,6 +33,23 @@ android {
             signingConfig = signingConfigs.getByName("releaseConfig")
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    flavorDimensions.add("default")
+    productFlavors {
+        create("development") {
+            dimension = "default"
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+        }
+        create("production") {
+            dimension = "default"
+            buildConfigField("String", "BASE_URL", "\"http://anti-social-app.eu-central-1.elasticbeanstalk.com/\"")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
