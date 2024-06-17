@@ -49,19 +49,9 @@ public class FriendListViewHolder extends RecyclerView.ViewHolder{
                         LayoutInflater layoutInflater = LayoutInflater.from(context);
                         View dialogView = layoutInflater.inflate(R.layout.dialog_logout, null);
                         builder.setView(dialogView);
-                        Button buttonLogout = dialogView.findViewById(R.id.buttonLogout);
 
                         AlertDialog dialog = builder.create();
 
-                        buttonLogout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                sharedPreferencesManager.deleteJwt();
-                                Intent intent = new Intent(context, MainActivity.class);
-                                context.startActivity(intent);
-                                dialog.dismiss();
-                            }
-                        });
                         dialog.show();
                     } else {
                         Intent intent = new Intent(context, VideoRecordActivity.class);

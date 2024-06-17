@@ -132,10 +132,20 @@ public class MainPageActivity extends AppCompatActivity {
         handleAdapters.setAdapter(recyclerViewFriendList, "Friend", MainPageActivity.this);
 
         Button refreshButton = findViewById(R.id.buttonRefresh);
+        Button logoutButton = findViewById(R.id.buttonLogout);
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intentMainActivity = new Intent(MainPageActivity.this, MainActivity.class);
+                startActivity(intentMainActivity);
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferencesManager.deleteJwt();
                 Intent intentMainActivity = new Intent(MainPageActivity.this, MainActivity.class);
                 startActivity(intentMainActivity);
             }
