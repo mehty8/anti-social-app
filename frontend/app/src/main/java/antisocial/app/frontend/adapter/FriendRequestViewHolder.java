@@ -1,5 +1,7 @@
 package antisocial.app.frontend.adapter;
 
+import static antisocial.app.frontend.service.CheckJwtExpiration.jwtExpired;
+import static antisocial.app.frontend.service.CheckJwtExpiration.logoutJwtExpired;
 import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
 
 import android.content.Context;
@@ -12,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONException;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -40,14 +44,30 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleFriendRequest("acceptrequest", textView.getTag().toString());
+                try {
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), 0)){
+                        logoutJwtExpired(context);
+                    } else {
+                        handleFriendRequest("acceptrequest", textView.getTag().toString());
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         denyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleFriendRequest("denyrequest", textView.getTag().toString());
+                try {
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), 0)){
+                        logoutJwtExpired(context);
+                    } else {
+                        handleFriendRequest("denyrequest", textView.getTag().toString());
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }

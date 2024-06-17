@@ -1,6 +1,6 @@
 package antisocial.app.frontend;
 
-import static antisocial.app.frontend.service.CheckJwtExpiration.expired;
+import static antisocial.app.frontend.service.CheckJwtExpiration.jwtExpired;
 import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void validateJwt() throws JSONException {
         String jwt = sharedPreferencesManager.getJwt();
-        if(jwt == null || expired(jwt, 0)){
+        if(jwt == null || jwtExpired(jwt, 0)){
             Intent intent = new Intent(MainActivity.this, RegisterLoginActivity.class);
             startActivity(intent);
         } else {

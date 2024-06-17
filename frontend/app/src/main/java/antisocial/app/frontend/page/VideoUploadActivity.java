@@ -1,6 +1,6 @@
 package antisocial.app.frontend.page;
 
-import static antisocial.app.frontend.service.CheckJwtExpiration.expired;
+import static antisocial.app.frontend.service.CheckJwtExpiration.jwtExpired;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,7 +56,7 @@ public class VideoUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    if(expired(sharedPreferencesManager.getJwt(), 0)){
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), 0)){
                         String message = "Video not sent cause session expired, " +
                                 "please login and make the video again";
                         cancelVideo(temporaryVideoName, message);
