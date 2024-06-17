@@ -1,5 +1,7 @@
 package antisocial.app.frontend.adapter;
 
+import static antisocial.app.frontend.service.CheckJwtExpiration.jwtExpired;
+import static antisocial.app.frontend.service.CheckJwtExpiration.logoutJwtExpired;
 import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
 
 import android.content.Context;
@@ -11,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONException;
 
 import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
@@ -43,25 +47,33 @@ public class UserFinderViewHolder extends RecyclerView.ViewHolder{
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApiService apiService = ApiClient.getApiServiceDynamic();
-                Call<ResponseMessageDto> call = apiService.sendOrHandleFriendRequest("friendrequest", requestName,"Bearer " + sharedPreferencesManager.getJwt());
-                call.enqueue(new Callback<ResponseMessageDto>() {
-                    @Override
-                    public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(context, MainActivity.class);
-                            context.startActivity(intent);
-                        } else {
-                            responseError(response, context, "");
-                        }
-                    }
+                try {
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), 0)){
+                        logoutJwtExpired(context);
+                    } else {
+                        ApiService apiService = ApiClient.getApiServiceDynamic();
+                        Call<ResponseMessageDto> call = apiService.sendOrHandleFriendRequest("friendrequest", requestName,"Bearer " + sharedPreferencesManager.getJwt());
+                        call.enqueue(new Callback<ResponseMessageDto>() {
+                            @Override
+                            public void onResponse(Call<ResponseMessageDto> call, Response<ResponseMessageDto> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent);
+                                } else {
+                                    responseError(response, context, "");
+                                }
+                            }
 
-                    @Override
-                    public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
-                        Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
+                            @Override
+                            public void onFailure(Call<ResponseMessageDto> call, Throwable t) {
+                                Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-                });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }

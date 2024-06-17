@@ -1,5 +1,7 @@
 package antisocial.app.frontend.page;
 
+import static antisocial.app.frontend.service.CheckJwtExpiration.jwtExpired;
+import static antisocial.app.frontend.service.CheckJwtExpiration.logoutJwtExpired;
 import static antisocial.app.frontend.service.HandleResponseFailure.responseError;
 
 import android.Manifest;
@@ -14,6 +16,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -81,7 +85,15 @@ public class MainPageActivity extends AppCompatActivity {
         buttonSentVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVideosActivity("sent");
+                try {
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), 0)){
+                        logoutJwtExpired(MainPageActivity.this);
+                    } else {
+                        getVideosActivity("sent");
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -89,40 +101,55 @@ public class MainPageActivity extends AppCompatActivity {
         buttonReceivedVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVideosActivity("received");
+                try {
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), 0)){
+                        logoutJwtExpired(MainPageActivity.this);
+                    } else {
+                        getVideosActivity("received");
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
-
 
         EditText editTexFriendName = findViewById(R.id.editTextFriendName);
         Button buttonFriendSearch = findViewById(R.id.buttonFindFriend);
         buttonFriendSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String friendName = editTexFriendName.getText().toString();
-                ApiService apiService = ApiClient.getApiServiceDynamic();
-                Call<FriendsNamesDto> call = apiService.getFriendsNames(friendName,"Bearer " + sharedPreferencesManager.getJwt());
-                call.enqueue(new Callback<FriendsNamesDto>() {
-                    @Override
-                    public void onResponse(Call<FriendsNamesDto> call, Response<FriendsNamesDto> response) {
-                        Set<String> friendRequestNames = response.body().getFriendsNames();
-                        if(response.isSuccessful()){
-                            if(friendRequestNames.isEmpty()){
-                                Toast.makeText(MainPageActivity.this, "No such user found", Toast.LENGTH_LONG).show();
-                            } else {
-                                Intent intentFriendRequest = new Intent(MainPageActivity.this, FriendRequestActivity.class);
-                                intentFriendRequest.putExtra("friendRequestNames", new HashSet<>(friendRequestNames));
-                                startActivity(intentFriendRequest);
+                try {
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), -15)){
+                        logoutJwtExpired(MainPageActivity.this);
+                    } else {
+                        String friendName = editTexFriendName.getText().toString();
+                        ApiService apiService = ApiClient.getApiServiceDynamic();
+                        Call<FriendsNamesDto> call = apiService.getFriendsNames(friendName,"Bearer " + sharedPreferencesManager.getJwt());
+                        call.enqueue(new Callback<FriendsNamesDto>() {
+                            @Override
+                            public void onResponse(Call<FriendsNamesDto> call, Response<FriendsNamesDto> response) {
+                                Set<String> friendRequestNames = response.body().getFriendsNames();
+                                if(response.isSuccessful()){
+                                    if(friendRequestNames.isEmpty()){
+                                        Toast.makeText(MainPageActivity.this, "No such user found", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Intent intentFriendRequest = new Intent(MainPageActivity.this, FriendRequestActivity.class);
+                                        intentFriendRequest.putExtra("friendRequestNames", new HashSet<>(friendRequestNames));
+                                        startActivity(intentFriendRequest);
+                                    }
+                                } else {
+                                    responseError(response, MainPageActivity.this, "");
+                                }
                             }
-                        } else {
-                            responseError(response, MainPageActivity.this, "");
-                        }
+                            @Override
+                            public void onFailure(Call<FriendsNamesDto> call, Throwable t) {
+                                Toast.makeText(MainPageActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-                    @Override
-                    public void onFailure(Call<FriendsNamesDto> call, Throwable t) {
-                        Toast.makeText(MainPageActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
