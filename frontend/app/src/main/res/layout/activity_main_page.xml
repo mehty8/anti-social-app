@@ -117,23 +117,43 @@
         app:layout_constraintTop_toBottomOf="@id/textViewFriends"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRefresh" />
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout" />
 
-    <!-- Refresh Button -->
-    <Button
-        android:id="@+id/buttonRefresh"
-        android:layout_width="wrap_content"
+    <!-- Refresh and Logout Button -->
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:textColor="@color/sunsetDarkOrange"
-        android:backgroundTint="@color/button_refresh_background_color"
-        app:cornerRadius="20dp"
-        app:strokeColor="@color/sunsetDarkOrange"
-        app:strokeWidth="2dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewFriends"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/button_refresh_background_color"
+            android:text="Logout"
+            android:textColor="@color/sunsetDarkOrange"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/sunsetDarkOrange"
+            app:strokeWidth="2dp" />
+
+        <Button
+            android:id="@+id/buttonRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="@color/button_refresh_background_color"
+            android:text="Refresh"
+            android:textColor="@color/sunsetDarkOrange"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/sunsetDarkOrange"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
