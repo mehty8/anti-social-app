@@ -1,13 +1,12 @@
 package antisocial.app.frontend.adapter;
 
-import static antisocial.app.frontend.service.CheckJwtExpiration.expired;
+import static antisocial.app.frontend.service.CheckJwtExpiration.jwtExpired;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
 
-import antisocial.app.frontend.MainActivity;
 import antisocial.app.frontend.R;
 import antisocial.app.frontend.SharedPreferencesManager;
 import antisocial.app.frontend.page.VideoRecordActivity;
@@ -44,7 +42,7 @@ public class FriendListViewHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View view) {
                 try {
-                    if(expired(sharedPreferencesManager.getJwt(), -60)){
+                    if(jwtExpired(sharedPreferencesManager.getJwt(), -60)){
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater layoutInflater = LayoutInflater.from(context);
                         View dialogView = layoutInflater.inflate(R.layout.dialog_logout, null);
