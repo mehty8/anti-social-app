@@ -123,7 +123,7 @@
    <img src="/stop-video-recording.png" alt="Stopping video">
    <p> </p>
    <p>
-      THis is the video recording page, You get here after You clicked on one of your friends. Tap the red button on the bottom to start recording the video. You can also flip the camrea by tapping on the "recycle" button on the top right corner. To stop the recording tap on the square on the bottom.
+      This is the video recording page. You get here after You tapped on one of your friends. Tap the red button at the bottom to start recording the video. You can also flip the camrea by tapping the "recycle" button at the top right corner. To stop the recording, tap the square at the bottom.
    </p>
    <h2></h2>
 </div>
