@@ -55,7 +55,7 @@
    <img src="/storage-acces very first page.png" alt="Storage access permission">
    <p> </p>
    <p>
-      This is the welcome page if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead, saves it to the phone till You send it or cancel it, then the system deletes the recorded video. So push the switch to right, then tap the "back" arrow on the top-left corner
+      This is the welcome page if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead, saves it to the phone till You send it or cancel it, then the system deletes the recorded video. So push the switch to right, then tap the "back" arrow on the top-left corner.
    </p>
    <h2></h2>
 </div>
@@ -65,7 +65,7 @@
    <img src="/register-login.png" alt="Register and login page">
    <p> </p>
    <p>
-      The Username can only have letters, numbers and underscore, and the Password must be at least 8 characters long and have at least 1 uppercase, 1 lowercase and 1 digit. So please proceed accordingly, however if the provided credentials are invalid, or something goes wrong during registration, a message down at the bottom will be shown and it tell You what to do. After you registered You can login immediately
+      The Username can only have letters, numbers and underscore. The Password must be at least 8 characters long and have at least 1 uppercase, 1 lowercase and 1 digit. So please proceed accordingly, however if the provided credentials are invalid, or something goes wrong during registration, a message, down at the bottom, will be shown and it is going to tell You what to do. After you registered You can login immediately.
    </p>
    <h2></h2>
 </div>
