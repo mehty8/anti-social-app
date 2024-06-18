@@ -86,12 +86,13 @@
    <img src="/main-page.png" alt="Main page">
    <p> </p>
    <p>
-      Here We are, the main page. Amazing design right :). At the top You can check your sent or received videos. The videos are avaiable up to 12 hours form the making, after that They got completely deleted from the storage. 
-      Below that YOu can look for users. The system searches for any match that has the provided segment in it, so for "test", it will find "test1" "testarosa" "testicle" users as well.
-      However only users that You are not friends with, or sent/received a friend request will appear.
-      After that YOu can see the friend request that were sent to You. In the frame, on the left side, there is the username of the requester, decline or accept it.
-      In the next segment You can see Your friends. By clicking on them You can record and send videos.
-      Finally at the bottom of the page, You can logout or refresh the page. The session lasts for 10 minutes, so after login You will have 10 minutes before the system logs You out, to login again and start a new session. Because of that there safety measures introduced so the session will not expire while for instance You are recording a video, or if do so the system can handle the error. You can only start a user search up until 15 seconds, or a video recording up until 1 minute, before the session expires. The refresh button is usefull cause auto update function is not developed, so when You get a friend request, or your friend reuqest was accepted, You will not gonna be notified about them unless You refresh the page.
+      Here We are, the main page. Amazing design right :). At the top, You can check your sent or received videos. The videos are avaiable up to 12 hours from the making, after that They got completely deleted from the storage.<br>
+      Below You can look for users. The system searches for any match that has the provided text in it. For "test", it will find "test1", "testarosa", "testicle" users as well.
+      However only users that You are not friends with, or sent/received a friend request will appear.<br>
+      After that You can see the friend requests that were sent to You. In the frame, on the left side, there is the username of the requester, decline or accept it.<br>
+      In the next segment You can see Your friends. By clicking on them You can record and send videos.<br>
+      Finally at the bottom, You can logout or refresh the page. The session lasts for 10 minutes, so after login, You will have 10 minutes before the system logs You out, to login again and start a new session. Because of this there safety measures introduced so the session will not expire while for instance You are recording a video, or if do so, the system can handle the error. You can only start a user search up until 15 seconds, or a video recording up until 1 minute before the session expires.<br>
+      The refresh button is needed cause the auto-update function is not developed. So when You get a friend request, or your friend request was accepted, You will not be notified, unless You refresh the page.
    </p>
    <h2></h2>
 </div>
