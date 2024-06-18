@@ -42,7 +42,7 @@
     Settings -> Security -> Application from unknown sources -> Allow Google Drive, or something like that, It differs from phone to phone.
 - Open this link on your phone:
     https://drive.google.com/file/d/167xb3ZZlQSEAKsg8V_5cv5FnAcudQ193/view?usp=drive_link
-- The system"s package installer will pop up, so click on that.
+- The system's package installer will pop up, click on that.
 - It may look like that nothing is happening but in the backgorund the package installer is preapring the app for instalation, sometimes it takes even 30 seconds to finish
 - The Installation will pop up, so install the app
 - Since the app is from unknwon sources, not via an app store, play protect may show up to check the app. Just click on details, and choose to ignore it.
