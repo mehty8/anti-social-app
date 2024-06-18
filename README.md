@@ -1,11 +1,5 @@
 # Anti-Social-App
 
-## Contact information:
-- Name: Balint Csanyi
-- Email: mehty8@gmail.com
-- linkedin: https://www.linkedin.com/in/balint-csanyi/
-
-
 This is a video sending android application.
 
 ## Prerequisites:
@@ -68,6 +62,10 @@ This is a video sending android application.
 The design is hideous, I know :).
 The jwt is set for 10 minutes
 
-That is it so far, thanks for dropping by. 
-If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me:
-mehty8@gmail.com
+Have fun and thanks for dropping by. 
+If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me.
+
+## Contact information:
+- Name: Balint Csanyi
+- Email: mehty8@gmail.com
+- linkedin: https://www.linkedin.com/in/balint-csanyi/
