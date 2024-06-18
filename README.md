@@ -1,5 +1,5 @@
 <p align="center"><b><font size="-2">Anti Social App</font></b></p>
-* <span style="font-size:14px;">Feature 1</span>
+<span style="font-size:20px;">Feature 1</span>
 
 This is a video sending android application.
 
