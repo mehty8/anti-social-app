@@ -1,6 +1,6 @@
 <h1 align="center">Anti Social App</h1>
 
-This is a video sending android application.
+<p align="center">This is a video sending android application.</p>
 
 ## Prerequisites
 
