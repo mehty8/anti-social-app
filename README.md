@@ -21,7 +21,7 @@
 - Java android studio (frontend)
 - Postgres (database)
 - AWS services:
-   - S3 Bucket (sotring videos)
+   - S3 Bucket (storing videos)
    - Elastic Beanstalk (Deploying backend)
    - RDS (Database)
    - Security Manager (Storing secret)
