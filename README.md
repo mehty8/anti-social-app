@@ -1,4 +1,4 @@
-# Anti-Social-App
+<p align="center>Anti-Social-App</p>
 
 This is a video sending android application.
 
