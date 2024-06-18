@@ -49,20 +49,69 @@
 - Open the app and play along :).
 
 ## Tutorial
-<img src="/storage-acces very first page.png" alt="Storage access permission">
-<img src="/register-login.png" alt="Register and login page">
-<img src="/permission-video.png" alt="Video permission">
-<img src="/permission-audio.png" alt="Audio permission">
-<img src="/main-page.png" alt="Main page">
-<img src="/video-list.png" alt="Video list">
-<img src="/user-finder.png" alt="Look for users">
-<img src="/start-video-recording.png" alt="Starting video">
-<img src="/stop-video-recording.png" alt="Stopping video">
-<img src="/name-video.png" alt="Naming video">
+<div align="center">
+   <img src="/storage-acces very first page.png" alt="Storage access permission">
+   <p>
+      This is the very first page that welcomes You if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead it saves it to the phone till You send it or cancel it, then it deletes the recorded video. So push the switch to right, then tap on the "back" arrow on the top-right corner
+   </p>
+</div>
 
+<div align="center">
+   <img src="/register-login.png" alt="Register and login page">
+   <p>
+      The Username can only have letters, numbers and underscore, and the Password must be at least 8 characters long and have at least 1 uppercase, 1 lowercase and 1 digit. So please proceed accordingly, however if the provided credentials are invalid, or something goes wrong during registration, a message down at the bottom will be shown and it tell You what to do. After you registered You can login immediately
+   </p>
+</div>
 
-The design is hideous, I know :).
-The jwt is set for 10 minutes
+<div align="center">
+   <img src="/permission-video.png" alt="Video permission">
+   <img src="/permission-audio.png" alt="Audio permission">
+   <p>
+      You have to provide permission to record video and audio, please choose "while using the app" if do not wanna do this each and every time before recording a video
+   </p>
+</div>
+
+<div align="center">
+   <img src="/main-page.png" alt="Main page">
+   <p>
+      Here We are, the main page. Amazing design right :). At the top You can check your sent or received videos. The videos are avaiable up to 12 hours form the making, after that They got completely deleted from the storage. 
+      Below that YOu can look for users. The system searches for any match that has the provided segment in it, so for "test", it will find "test1" "testarosa" "testicle" users as well.
+      However only users that You are not friends with, or sent/received a friend request will appear.
+      After that YOu can see the friend request that were sent to You. In the frame, on the left side, there is the username of the requester, decline or accept it.
+      In the next segment You can see Your friends. By clicking on them You can record and send videos.
+      Finally at the bottom of the page, You can logout or refresh the page. The session lasts for 10 minutes, so after login You will have 10 minutes before the system logs You out, to login again and start a new session. Because of that there safety measures introduced so the session will not expire while for instance You are recording a video, or if do so the system can handle the error. You can only start a user search up until 15 seconds, or a video recording up until 1 minute, before the session expires. The refresh button is usefull cause auto update function is not developed, so when You get a friend request, or your friend reuqest was accepted, You will not gonna be notified about them unless You refresh the page.
+   </p>
+</div>
+
+<div align="center">
+   <img src="/video-list.png" alt="Video list">
+   <p>
+      This is the sent or received video list segment. In the frame on the left there is the username of the one that You got it from or You sent it to, after colon comes the name of the video. By tapping, You can watch them. The videos are not downloaded to your phone, It is streamed from the cloud, therefore it might stutter.
+   </p>
+</div>
+
+<div align="center">
+   <img src="/user-finder.png" alt="Look for users">
+   <p>
+      Here You can find the result of the user-search. By tapping You can send a friend request
+   </p>
+</div>
+
+<div align="center">
+   <img src="/start-video-recording.png" alt="Starting video">
+   <img src="/stop-video-recording.png" alt="Stopping video">
+   <p>
+      THis is the video recording page, You get here after You clicked on one of your friends. Tap the red button on the bottom to start recording the video. You can also flip the camrea by tapping on the "recycle" button on the top right corner. To stop the recording tap on the square on the bottom.
+   </p>
+</div>
+<h3>Next</h3>
+<div align="center">
+   <img src="/name-video.png" alt="Naming video">
+   <p>
+      This dialog pops up after You are done recording the video. You have to give a name to it please You finalize it and send it. IF for some reason You wanna cancel the procedure and delete the video, just click on cnacel. If despite the precaution, your session expires while You were making the video, no matter what You tap on, the system will automaticaly cancel the procedure, delete the video and log You out.
+   </p>
+</div>
+
 
 Have fun and thanks for dropping by. 
 If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me.
