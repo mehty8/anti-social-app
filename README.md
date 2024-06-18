@@ -102,7 +102,7 @@
    <img src="/video-list.png" alt="Video list">
    <p> </p>
    <p>
-      This is the sent or received video list segment. In the frame on the left there is the username of the one that You got it from or You sent it to, after colon comes the name of the video. By tapping, You can watch them. The videos are not downloaded to your phone, It is streamed from the cloud, therefore it might stutter.
+      This is the sent or received video list segment. In the frame, on the left side, there is the username of the user that You got the video from or You sent it to. After the colon comes the name of the video. By tapping on the frames, You can watch the videos. The videos are not downloaded to your phone, It is streamed from the cloud, therefore it might stutter.
    </p>
    <h2></h2>
 </div>
