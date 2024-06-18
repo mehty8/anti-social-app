@@ -53,16 +53,16 @@ Instalation:
 - Open the app and play along :).
 
 Tutorial:
-<img src="/storage-acces very first page.png">
-<img src="/register-login.png" alt="Logo" width="960" height="374">
-<img src="/permission-video.png" alt="Logo" width="960" height="374">
-<img src="/permission-audio.png" alt="Logo" width="960" height="374">
-<img src="/main-page.png" alt="Logo" width="960" height="374">
-<img src="/video-list.png" alt="Logo" width="960" height="374">
-<img src="/user-finder.png" alt="Logo" width="960" height="374">
-<img src="/start-video-recording.png" alt="Logo" width="960" height="374">
-<img src="/stop-video-recording.png" alt="Logo" width="960" height="374">
-<img src="/name-video.png" alt="Logo" width="960" height="374">
+<img src="/storage-access very first page.png" alt="Storage access permission">
+<img src="/register-login.png" alt="Register and login page">
+<img src="/permission-video.png" alt="Video permission">
+<img src="/permission-audio.png" alt="Audio permission">
+<img src="/main-page.png" alt="Main page">
+<img src="/video-list.png" alt="Video list">
+<img src="/user-finder.png" alt="Look for users">
+<img src="/start-video-recording.png" alt="Starting video">
+<img src="/stop-video-recording.png" alt="Stopping video">
+<img src="/name-video.png" alt="Naming video">
 
 
 The design is hideous, I know :).
