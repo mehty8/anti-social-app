@@ -45,7 +45,7 @@
 - The system's package installer will pop up, click on that.
 - It may look like nothing is happening but in the backgorund the package installer is preparing the app for installation, sometimes it takes even 30 seconds to finish
 - The Installation will pop up, install the app
-- Since the app is from unknwon sources, not via an app store, play protect may show up to check the app. Just click on details, and choose to ignore it.
+- Since the app is from unknown sources, not via an app store, play protect may show up to check the app. Just click on details, and choose to ignore it.
 - Open the app and play along :).
 
 ## Tutorial
