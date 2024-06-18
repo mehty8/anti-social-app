@@ -133,7 +133,7 @@
    <img src="/name-video.png" alt="Naming video">
    <p> </p>
    <p>
-      This dialog pops up after You are done recording the video. You have to give a name to it please You finalize it and send it. IF for some reason You wanna cancel the procedure and delete the video, just click on cnacel. If despite the precaution, your session expires while You were making the video, no matter what You tap on, the system will automaticaly cancel the procedure, delete the video and log You out.
+      This dialog pops up after You are done recording the video. You have to name it to finalize and send the video. If, for some reason, You wanna cancel the procedure and delete the video, just tap cnacel. If despite the precaution, your session expires while You were making the video, no matter what You tap on, the system will automatically cancel the procedure, delete the video and log You out.
    </p>
 </div>
 
