@@ -76,7 +76,7 @@
    <img src="/permission-audio.png" alt="Audio permission">
    <p> </p>
    <p>
-      You have to provide permission to record video and audio, please choose "while using the app" if do not wanna do this each and every time before recording a video
+      You have to provide permission to record video and audio. Choose "while using the app" if You do not wish to do this each and every time before recording a video.
    </p>
    <h2></h2>
 </div>
