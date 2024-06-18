@@ -53,7 +53,7 @@ Instalation:
 - Open the app and play along :).
 
 Tutorial:
-<img src="/storage-acces very first page.png" alt="Storage access permission">
+<img src="/storage-acces very first page.png" alt="Storage access permission" width="360" height="360">
 <img src="/register-login.png" alt="Register and login page">
 <img src="/permission-video.png" alt="Video permission">
 <img src="/permission-audio.png" alt="Audio permission">
