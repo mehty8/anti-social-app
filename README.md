@@ -42,10 +42,10 @@
     Settings -> Security -> Application from unknown sources -> Allow Google Drive, or something like that, It differs from phone to phone.
 - Open this link on your phone:
     https://drive.google.com/file/d/167xb3ZZlQSEAKsg8V_5cv5FnAcudQ193/view?usp=drive_link
-- The system's package installer will pop up, click on that.
+- The system's package installer will pop up, tap on that.
 - It may look like nothing is happening but in the backgorund the package installer is preparing the app for installation, sometimes it takes even 30 seconds to finish.
 - The Installation will pop up, install the app.
-- Since the app is from unknown sources, not via an app store, play protect may show up to check the app. Just click on details, and choose to ignore it.
+- Since the app is from unknown sources, not via an app store, play protect may show up to check the app. Just tap on details, and choose to ignore it.
 - Open the app and play along :).
 
 ## Tutorial
@@ -55,7 +55,7 @@
    <img src="/storage-acces very first page.png" alt="Storage access permission">
    <p> </p>
    <p>
-      This is the welcome page if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead, saves it to the phone till You send it or cancel it, then the system deletes the recorded video. So push the switch to right, then tap the "back" arrow on the top-left corner.
+      This is the welcome page if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead, saves it to the phone till You send it or cancel it, then the system deletes the recorded video. So push the switch to right, then tap the "back" arrow at the top-left corner.
    </p>
    <h2></h2>
 </div>
@@ -89,8 +89,8 @@
       Here We are, the main page. Amazing design right :). At the top, You can check your sent or received videos. The videos are avaiable up to 12 hours from the making, after that They got completely deleted from the storage.<br>
       Below You can look for users. The system searches for any match that has the provided text in it. For "test", it will find "test1", "testarosa", "testicle" users as well.
       However only users that You are not friends with, or sent/received a friend request will appear.<br>
-      After that You can see the friend requests that were sent to You. In the frame, on the left side, there is the username of the requester, decline or accept it.<br>
-      In the next segment You can see Your friends. By clicking on them You can record and send videos.<br>
+      After that You can see the friend requests that were sent to You. In the frame, at the left side, there is the username of the requester, decline or accept it.<br>
+      In the next segment You can see Your friends. By tapping on them You can record and send videos.<br>
       Finally at the bottom, You can logout or refresh the page. The session lasts for 10 minutes, so after login, You will have 10 minutes before the system logs You out, to login again and start a new session. Because of this there are safety measures introduced, so the session will not expire while for instance, You are recording a video, or if do so, the system can handle the error. You can only start a user search up until 15 seconds, or a video recording up until 1 minute before the session expires.<br>
       The refresh button is needed cause the auto-update function is not developed. When You get a friend request, or your friend request was accepted, You will not be notified, unless You refresh the page.
    </p>
@@ -102,7 +102,7 @@
    <img src="/video-list.png" alt="Video list">
    <p> </p>
    <p>
-      This is the sent or received video list segment. In the frame, on the left side, there is the username of the user that You got the video from or You sent it to. After the colon comes the name of the video. By tapping on the frames, You can watch the videos. The videos are not downloaded to your phone, They are streamed from the cloud, therefore They might stutter.
+      This is the sent or received video list segment. In the frame, at the left side, there is the username of the user that You got the video from or You sent it to. After the colon comes the name of the video. By tapping on the frames, You can watch the videos. The videos are not downloaded to your phone, They are streamed from the cloud, therefore They might stutter.
    </p>
    <h2></h2>
 </div>
@@ -133,7 +133,7 @@
    <img src="/name-video.png" alt="Naming video">
    <p> </p>
    <p>
-      This dialog pops up after You are done recording the video. You have to name it to finalize and send the video. If, for some reason, You wanna cancel the procedure and delete the video, just tap cnacel. If despite the precaution, your session expires while You were making the video, no matter what You tap on, the system will automatically cancel the procedure, delete the video and log You out.
+      This dialog pops up after You are done recording the video. You have to name it to finalize and send the video. If, for some reason, You wanna cancel the procedure and delete the video, just tap cancel.<br> If despite the precaution, your session expires while You were making the video, no matter what You tap on, the system will automatically cancel the procedure, delete the video and log You out.
    </p>
 </div>
 
