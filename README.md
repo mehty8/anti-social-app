@@ -112,7 +112,7 @@
    <img src="/user-finder.png" alt="Look for users" >
    <p> </p>
    <p>
-      Here You can find the result of the user-search. By tapping You can send a friend request
+      Here You can find the result of the user-search. By tapping on th frames, You can send friend requests.
    </p>
    <h2></h2>
 </div>
