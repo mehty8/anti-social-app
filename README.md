@@ -1,61 +1,71 @@
-# Anti-Social-App
+<h1 align="center">Anti Social App</h1>
 
-Contact information:
+<p align="center">This is a video-sending android application</p>
+
+## Prerequisites
+
+- Android 11 or higher
+
+## Aim of this project
+
+- To learn the basics of android application development
+- To learn how to dynamicaly store and serve media content (in this case video)
+- To learn the basics of cloud computing (in this case AWS)
+- To learn how to deploy an application to production environment
+
+## Technologies
+
+- Java spring boot (backend)
+- Java android studio (frontend)
+- Postgres (database)
+- AWS services:
+   - S3 Bucket (sotring the videos)
+   - Elastic Beanstalk (Deploying backend)
+   - RDS (Database)
+   - Security Manager (Storing secret)
+   - System manager (Storing insensitove information)
+ 
+
+## Features
+
+- Register/Login
+- Search for user, send friend request
+- Accept/Deny friend request
+- Record, send video to a friend
+- Watch sent/received video
+
+## Installation
+
+- The app is self-distributed, not via any app store, there fore make sure your app allows instalation from unknown sources:
+    Settings -> Security -> Application from unknown sources -> Allow Google Drive, or something like that, It differs from phone to phone.
+- Open this link on your phone:
+    https://drive.google.com/file/d/167xb3ZZlQSEAKsg8V_5cv5FnAcudQ193/view?usp=drive_link
+- The system"s package installer will pop up, so click on that.
+- It may look like that nothing is happening but in the backgorund the package installer is preapring the app for instalation, sometimes it takes even 30 seconds to finish
+- The Installation will pop up, so install the app
+- Since the app is from unknwon sources, not via an app store, play protect may show up to check the app. Just click on details, and choose to ignore it.
+- Open the app and play along :).
+
+## Tutorial
+<img src="/storage-acces very first page.png" alt="Storage access permission">
+<img src="/register-login.png" alt="Register and login page">
+<img src="/permission-video.png" alt="Video permission">
+<img src="/permission-audio.png" alt="Audio permission">
+<img src="/main-page.png" alt="Main page">
+<img src="/video-list.png" alt="Video list">
+<img src="/user-finder.png" alt="Look for users">
+<img src="/start-video-recording.png" alt="Starting video">
+<img src="/stop-video-recording.png" alt="Stopping video">
+<img src="/name-video.png" alt="Naming video">
+
+
+The design is hideous, I know :).
+The jwt is set for 10 minutes
+
+Have fun and thanks for dropping by. 
+If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me.
+
+## Contact information
 - Name: Balint Csanyi
 - Email: mehty8@gmail.com
 - linkedin: https://www.linkedin.com/in/balint-csanyi/
-
-
-This is a video sending android application, that is a bit far from being done, however it is already operational.
-
-What it already can do:
-- User registration
-- User login
-- Look for users by username
-- Send friend reuquest
-- Accept friend request
-- Record and send video to a friend
-- Watch the received or sent video anytime up to 12 hours from recording.
-
-There are many features to develope, and also some refactoring to align with the OOP principles, readability and so on.
-These are gonna be developed in the months to come but because I'm looking for a job as a junior developer,
-I made this project public, as a reflection on my current spring boot knowledge.
-Therefore it is merely <b>for code isnpection</b>, however - since dockerization is not fully possible due to AWS S3 bucket, there is none at all - if You wish to run the app, these are the steps to make:
-
-//AWS
-- Create an account on AWS (it is free of charge).
-- Create an IAM User with s3 full access permission policy.
-- Generate the access key (application running outside AWS), save it and the secret key on your computer.
-- Create a bucket. Name it and choose the closest region to You and that is it.
-
-//Postgress
-- Create a database called "anti-social-app".
-
-//Android studio
-- Open the frontend in android studio.
-- If it is not automatical, sync gradle.
-- Have an emulator, preferably api 33 or higher and medium-size with tiramisu.
-- Go to the VideoUploadService class and change the bucket name to your bucket"s name.
-
-//Intellij
-- Open the backend in Intellij (or any other java ide).
-- If it is not autoamtical, load maven.
-- In the resources directory, create a file called "application.properties".
-- Copy the content of the application.properties.template to the created application.properties.
-- The values in CAPITAL, must be replaced with your data:
-   - Choose your own jwt secret, make sure it is long enough and does not contain special characters like /*?...
-   - Set the expiration time of the jwt in millisecond. However since the logout function is not developed yet, do not set it for longer than 10 minutes.
-   - In the AWS section you have to provide your access key, secret key and the region of the bucket.
-   - In the Postgres section provide your postgres username (the owner of the database), and the password.
-   - The rest is good as it is, no need to change them.
-     
-Run the backend, it is gonna migrate the database.
-Run the frontend emulator, give permission when asked, and play around with it.
-
-The design is hideous, I know :), again the project is far from done.
-If it does not say, You just have to tap on the names to send or accept friend request, record, send and watch videos.
-The "back" function is not developed yet , so just use the "back" button over the emulator :).
-
-That is it so far, thanks for dropping by. 
-If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me:
-mehty8@gmail.com
