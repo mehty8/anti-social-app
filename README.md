@@ -38,7 +38,7 @@
 
 ## Installation
 
-- The app is self-distributed, not via any app store, therefore make sure your app allows instalation from unknown sources:
+- The app is self-distributed, not via any app store, therefore make sure your phone allows instalation from unknown sources:<br>
     Settings -> Security -> Application from unknown sources -> Allow Google Drive, or something like that, It differs from phone to phone.
 - Open this link on your phone:
     https://drive.google.com/file/d/167xb3ZZlQSEAKsg8V_5cv5FnAcudQ193/view?usp=drive_link
