@@ -53,7 +53,7 @@ Instalation:
 - Open the app and play along :).
 
 Tutorial:
-<img src="/storage-access very first page.png" alt="Logo">
+<img src="/storage-access very first page.png">
 <img src="/register-login.png" alt="Logo" width="960" height="374">
 <img src="/permission-video.png" alt="Logo" width="960" height="374">
 <img src="/permission-audio.png" alt="Logo" width="960" height="374">
