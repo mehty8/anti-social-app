@@ -1,4 +1,4 @@
-<div align="center>
+<div>
 <h1>Anti Social App</h1>
 <img src="/android-logo.png" alt="Android logo">
 <p>This is a video-sending android application</p>
