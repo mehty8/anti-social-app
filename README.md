@@ -2,18 +2,18 @@
 
 This is a video sending android application.
 
-## Prerequisites:
+## Prerequisites
 
 - Android 11 or higher
 
-## Aim of this project:
+## Aim of this project
 
 - To learn the basics of android application development
 - To learn how to dynamicaly store and serve media content (in this case video)
 - To learn the basics of cloud computing (in this case AWS)
 - To learn how to deploy an application to production environment
 
-## Technologies:
+## Technologies
 
 - Java spring boot (backend)
 - Java android studio (frontend)
@@ -26,7 +26,7 @@ This is a video sending android application.
    - System manager (Storing insensitove information)
  
 
-## Features:
+## Features
 
 - Register/Login
 - Search for user, send friend request
@@ -34,7 +34,7 @@ This is a video sending android application.
 - Record, send video to a friend
 - Watch sent/received video
 
-## Installation:
+## Installation
 
 - The app is self-distributed, not via any app store, there fore make sure your app allows instalation from unknown sources:
     Settings -> Security -> Application from unknown sources -> Allow Google Drive, or something like that, It differs from phone to phone.
@@ -46,7 +46,7 @@ This is a video sending android application.
 - Since the app is from unknwon sources, not via an app store, play protect may show up to check the app. Just click on details, and choose to ignore it.
 - Open the app and play along :).
 
-## Tutorial:
+## Tutorial
 <img src="/storage-acces very first page.png" alt="Storage access permission">
 <img src="/register-login.png" alt="Register and login page">
 <img src="/permission-video.png" alt="Video permission">
@@ -65,7 +65,7 @@ The jwt is set for 10 minutes
 Have fun and thanks for dropping by. 
 If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me.
 
-## Contact information:
+## Contact information
 - Name: Balint Csanyi
 - Email: mehty8@gmail.com
 - linkedin: https://www.linkedin.com/in/balint-csanyi/
