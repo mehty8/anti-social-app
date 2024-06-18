@@ -1,6 +1,8 @@
-<h1 align="center">Anti Social App</h1>
-
-<p align="center">This is a video-sending android application</p>
+<div align="center>
+<h1>Anti Social App</h1>
+<img src="/android-logo.png" alt="Android logo">
+<p>This is a video-sending android application</p>
+</div>
 
 ## Prerequisites
 
