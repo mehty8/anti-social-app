@@ -55,7 +55,7 @@
    <img src="/storage-acces very first page.png" alt="Storage access permission">
    <p> </p>
    <p>
-      This is the very first page that welcomes You if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead it saves it to the phone till You send it or cancel it, then it deletes the recorded video. So push the switch to right, then tap on the "back" arrow on the top-right corner
+      This is the welcome page if You open the app for the very first time. You have to give access, cause the application does not stream the video when You record it, instead, saves it to the phone till You send it or cancel it, then the system deletes the recorded video. So push the switch to right, then tap the "back" arrow on the top-left corner
    </p>
    <h2></h2>
 </div>
