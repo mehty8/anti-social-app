@@ -11,7 +11,7 @@
 ## Aim of this project
 
 - To learn the basics of android application development
-- To learn how to dynamicaly store and serve media content (in this case video)
+- To learn how to dynamically store and serve media content (in this case video)
 - To learn the basics of cloud computing (in this case AWS)
 - To learn how to deploy an application to production environment
 
