@@ -1,4 +1,4 @@
-<p style="size: 50px; align: center;"><b>Anti-Social-App</b></p>
+<p align="center"; style="font-size:50px"><b>Anti-Social-App</b></p>
 
 This is a video sending android application.
 
