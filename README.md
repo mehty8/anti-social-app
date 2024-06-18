@@ -1,7 +1,6 @@
 <p align="center"><b><font size="-2">Anti Social App</font></b></p>
-<span style="font-size:20px;">Feature 1</span>
 
-This is a video sending android application.
+<p style="font-size:20px; font-weight:bold;">Introduction</p>
 
 ## Prerequisites
 
