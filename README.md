@@ -1,4 +1,4 @@
-<p align="center"><b><font size="25px">Anti Social App</font></b></p>
+<p align="center"><b><font size="-2">Anti Social App</font></b></p>
 
 This is a video sending android application.
 
