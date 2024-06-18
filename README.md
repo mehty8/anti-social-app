@@ -53,16 +53,16 @@ Instalation:
 - Open the app and play along :).
 
 Tutorial:
-<img src="/storage-access very first page.png alt="Logo" width="960" height="374">
-<img src="/register-login.png alt="Logo" width="960" height="374">
-<img src="/permission-video.png alt="Logo" width="960" height="374">
-<img src="/permission-audio.png alt="Logo" width="960" height="374">
-<img src="/main-page.png alt="Logo" width="960" height="374">
-<img src="/video-list.png alt="Logo" width="960" height="374">
-<img src="/user-finder.png alt="Logo" width="960" height="374">
-<img src="/start-video-recording.png alt="Logo" width="960" height="374">
-<img src="/stop-video-recording.png alt="Logo" width="960" height="374">
-<img src="/name-video.png alt="Logo" width="960" height="374">
+<img src="/storage-access very first page.png" alt="Logo" width="960" height="374">
+<img src="/register-login.png" alt="Logo" width="960" height="374">
+<img src="/permission-video.png" alt="Logo" width="960" height="374">
+<img src="/permission-audio.png" alt="Logo" width="960" height="374">
+<img src="/main-page.png" alt="Logo" width="960" height="374">
+<img src="/video-list.png" alt="Logo" width="960" height="374">
+<img src="/user-finder.png" alt="Logo" width="960" height="374">
+<img src="/start-video-recording.png" alt="Logo" width="960" height="374">
+<img src="/stop-video-recording.png" alt="Logo" width="960" height="374">
+<img src="/name-video.png" alt="Logo" width="960" height="374">
 
 
 The design is hideous, I know :).
