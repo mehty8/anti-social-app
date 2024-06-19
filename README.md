@@ -137,11 +137,12 @@
    </p>
 </div>
 
+## Have fun...
 
-Have fun and thanks for dropping by. 
+That is it, have fun and thanks for dropping by. 
 If You are a recruiter, a hiring manager or basicaly anybody that is looking for a junior developer, please do not hesitate to contact me.
 
-## Contact information
+### Contact
 - Name: Balint Csanyi
 - Email: mehty8@gmail.com
 - linkedin: https://www.linkedin.com/in/balint-csanyi/
