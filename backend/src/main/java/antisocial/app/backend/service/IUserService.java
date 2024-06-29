@@ -1,12 +1,15 @@
 package antisocial.app.backend.service;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.RegisterLoginDto;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface IUserService {
 
-    void registerNewUser(RegisterLoginDto registerLoginDto);
+    CompletableFuture<Void> registerNewUser(RegisterLoginDto registerLoginDto);
 
-    JwtResponseDto login(RegisterLoginDto registerLoginDto);
+    CompletableFuture<IResponseDto> login(RegisterLoginDto registerLoginDto);
 
 }

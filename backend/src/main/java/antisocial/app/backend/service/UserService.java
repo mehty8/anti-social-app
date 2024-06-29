@@ -1,5 +1,6 @@
 package antisocial.app.backend.service;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.RegisterLoginDto;
 import antisocial.app.backend.data.entity.RoleEntity;
@@ -14,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class UserService implements IUserService{
@@ -36,37 +39,43 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public void registerNewUser(RegisterLoginDto registerLoginDto) {
-        String username = registerLoginDto.getUsername();
-        String password = registerLoginDto.getPassword();
+    public CompletableFuture<Void> registerNewUser(RegisterLoginDto registerLoginDto) {
 
-        checkUsername(username);
-        checkPassword(password);
+        return CompletableFuture.runAsync(() -> {
+            String username = registerLoginDto.getUsername();
+            String password = registerLoginDto.getPassword();
 
-        String passwordEncoded = encoder.encode(password);
+            checkUsername(username);
+            checkPassword(password);
 
-        RoleEntity role = roleRepository.findByRoleName("User").get();
+            String passwordEncoded = encoder.encode(password);
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(username);
-        userEntity.setPassword(passwordEncoded);
-        userEntity.addRole(role);
+            RoleEntity role = roleRepository.findByRoleName("User").get();
 
-        userRepository.save(userEntity);
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUsername(username);
+            userEntity.setPassword(passwordEncoded);
+            userEntity.addRole(role);
+
+            userRepository.save(userEntity);
+        });
     }
 
     @Override
-    public JwtResponseDto login(RegisterLoginDto registerLoginDto){
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(registerLoginDto.getUsername(),
-                        registerLoginDto.getPassword()));
+    public CompletableFuture<IResponseDto> login(RegisterLoginDto registerLoginDto){
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        return CompletableFuture.supplyAsync(() -> {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(registerLoginDto.getUsername(),
+                            registerLoginDto.getPassword()));
 
-        JwtResponseDto jwtResponseDto = new JwtResponseDto(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        return jwtResponseDto;
+            IResponseDto jwtResponseDto = new JwtResponseDto(jwt);
+
+            return jwtResponseDto;
+        });
     }
 
     private void checkUsername(String username){

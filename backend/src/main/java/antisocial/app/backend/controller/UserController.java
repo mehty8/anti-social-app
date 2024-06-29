@@ -1,7 +1,7 @@
 package antisocial.app.backend.controller;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.errorHandling.exception.component.CatchException;
-import antisocial.app.backend.data.dto.JwtResponseDto;
 import antisocial.app.backend.data.dto.RegisterLoginDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.service.IUserService;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/user")
@@ -28,33 +30,27 @@ public class UserController {
 
 
     @PostMapping("register")
-    public ResponseEntity<ResponseMessageDto> register(@RequestBody RegisterLoginDto registerLoginDto){
+    public CompletableFuture<ResponseEntity<IResponseDto>> register(@RequestBody RegisterLoginDto registerLoginDto){
 
-        try {
-            userService.registerNewUser(registerLoginDto);
+        return userService.registerNewUser(registerLoginDto).thenApply(voided -> {
 
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("User Registered");
+            IResponseDto responseMessageDto = new ResponseMessageDto("User Registered");
 
             return ResponseEntity.status(HttpStatus.CREATED).body(responseMessageDto);
 
-        } catch (Exception exception) {
+        }).exceptionally(exception
+                -> catchException.catchException((Exception) exception, exception.getMessage(),
+                HttpStatus.BAD_REQUEST, this.getClass()));
 
-            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
-        }
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody RegisterLoginDto registerLoginDto){
+    public CompletableFuture<ResponseEntity<IResponseDto>> login(@RequestBody RegisterLoginDto registerLoginDto){
 
-        try{
-            JwtResponseDto jwtResponseDto = userService.login(registerLoginDto);
+        return userService.login(registerLoginDto).thenApply(jwtResponseDto
+                -> ResponseEntity.ok(jwtResponseDto)).exceptionally(exception
+                -> catchException.catchException((Exception) exception, "Invalid Password or/and username",
+                HttpStatus.UNAUTHORIZED, this.getClass()));
 
-            return ResponseEntity.ok(jwtResponseDto);
-
-        } catch (Exception exception){
-
-            return catchException.catchException(exception, "Invalid Password or/and username",
-                    HttpStatus.UNAUTHORIZED, this.getClass());
-        }
     }
 }
