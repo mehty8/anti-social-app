@@ -1,16 +1,18 @@
 package antisocial.app.backend.service;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.data.dto.PreassignedUrlDetailsDto;
-import antisocial.app.backend.data.dto.VideosDto;
+
+import java.util.concurrent.CompletableFuture;
 
 
 public interface IVideoService {
 
-    String getPreassignedUrl(PreassignedUrlDetailsDto preassignedUrlDetailsDto);
+    CompletableFuture<String> getPreassignedUrl(PreassignedUrlDetailsDto preassignedUrlDetailsDto);
 
-    void savePreassignedUrlDetails(String bucketName, String videoName, String preassignedURl,
+    CompletableFuture<Void> savePreassignedUrlDetails(String bucketName, String videoName, String preassignedURl,
                                    String usernameOfReceiver, String usernameOfSender);
 
-    VideosDto getVideos(String username, String type);
+    CompletableFuture<IResponseDto> getVideos(String username, String type);
 
 }

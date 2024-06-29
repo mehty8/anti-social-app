@@ -1,6 +1,6 @@
 package antisocial.app.backend.data.dto;
 
-public class PreassignedUrlToUploadVideoDto {
+public class PreassignedUrlToUploadVideoDto implements IResponseDto {
 
     private String preassignedUrl;
 

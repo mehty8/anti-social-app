@@ -1,5 +1,6 @@
 package antisocial.app.backend.service;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.data.dto.PreassignedUrlDetailsDto;
 import antisocial.app.backend.data.dto.VideosDto;
 import antisocial.app.backend.data.entity.PreassignedUrlEntity;
@@ -12,11 +13,13 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class VideoService implements IVideoService {
@@ -36,57 +39,65 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public String getPreassignedUrl(PreassignedUrlDetailsDto preassignedUrlDetailsDto) {
-        String fileName = preassignedUrlDetailsDto.getFileName();
-        String bucketName = preassignedUrlDetailsDto.getBucketName();
-        HttpMethod httpMethod = HttpMethod.valueOf(preassignedUrlDetailsDto.getHttpMethod());
-        int timeInMs = preassignedUrlDetailsDto.getTimeInMs();
-        Date date = new Date(System.currentTimeMillis() + timeInMs);
+    public CompletableFuture<String> getPreassignedUrl(PreassignedUrlDetailsDto preassignedUrlDetailsDto) {
 
-        URL url = s3Client.generatePresignedUrl(bucketName, fileName, date, httpMethod);
+        return CompletableFuture.supplyAsync(() -> {
+            String fileName = preassignedUrlDetailsDto.getFileName();
+            String bucketName = preassignedUrlDetailsDto.getBucketName();
+            HttpMethod httpMethod = HttpMethod.valueOf(preassignedUrlDetailsDto.getHttpMethod());
+            int timeInMs = preassignedUrlDetailsDto.getTimeInMs();
+            Date date = new Date(System.currentTimeMillis() + timeInMs);
 
-        return url.toString();
+            URL url = s3Client.generatePresignedUrl(bucketName, fileName, date, httpMethod);
+
+            return url.toString();
+        });
     }
 
     @Override
-    public void savePreassignedUrlDetails(String bucketName, String videoName, String preassignedUrl,
+    public CompletableFuture<Void> savePreassignedUrlDetails(String bucketName, String videoName, String preassignedUrl,
                                           String usernameOfReceiver, String usernameOfSender) {
 
-        UserEntity sender = userRepository.findByUsername(usernameOfSender).get();
-        UserEntity receiver = userRepository.findByUsername(usernameOfReceiver).orElseThrow(() ->
-                new BadCredentialsException("There is no such user"));
+        return CompletableFuture.runAsync(() -> {
+            UserEntity sender = userRepository.findByUsername(usernameOfSender)
+                    .orElseThrow(() -> new UsernameNotFoundException("There is no such user"));
+            UserEntity receiver = userRepository.findByUsername(usernameOfReceiver).orElseThrow(() ->
+                    new BadCredentialsException("There is no such user"));
 
-        PreassignedUrlEntity preassignedUrlEntity = new PreassignedUrlEntity();
-        preassignedUrlEntity.setVideoName(videoName);
-        preassignedUrlEntity.setPreassignedUrl(preassignedUrl);
-        preassignedUrlEntity.setBucketName(bucketName);
-        preassignedUrlEntity.setReceiver(receiver);
-        preassignedUrlEntity.setSender(sender);
-        preassignedUrlRepository.save(preassignedUrlEntity);
+            PreassignedUrlEntity preassignedUrlEntity = new PreassignedUrlEntity();
+            preassignedUrlEntity.setVideoName(videoName);
+            preassignedUrlEntity.setPreassignedUrl(preassignedUrl);
+            preassignedUrlEntity.setBucketName(bucketName);
+            preassignedUrlEntity.setReceiver(receiver);
+            preassignedUrlEntity.setSender(sender);
+            preassignedUrlRepository.save(preassignedUrlEntity);
 
-        receiver.addPreassignedUrlDetails(preassignedUrlEntity, "received");
-        sender.addPreassignedUrlDetails(preassignedUrlEntity, "sent");
+            receiver.addPreassignedUrlDetails(preassignedUrlEntity, "received");
+            sender.addPreassignedUrlDetails(preassignedUrlEntity, "sent");
 
-        userRepository.save(receiver);
-        userRepository.save(sender);
+            userRepository.save(receiver);
+            userRepository.save(sender);
+        });
     }
     
     @Override
-    public VideosDto getVideos(String username, String type) {
-        UserEntity userEntity = userRepository.findByUsername(username).get();
+    public CompletableFuture<IResponseDto> getVideos(String username, String type) {
 
-        VideoRequest videoRequest = videoRequests.stream().filter(neededVideo -> neededVideo.isNeeded(type))
-                        .findFirst().orElseThrow(() -> new VideoRequestException("There is no such video request"));
+        return CompletableFuture.supplyAsync(() -> {
+            UserEntity userEntity = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("There is no such user"));
 
-        videoRequest.setPreassignedUrlEntities(userEntity);
+            VideoRequest videoRequest = videoRequests.stream().filter(neededVideo -> neededVideo.isNeeded(type))
+                    .findFirst().orElseThrow(() -> new VideoRequestException("There is no such video request"));
+            videoRequest.setPreassignedUrlEntities(userEntity);
 
-        List<PreassignedUrlEntity> expiredPreassignedUrls = videoRequest.getExpiredPreassignedUrls();
+            List<PreassignedUrlEntity> expiredPreassignedUrls = videoRequest.getExpiredPreassignedUrls();
+            deleteExpiredUrls(expiredPreassignedUrls);
 
-        deleteExpiredUrls(expiredPreassignedUrls);
+            IResponseDto videosDto = videoRequest.getVideos();
 
-        VideosDto videosDto = videoRequest.getVideos();
-
-        return videosDto;
+            return videosDto;
+        });
     }
 
     private void deleteExpiredUrls(List<PreassignedUrlEntity> expiredPreassignedUrls){

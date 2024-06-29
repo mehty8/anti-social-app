@@ -2,7 +2,7 @@ package antisocial.app.backend.data.dto;
 
 import java.util.Set;
 
-public class FriendsNamesAndRequestsDto {
+public class FriendsNamesAndRequestsDto implements IResponseDto{
 
     private Set<String> friendsNames;
     private Set<String> requestsNames;

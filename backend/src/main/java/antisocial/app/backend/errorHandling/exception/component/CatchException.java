@@ -1,5 +1,6 @@
 package antisocial.app.backend.errorHandling.exception.component;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.errorHandling.exception.IExceptionFinder;
 import org.slf4j.Logger;
@@ -19,8 +20,8 @@ public class CatchException {
         this.exceptionHandlers = exceptionHandlers;
     }
 
-    public ResponseEntity<ResponseMessageDto> catchException(Exception exception, String message,
-                                                             HttpStatus httpStatus, Class<?> controllerClass){
+    public ResponseEntity<IResponseDto> catchException(Exception exception, String message,
+                                                       HttpStatus httpStatus, Class<?> controllerClass){
 
         Logger logger = LoggerFactory.getLogger(controllerClass);
         logger.error(exception.getMessage());
@@ -32,7 +33,7 @@ public class CatchException {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
-        ResponseMessageDto responseMessageDto = new ResponseMessageDto(message);
+        IResponseDto responseMessageDto = new ResponseMessageDto(message);
 
         return ResponseEntity.status(httpStatus).body(responseMessageDto);
     }

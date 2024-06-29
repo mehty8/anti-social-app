@@ -19,17 +19,17 @@ public class UserEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER)
     private List<PreassignedUrlEntity> receivedPreassignedUrlsDetails;
 
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
     private List<PreassignedUrlEntity> sentPreassignedUrlsDetails;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> friendsNames;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> friendsRequests;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> friendsRequestsSent;
 
     public UserEntity() {

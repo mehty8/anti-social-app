@@ -1,6 +1,6 @@
 package antisocial.app.backend.data.dto;
 
-public class JwtResponseDto {
+public class JwtResponseDto implements IResponseDto{
 
     private String jwt;
 

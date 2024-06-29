@@ -1,17 +1,19 @@
 package antisocial.app.backend.controller;
 
+import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.errorHandling.exception.component.CatchException;
-import antisocial.app.backend.data.dto.FriendsNamesAndRequestsDto;
 import antisocial.app.backend.data.dto.FriendsNamesDto;
 import antisocial.app.backend.data.dto.ResponseMessageDto;
 import antisocial.app.backend.service.IFriendService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/friend")
@@ -29,42 +31,37 @@ public class FriendController {
 
 
     @GetMapping
-    public ResponseEntity<?> getFriendsNamesAndRequests(){
+    public CompletableFuture<ResponseEntity<IResponseDto>> getFriendsNamesAndRequests(){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = user.getUsername();
 
-        try {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = user.getUsername();
+        return friendService.getFriendsNamesAndRequests(username).thenApply(friendsNamesAndRequests
+                -> ResponseEntity.ok(friendsNamesAndRequests)).exceptionally(exception
+                -> catchException.catchException((Exception) exception, exception.getMessage(),
+                HttpStatus.BAD_REQUEST, this.getClass()));
 
-            FriendsNamesAndRequestsDto friendsNamesAndRequests = friendService.getFriendsNamesAndRequests(username);
-
-            return ResponseEntity.ok(friendsNamesAndRequests);
-
-        } catch (Exception exception){
-
-            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
-        }
     }
 
     @GetMapping("finduser/{usernameToSearch}")
-    public ResponseEntity<?> getUser(@PathVariable String usernameToSearch){
+    public CompletableFuture<ResponseEntity<IResponseDto>> findUser(@PathVariable String usernameToSearch) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        String userUsername = user.getUsername();
 
-        try {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String userUsername = user.getUsername();
-            Set<String> usernamesString = friendService.findUsers(usernameToSearch, userUsername);
 
-            FriendsNamesDto usernames = new FriendsNamesDto(usernamesString);
-
-            return ResponseEntity.ok(usernames);
-
-        } catch (Exception exception){
-
-            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
-        }
+        return friendService.findUsers(usernameToSearch, userUsername)
+                .thenApply(usernamesString -> {
+                    SecurityContextHolder.setContext(securityContext);
+                    IResponseDto usernames = new FriendsNamesDto(usernamesString);
+                    return ResponseEntity.ok(usernames);
+                })
+                .exceptionally(exception -> catchException.catchException((Exception) exception,
+                        exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass()));
     }
 
     @PatchMapping("friendrequest/{receiver}")
-    public ResponseEntity<ResponseMessageDto> sendFriendsRequest(@PathVariable String receiver){
+    public CompletableFuture<ResponseEntity<IResponseDto>> sendFriendsRequest(@PathVariable String receiver){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String sender = user.getUsername();
 
@@ -72,7 +69,7 @@ public class FriendController {
     }
 
     @PatchMapping("acceptrequest/{sender}")
-    public ResponseEntity<ResponseMessageDto> acceptFriendRequest(@PathVariable String sender){
+    public CompletableFuture<ResponseEntity<IResponseDto>> acceptFriendRequest(@PathVariable String sender){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
@@ -80,7 +77,7 @@ public class FriendController {
     }
 
     @PatchMapping("denyrequest/{sender}")
-    public ResponseEntity<ResponseMessageDto> denyFriendRequest(@PathVariable String sender){
+    public CompletableFuture<ResponseEntity<IResponseDto>> denyFriendRequest(@PathVariable String sender){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String receiver = user.getUsername();
 
@@ -88,18 +85,15 @@ public class FriendController {
     }
 
 
-    private ResponseEntity<ResponseMessageDto> friendRequestHandling(String receiver, String sender,
+    private CompletableFuture<ResponseEntity<IResponseDto>> friendRequestHandling(String receiver, String sender,
                                                                      String type, String message){
-        try {
-            friendService.handleFriendRequest(receiver, sender, type);
 
-            ResponseMessageDto simpleResponse = new ResponseMessageDto(message);
-
+        return friendService.handleFriendRequest(receiver, sender, type).thenApply(voided -> {
+            IResponseDto simpleResponse = new ResponseMessageDto(message);
             return ResponseEntity.ok(simpleResponse);
+        }).exceptionally(exception
+                -> catchException.catchException((Exception) exception, exception.getMessage(),
+                HttpStatus.BAD_REQUEST, this.getClass()));
 
-        } catch (Exception exception){
-
-            return catchException.catchException(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, this.getClass());
-        }
     }
 }
