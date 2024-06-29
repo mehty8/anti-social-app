@@ -3,7 +3,7 @@ package antisocial.app.backend.data.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideosDto {
+public class VideosDto implements IResponseDto {
 
     private List<VideoDetailsToPlay> videoDetailsToPlay;
 

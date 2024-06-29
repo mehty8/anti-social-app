@@ -1,6 +1,6 @@
 package antisocial.app.backend.data.dto;
 
-public class ResponseMessageDto {
+public class ResponseMessageDto implements IResponseDto{
 
     private String message;
 
