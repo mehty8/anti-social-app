@@ -1,5 +1,6 @@
 package antisocial.app.backend.security;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,7 +59,8 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("user/**").permitAll()
+                        auth.dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
+                                .requestMatchers("user/**").permitAll()
                                 .requestMatchers("video/**").hasAuthority("User")
                                 .requestMatchers("friend/**").hasAuthority("User")
                                 .requestMatchers("/error").permitAll()
