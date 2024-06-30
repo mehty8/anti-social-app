@@ -43,9 +43,10 @@ public class VideoController {
     public CompletableFuture<ResponseEntity<IResponseDto>> savePreassignedUrlDetailsToWatchVideo(
             @PathVariable String receiver, @RequestBody PreassignedUrlDetailsDto preassignedUrlDetailsDto){
 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String sender = user.getUsername();
+
         return videoService.getPreassignedUrl(preassignedUrlDetailsDto).thenCompose(preassignedUrl -> {
-                    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                    String sender = user.getUsername();
                     String videoName = preassignedUrlDetailsDto.getFileName();
                     String bucketName = preassignedUrlDetailsDto.getBucketName();
 
