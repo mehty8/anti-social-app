@@ -6,12 +6,15 @@ public class PreassignedUrlDetailsDto {
     private String httpMethod;
     private String bucketName;
     private int timeInMs;
+    private String timeOfRecording;
 
-    public PreassignedUrlDetailsDto(String fileName, String httpMethod, String bucketName, int timeInMs) {
+    public PreassignedUrlDetailsDto(String fileName, String httpMethod, String bucketName,
+                                    int timeInMs, String timeOfRecording) {
         this.fileName = fileName;
         this.httpMethod = httpMethod;
         this.bucketName = bucketName;
         this.timeInMs = timeInMs;
+        this.timeOfRecording = timeOfRecording;
 
     }
 
@@ -28,4 +31,6 @@ public class PreassignedUrlDetailsDto {
     public int getTimeInMs() {
         return timeInMs;
     }
+
+    public String getTimeOfRecording(){ return timeOfRecording; }
 }

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.time.LocalTime;
 
 import antisocial.app.frontend.data.dto.PreassignedUrlToUploadVideoDto;
 import antisocial.app.frontend.data.dto.PreassignedUrlDetailsDto;
@@ -35,8 +36,12 @@ public class VideoUploadService {
         this.context = context;
     }
 
-    public void videoUpload(String jwt, String videoName, String username, String temporaryVideoName, ToastCallBack toastCallback){
-        getPreassignedUrl(jwt, videoName, username, temporaryVideoName, toastCallback);
+    public void videoUpload(String jwt, String videoName, String username, String temporaryVideoName,
+                            ToastCallBack toastCallback){
+        LocalTime localTime = LocalTime.now();
+        String timeOfRecording = "" + localTime.getHour() + localTime.getMinute() + localTime.getSecond();
+
+        getPreassignedUrl(jwt, videoName, username, temporaryVideoName, timeOfRecording, toastCallback);
     }
 
     public void videoCancel(String temporaryVideoName, String message, ToastCallBack toastCallBack){
@@ -45,10 +50,10 @@ public class VideoUploadService {
     }
 
     private void getPreassignedUrl(String jwt, String videoName, String username,
-                                   String temporaryVideoName, ToastCallBack toastCallback) {
+                                   String temporaryVideoName, String timeOfRecording,  ToastCallBack toastCallback) {
 
         PreassignedUrlDetailsDto preassignedUrlDetailsDto = new PreassignedUrlDetailsDto(videoName,
-                "PUT", BUCKET_NAME, TIME_IN_MS_TO_UPLOAD);
+                "PUT", BUCKET_NAME, TIME_IN_MS_TO_UPLOAD, timeOfRecording);
         ApiService apiService = ApiClient.getApiServiceDynamic();
         Call<PreassignedUrlToUploadVideoDto> call = apiService.getPreassignedUrlToUploadVideo("Bearer " + jwt, preassignedUrlDetailsDto);
         call.enqueue((new Callback<PreassignedUrlToUploadVideoDto>() {
@@ -57,7 +62,7 @@ public class VideoUploadService {
             public void onResponse(Call<PreassignedUrlToUploadVideoDto> call, Response<PreassignedUrlToUploadVideoDto> response) {
                 if(response.isSuccessful()){
                     String url = response.body().getPreassignedUrl();
-                    uploadVideo(url, videoName, username, jwt, temporaryVideoName, toastCallback);
+                    uploadVideo(url, videoName, username, jwt, temporaryVideoName, timeOfRecording, toastCallback);
                 } else {
                     responseError(response, context, "");
                 }
@@ -70,7 +75,8 @@ public class VideoUploadService {
         }));
     }
 
-    private void uploadVideo(String url, String videoName, String username, String jwt, String temporaryVideoName, ToastCallBack toastCallBack){
+    private void uploadVideo(String url, String videoName, String username, String jwt,
+                             String temporaryVideoName, String timeOfRecording, ToastCallBack toastCallBack){
         File videoFilePath = new File(getFilePath(temporaryVideoName));
 
         ApiService apiService = ApiClient.getApiServiceDynamic();
@@ -82,7 +88,7 @@ public class VideoUploadService {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 deleteFile(temporaryVideoName);
-                savePreassignedUrl(videoName, username, jwt, toastCallBack);
+                savePreassignedUrl(videoName, username, jwt, timeOfRecording, toastCallBack);
             }
 
             @Override
@@ -150,10 +156,11 @@ public class VideoUploadService {
         }
     }
 
-    private void savePreassignedUrl(String videoName, String username, String jwt, ToastCallBack toastcallback) {
+    private void savePreassignedUrl(String videoName, String username, String jwt,
+                                    String timeOfRecording, ToastCallBack toastcallback) {
 
         PreassignedUrlDetailsDto preassignedUrlDetailsDto = new PreassignedUrlDetailsDto(videoName,
-                "GET", BUCKET_NAME, TIME_IN_MS_TO_GET);
+                "GET", BUCKET_NAME, TIME_IN_MS_TO_GET, timeOfRecording);
         ApiService apiService = ApiClient.getApiServiceDynamic();
         Call<ResponseMessageDto> call = apiService.getPreassignedUrlToWatch(username,"Bearer " + jwt, preassignedUrlDetailsDto);
         call.enqueue((new Callback<ResponseMessageDto>() {
