@@ -2,7 +2,6 @@ package antisocial.app.backend.service;
 
 import antisocial.app.backend.data.dto.IResponseDto;
 import antisocial.app.backend.data.dto.PreassignedUrlDetailsDto;
-import antisocial.app.backend.data.dto.VideosDto;
 import antisocial.app.backend.data.entity.PreassignedUrlEntity;
 import antisocial.app.backend.data.entity.UserEntity;
 import antisocial.app.backend.errorHandling.exception.VideoRequestException;
