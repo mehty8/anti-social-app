@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface IVideoService {
 
-    CompletableFuture<String> getPreassignedUrl(PreassignedUrlDetailsDto preassignedUrlDetailsDto);
+    CompletableFuture<String> getPreassignedUrl(String sender, PreassignedUrlDetailsDto preassignedUrlDetailsDto);
 
     CompletableFuture<Void> savePreassignedUrlDetails(String bucketName, String videoName, String preassignedURl,
                                    String usernameOfReceiver, String usernameOfSender);

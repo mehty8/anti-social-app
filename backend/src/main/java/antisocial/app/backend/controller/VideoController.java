@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -30,7 +31,10 @@ public class VideoController {
     public CompletableFuture<ResponseEntity<IResponseDto>> getPreassignedUrlToUploadVideo(
             @RequestBody PreassignedUrlDetailsDto preassignedUrlDetailsDto){
 
-        return videoService.getPreassignedUrl(preassignedUrlDetailsDto).thenApply(preassignedUrl -> {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String sender = user.getUsername();
+
+        return videoService.getPreassignedUrl(sender, preassignedUrlDetailsDto).thenApply(preassignedUrl -> {
             IResponseDto preassignedUrlToUploadVideo = new PreassignedUrlToUploadVideoDto(preassignedUrl);
             return ResponseEntity.ok(preassignedUrlToUploadVideo);
         }).exceptionally(exception
@@ -46,7 +50,7 @@ public class VideoController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String sender = user.getUsername();
 
-        return videoService.getPreassignedUrl(preassignedUrlDetailsDto).thenCompose(preassignedUrl -> {
+        return videoService.getPreassignedUrl(sender, preassignedUrlDetailsDto).thenCompose(preassignedUrl -> {
                     String videoName = preassignedUrlDetailsDto.getFileName();
                     String bucketName = preassignedUrlDetailsDto.getBucketName();
 

@@ -38,10 +38,10 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public CompletableFuture<String> getPreassignedUrl(PreassignedUrlDetailsDto preassignedUrlDetailsDto) {
+    public CompletableFuture<String> getPreassignedUrl(String sender, PreassignedUrlDetailsDto preassignedUrlDetailsDto) {
 
         return CompletableFuture.supplyAsync(() -> {
-            String fileName = preassignedUrlDetailsDto.getFileName();
+            String fileName = sender + preassignedUrlDetailsDto.getFileName() + preassignedUrlDetailsDto.getTimeOfRecording();
             String bucketName = preassignedUrlDetailsDto.getBucketName();
             HttpMethod httpMethod = HttpMethod.valueOf(preassignedUrlDetailsDto.getHttpMethod());
             int timeInMs = preassignedUrlDetailsDto.getTimeInMs();

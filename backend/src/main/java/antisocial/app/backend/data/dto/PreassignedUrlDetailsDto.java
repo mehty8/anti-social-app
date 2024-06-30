@@ -6,6 +6,7 @@ public class PreassignedUrlDetailsDto {
     private String httpMethod;
     private String bucketName;
     private int timeInMs;
+    private String timeOfRecording;
 
     public String getFileName() {
         return fileName;
@@ -22,5 +23,7 @@ public class PreassignedUrlDetailsDto {
     public int getTimeInMs() {
         return timeInMs;
     }
+
+    public String getTimeOfRecording(){ return timeOfRecording; }
 
 }
