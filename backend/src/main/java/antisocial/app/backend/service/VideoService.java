@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -100,19 +101,23 @@ public class VideoService implements IVideoService {
     }
 
     private void deleteExpiredUrls(List<PreassignedUrlEntity> expiredPreassignedUrls){
-        expiredPreassignedUrls.forEach(PreassignedUrlDetails -> {
-            UserEntity sender = PreassignedUrlDetails.getSender();
-            UserEntity receiver = PreassignedUrlDetails.getReceiver();
+        expiredPreassignedUrls.forEach(preassignedUrlDetails -> {
+            UserEntity sender = preassignedUrlDetails.getSender();
+            UserEntity receiver = preassignedUrlDetails.getReceiver();
 
-            sender.removePreassignedUrlDetails(PreassignedUrlDetails, "sent");
-            receiver.removePreassignedUrlDetails(PreassignedUrlDetails, "received");
+            sender.removePreassignedUrlDetails(preassignedUrlDetails, "sent");
+            receiver.removePreassignedUrlDetails(preassignedUrlDetails, "received");
 
-            s3Client.deleteObject(new DeleteObjectRequest(PreassignedUrlDetails.getBucketName(),
-                    PreassignedUrlDetails.getVideoName()));
+            String splitBeforeVideoName = Arrays.stream(preassignedUrlDetails.getPreassignedUrl().split("(?<=\\.com)/")).toList().get(1);
+            int indexOfQuestionMark = splitBeforeVideoName.lastIndexOf('?');
+            String s3VideoName = splitBeforeVideoName.substring(0, indexOfQuestionMark);
+
+            s3Client.deleteObject(new DeleteObjectRequest(preassignedUrlDetails.getBucketName(),
+                    s3VideoName));
 
             userRepository.save(sender);
             userRepository.save(receiver);
-            preassignedUrlRepository.delete(PreassignedUrlDetails);
+            preassignedUrlRepository.delete(preassignedUrlDetails);
         });
     }
 }
