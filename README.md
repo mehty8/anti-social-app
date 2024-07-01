@@ -41,7 +41,7 @@
 - The app is self-distributed, not via any app store, therefore make sure your phone allows installation from unknown sources:<br>
     Settings -> Security -> Application from unknown sources -> Allow Google Drive, or something like that, It differs from phone to phone.
 - Open this link on your phone:
-    https://drive.google.com/file/d/167xb3ZZlQSEAKsg8V_5cv5FnAcudQ193/view?usp=drive_link
+            https://drive.google.com/file/d/1c4frS_mf8kyOt6D9S4iTgpMCVkh_X3gJ/view?usp=sharing
 - The system's package installer will pop up, tap on that.
 - It may look like nothing is happening but in the backgorund the package installer is preparing the app for installation, sometimes it takes even 30 seconds to finish.
 - The Installation will pop up, install the app.
