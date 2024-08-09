@@ -1,3 +1,7 @@
+<div align= "center">
+<h1> THIS APP IS NO LONGER DEPLOYED</h1>
+</div>
+
 <div align="center">
    <h1>Anti Social App</h1>
    <img src="/android-logo.png" alt="Android logo">
