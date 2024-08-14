@@ -1,5 +1,5 @@
 <div align= "center">
-<h1> THIS APP IS NO LONGER DEPLOYED</h1>
+<h1> THE APP IS NOT DEPLOYED CURRENTLY, WILL BE DEPLOYED SOON AGAIN</h1>
 </div>
 
 <div align="center">
